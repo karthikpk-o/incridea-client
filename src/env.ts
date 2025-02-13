@@ -28,6 +28,8 @@ export const env = createEnv({
     // This is a shared secret between the server and the client.
     // It's used to introspect graphql schema.
     SCHEMA_TOKEN: z.string(),
+    RAZORPAY_KEY: z.string(),
+    UPLOADTHING_TOKEN: z.string(),
   },
 
   /**
@@ -44,12 +46,11 @@ export const env = createEnv({
       .default(process.env.NODE_ENV === "production" ? "true" : "false")
       .refine((val) => val === "true" || val === "false")
       .transform((val) => val === "true"),
-    NEXT_PUBLIC_SERVER_HTTP_URL: z.string().url(),
-    NEXT_PUBLIC_SERVER_WEBSOCKET_URL: z.string().url(),
-    NEXT_PUBLIC_UPLOADTHING_URL: z.string().url(),
-    NEXT_PUBLIC_UPLOADTHING_TOKEN: z.string(),
-    NEXT_PUBLIC_RAZORPAY_KEY: z.string(),
-    NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: z.string(),
+    NEXT_PUBLIC_SERVER_URL: z.string().url(),
+    NEXT_PUBLIC_BASE_IMAGE_URL: z.string().url(),
+    NEXT_PUBLIC_BASE_AUDIO_URL: z.string().url(),
+    NEXT_PUBLIC_BASE_URL: z.string().url(),
+    NEXT_PUBLIC_BASE_HTTP_URL: z.string().url(),
   },
 
   /**
@@ -61,16 +62,15 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     SCHEMA_TOKEN: process.env.SCHEMA_TOKEN,
-    NEXT_PUBLIC_RAZORPAY_KEY: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+    RAZORPAY_KEY: process.env.RAZORPAY_KEY,
     NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_LOGGING_DISABLED: process.env.NEXT_PUBLIC_LOGGING_DISABLED,
-    NEXT_PUBLIC_SERVER_HTTP_URL: process.env.NEXT_PUBLIC_SERVER_HTTP_URL,
-    NEXT_PUBLIC_SERVER_WEBSOCKET_URL:
-      process.env.NEXT_PUBLIC_SERVER_WEBSOCKET_URL,
-    NEXT_PUBLIC_UPLOADTHING_URL: process.env.NEXT_PUBLIC_UPLOADTHING_URL,
-    NEXT_PUBLIC_UPLOADTHING_TOKEN: process.env.NEXT_PUBLIC_UPLOADTHING_TOKEN,
-    NEXT_PUBLIC_GOOGLE_ANALYTICS_ID:
-      process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID,
+    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
+    NEXT_PUBLIC_BASE_IMAGE_URL: process.env.NEXT_PUBLIC_BASE_IMAGE_URL,
+    NEXT_PUBLIC_BASE_AUDIO_URL: process.env.NEXT_PUBLIC_BASE_AUDIO_URL,
+    UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
+    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_BASE_HTTP_URL: process.env.NEXT_PUBLIC_BASE_HTTP_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
