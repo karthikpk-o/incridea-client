@@ -12,7 +12,7 @@ const UploadButton = memo(
     },
   ) => {
     const Comp = generateUploadButton({
-      url: `${env.NEXT_PUBLIC_BASE_HTTP_URL}/api/uploadthing`,
+      url: `${env.NEXT_PUBLIC_BASE_URL}/api/uploadthing`,
     });
 
     return (
