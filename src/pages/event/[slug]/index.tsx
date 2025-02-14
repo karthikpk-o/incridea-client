@@ -2,6 +2,7 @@ import { type QueryResult } from "@apollo/client";
 import { type GetStaticPaths, type GetStaticProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import { BiTimeFive } from "react-icons/bi";
 import { BsTelephone } from "react-icons/bs";
@@ -26,19 +27,23 @@ import {
   PublishedEventsSlugDocument,
 } from "~/generated/generated";
 import { client } from "~/lib/apollo";
-import { usePathname } from 'next/navigation'
 
 type Props =
   | {
-    event: Extract<NonNullable<QueryResult<EventByIdQuery, EventByIdQueryVariables>["data"]>["eventById"], {
-      __typename: "QueryEventByIdSuccess";
-    }>["data"];
-    error?: never;
-  }
+      event: Extract<
+        NonNullable<
+          QueryResult<EventByIdQuery, EventByIdQueryVariables>["data"]
+        >["eventById"],
+        {
+          __typename: "QueryEventByIdSuccess";
+        }
+      >["data"];
+      error?: never;
+    }
   | {
-    event?: never;
-    error: string;
-  };
+      event?: never;
+      error: string;
+    };
 
 const getStaticPaths: GetStaticPaths = async () => {
   const { data: events } = await client.query({
@@ -47,8 +52,9 @@ const getStaticPaths: GetStaticPaths = async () => {
 
   const paths = events.publishedEvents.map((event) => ({
     params: {
-      slug: `${event.name.toLocaleLowerCase().split(" ").join("-")}-${event.id
-        }`,
+      slug: `${event.name.toLocaleLowerCase().split(" ").join("-")}-${
+        event.id
+      }`,
     },
   }));
 
@@ -94,7 +100,7 @@ const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 };
 
 const Page = ({ event, error }: Props) => {
-  const pathname = usePathname()
+  const pathname = usePathname();
   const getEventAttributes = () => {
     if (!event) return [];
 
@@ -154,17 +160,22 @@ const Page = ({ event, error }: Props) => {
   // #5BC89E - light text green
 
   return (
-    <div className={`relative flex justify-center items-center`}>
+    <div className={`relative flex items-center justify-center`}>
       <Image
         alt="events-bg"
         src="/2025/eventBg.jpg"
         height={1920}
         width={1080}
         priority
-        className={`w-screen h-screen object-cover object-center top-0 left-0 absolute`}
+        className={`absolute left-0 top-0 h-screen w-screen object-cover object-center`}
       />
       <Toaster />
-      <EventSEO title={event?.name} description={event?.description} image={event?.image} url={pathname} />
+      <EventSEO
+        title={event?.name}
+        description={event?.description}
+        image={event?.image}
+        url={pathname}
+      />
       {error && (
         <div
           className={`absolute inset-0 flex h-screen flex-col items-center justify-center gap-5 p-10 text-white`}
@@ -197,7 +208,7 @@ const Page = ({ event, error }: Props) => {
             className={`lg:no-scrollbar overflow-x-visible px-3 pt-20 lg:h-full lg:overflow-y-scroll lg:pb-8`}
           >
             <div
-              className={`basis-1/3 rounded-xl border border-[#D79128] bg-[#054432] bg-opacity-70 p-5 backdrop-blur-xl  backdrop-filter`}
+              className={`basis-1/3 rounded-xl border border-[#D79128] bg-[#054432] bg-opacity-70 p-5 backdrop-blur-xl backdrop-filter max-sm:mt-3 max-sm:p-2`}
             >
               <div className={`grow-0 space-y-4 rounded-md sm:space-y-10`}>
                 {event.image && (
@@ -210,11 +221,11 @@ const Page = ({ event, error }: Props) => {
                   />
                 )}
                 <h1
-                  className={`px-4 pb-0 text-center font-life-craft text-3xl tracking-wider sm:p-0 md:text-6xl text-[#D79128]`}
+                  className={`px-4 pb-0 text-center font-life-craft text-3xl tracking-wider text-[#D79128] sm:p-0 md:text-6xl`}
                 >
                   {event.name}
                 </h1>
-                <div className={`px-4 pb-4 sm:p-0`}>
+                <div className={`sm:p-0 sm:px-4 sm:pb-4`}>
                   <EventDetails details={event.description ?? ""} />
                 </div>
               </div>
@@ -230,7 +241,7 @@ const Page = ({ event, error }: Props) => {
                 <div className={`order-2 w-full space-y-1.5`}>
                   {/* <hr className="w-48 h-1 mx-auto my-4 bg-secondary-800 border-0 rounded " /> */}
                   <h2
-                    className={`mb-2  text-2xl tracking-wider md:text-4xl text-[#D79128]`}
+                    className={`mb-2 text-2xl tracking-wider text-[#D79128] md:text-4xl`}
                   >
                     Details
                   </h2>
@@ -242,7 +253,7 @@ const Page = ({ event, error }: Props) => {
                           className={`md:text-md flex w-full items-center gap-2 rounded-full border border-secondary-400/40 bg-[#D79128] bg-opacity-30 p-1 px-2 text-left text-sm`}
                         >
                           {
-                            <attr.Icon className="bg-[#D79128] rounded-full h-full text-4xl  p-1 text-[#002C1B]" />
+                            <attr.Icon className="h-full rounded-full bg-[#D79128] p-1 text-4xl text-[#002C1B]" />
                           }
                           <p>
                             {attr.name} {": "}
@@ -259,7 +270,7 @@ const Page = ({ event, error }: Props) => {
                       {event.rounds.map((round) => (
                         <div
                           key={round.roundNo}
-                          className={`items-center space-y-2 rounded-xl border border-[#D79128] bg-opacity-30 px-3 py-2 text-white bg-[#D79128]`}
+                          className={`items-center space-y-2 rounded-xl border border-[#D79128] bg-[#D79128] bg-opacity-30 px-3 py-2 text-white`}
                         >
                           <div className={`font-semibold`}>
                             Round {round.roundNo}
@@ -269,35 +280,35 @@ const Page = ({ event, error }: Props) => {
                               className={`flex items-center gap-2`}
                               suppressHydrationWarning
                             >
-                              <span className="bg-[#D79128] h-full text-xl p-2 text-[#002C1B] rounded-full">
+                              <span className="h-full rounded-full bg-[#D79128] p-2 text-xl text-[#002C1B]">
                                 <BsFillCalendar2WeekFill />
                               </span>
                               {round.date
                                 ? new Date(round.date).toLocaleDateString(
-                                  "en-IN",
-                                  {
-                                    day: "numeric",
-                                    month: "short",
-                                  },
-                                )
+                                    "en-IN",
+                                    {
+                                      day: "numeric",
+                                      month: "short",
+                                    },
+                                  )
                                 : ""}
                             </p>
                             <p
                               className={`flex items-center gap-2`}
                               suppressHydrationWarning
                             >
-                              <span className="bg-[#D79128] h-full text-xl p-2 text-[#002C1B] rounded-full">
+                              <span className="h-full rounded-full bg-[#D79128] p-2 text-xl text-[#002C1B]">
                                 <BiTimeFive />
                               </span>
                               {round.date
                                 ? new Date(round.date).toLocaleDateString(
-                                  "en-IN",
-                                  {
-                                    hour: "numeric",
-                                    minute: "numeric",
-                                    hour12: true,
-                                  },
-                                )
+                                    "en-IN",
+                                    {
+                                      hour: "numeric",
+                                      minute: "numeric",
+                                      hour12: true,
+                                    },
+                                  )
                                 : ""}
                             </p>
                           </div>
@@ -329,7 +340,7 @@ const Page = ({ event, error }: Props) => {
               >
                 <div className={`order-3 w-full`}>
                   <h2
-                    className={`mb-2 text-2xl tracking-wider md:text-4xl text-[#D79128]`}
+                    className={`mb-2 text-2xl tracking-wider text-[#D79128] md:text-4xl`}
                   >
                     Organizers
                   </h2>
@@ -337,7 +348,7 @@ const Page = ({ event, error }: Props) => {
                     {event.organizers.map((organizer, idx) => (
                       <div
                         key={idx}
-                        className={`text-md w-full rounded-xl border border-[#D79128] p-3 text-white bg-[#D79128] bg-opacity-30`}
+                        className={`text-md w-full rounded-xl border border-[#D79128] bg-[#D79128] bg-opacity-30 p-3 text-white`}
                       >
                         <h3 className={`mb-2 text-lg font-semibold`}>
                           {organizer.user.name}
@@ -348,8 +359,10 @@ const Page = ({ event, error }: Props) => {
                               href={`mailto:${organizer.user.email}`}
                               className={`inline-flex items-center gap-2 overflow-x-auto text-sm hover:underline hover:underline-offset-4`}
                             >
-                              <span className="bg-[#D79128] h-full text-xl p-2 text-[#002C1B] rounded-full">
-                                <MdOutlineMailOutline className={`text-lg`} />{" "}
+                              <span className="h-full rounded-full bg-[#D79128] p-2 text-xl text-[#002C1B]">
+                                <MdOutlineMailOutline
+                                  className={`text-lg`}
+                                />{" "}
                               </span>
                               {organizer.user.email}
                             </a>
@@ -360,7 +373,7 @@ const Page = ({ event, error }: Props) => {
                               className={`inline-flex items-center gap-2 text-sm hover:underline hover:underline-offset-4`}
                             >
                               {" "}
-                              <span className="bg-[#D79128] h-full text-xl p-2 text-[#002C1B] rounded-full">
+                              <span className="h-full rounded-full bg-[#D79128] p-2 text-xl text-[#002C1B]">
                                 <BsTelephone className={`text-lg`} />{" "}
                               </span>
                               {organizer.user.phoneNumber}

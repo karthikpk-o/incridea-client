@@ -1,10 +1,10 @@
+import gsap from "gsap";
 import { Calendar, MapPin, Users } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 
 import { type PublishedEventsQuery } from "~/generated/generated";
 import { generateEventUrl } from "~/utils/url";
-import gsap from "gsap";
 
 const Event = ({
   event,
@@ -42,12 +42,12 @@ const Event = ({
         name: "Date",
         text: event.rounds[0]?.date
           ? new Date(event.rounds[0]?.date).toLocaleString("en-IN", {
-            day: "numeric",
-            month: "short",
-            hour: "numeric",
-            minute: "numeric",
-            hour12: true,
-          })
+              day: "numeric",
+              month: "short",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            })
           : "TBD",
         Icon: Calendar,
       },
@@ -94,13 +94,13 @@ const Event = ({
     <div
       event-scroll
       onClick={() => router.push(generateEventUrl(event.name, event.id))}
-      className={`relative flex w-full -mt-16 md:-mt-12 justify-center items-center max-w-[80%] sm:max-w-sm md:max-w-md cursor-pointer flex-col rounded-2xl transition-transform duration-300 hover:scale-[1.02] mx-auto sm:mx-0`}
+      className={`mb relative mx-auto flex w-full max-w-[80%] cursor-pointer flex-col items-center rounded-2xl transition-transform duration-300 hover:scale-[1.02] sm:mx-0 sm:max-w-sm md:max-w-md`}
       style={{ willChange: "transform" }}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 145.68 254"
-        className="w-full h-full object-cover rounded-2xl"
+        className="h-full w-full rounded-2xl object-cover"
         style={{ transform: "scale(0.95)", WebkitTransform: "scale(0.95)" }}
         preserveAspectRatio="xMidYMid meet"
       >
@@ -146,8 +146,8 @@ const Event = ({
         />
 
         <foreignObject x="0" y="86" width="17" height="60">
-          <div className="flex items-center justify-center w-full h-full">
-            <span className="text-white italic font-semibold text-[8px] uppercase transform origin-center -rotate-90 whitespace-nowrap  px-8 shadow-2xl rounded-xl">
+          <div className="flex h-full w-full items-center justify-center">
+            <span className="origin-center -rotate-90 transform whitespace-nowrap rounded-xl px-8 text-[8px] font-semibold uppercase italic text-white shadow-2xl">
               {event.category?.toLowerCase() === "non_technical"
                 ? "Non Tech"
                 : event.category?.toLocaleLowerCase()}
@@ -161,7 +161,7 @@ const Event = ({
           y="-8"
           width="30"
           height="30"
-          className="object-cover z-500"
+          className="z-500 object-cover"
         />
         {event.image && (
           <image
@@ -182,8 +182,8 @@ const Event = ({
           height="120"
           style={{ position: "relative" }}
         >
-          <div className="text-white flex flex-col w-full items-center justify-center">
-            <h2 className="font-life-craft my-1 text-center italic text-white w-32 overflow-hidden whitespace-nowrap">
+          <div className="flex w-full flex-col items-center justify-center text-white">
+            <h2 className="my-1 w-32 overflow-hidden whitespace-nowrap text-center font-life-craft italic text-white">
               {event.name.length > 20 ? (
                 <div
                   style={{
@@ -209,17 +209,15 @@ const Event = ({
               `}</style>
             </h2>
 
-            <div className="grid grid-cols-1 gap-x-1 gap-y-1 w-full px-2 items-start -mt-1.5">
+            <div className="-mt-1.5 grid w-full grid-cols-1 items-start gap-x-1 gap-y-1 px-2">
               {getEventAttributes().map((attr, i) => (
                 <div
                   key={i}
-                  className="flex items-center h-3.5 text-[7px] gap-1 rounded-md px-2 py-[7px]
-                     bg-gradient-to-tr bg-opacity-50 from-primary-900 via-primary-800/80 to-primary-900
-                     border border-primary-300/50 text-white font-medium shadow-md"
+                  className="flex h-3.5 items-center gap-1 rounded-md border border-primary-300/50 bg-opacity-50 bg-gradient-to-tr from-primary-900 via-primary-800/80 to-primary-900 px-2 py-[7px] text-[7px] font-medium text-white shadow-md"
                 >
                   <attr.Icon width="7" height="7" className="flex-shrink-0" />
                   <span
-                    className="leading-none flex items-center mt-0.5"
+                    className="mt-0.5 flex items-center leading-none"
                     suppressHydrationWarning
                   >
                     {attr.text}
@@ -231,7 +229,7 @@ const Event = ({
         </foreignObject>
       </svg>
       <div
-        className="h-[6%] register-button w-[86%] aspect-square bg-gradient-to-tr bg-opacity-50 from-primary-950 via-primary-900/90 to-primary-950 flex justify-center items-center absolute -mt-[42.5%]"
+        className="register-button absolute -mt-[42.5%] flex aspect-square h-[6%] w-[86%] items-center justify-center bg-opacity-50 bg-gradient-to-tr from-primary-950 via-primary-900/90 to-primary-950"
         style={{
           clipPath:
             "polygon(0% 55%, 5% 0%, 95% 0%, 100% 55%, 95% 100%, 5% 100%)",
@@ -243,11 +241,11 @@ const Event = ({
         ref={buttonRef}
         onClick={() => router.push(generateEventUrl(event.name, event.id))}
       >
-        <div className="text-white font-life-craft tracking-widest italic font-semibold text-[27px] uppercase cursor-pointer mt-1">
+        <div className="mt-1 cursor-pointer font-life-craft text-[27px] font-semibold uppercase italic tracking-widest text-white">
           Register
           <div
             ref={shineRef}
-            className="absolute top-0 left-[-50%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent z-10"
+            className="absolute left-[-50%] top-0 z-10 h-full w-[200%] bg-gradient-to-r from-transparent via-white/30 to-transparent"
             style={{ pointerEvents: "none" }}
           />
         </div>

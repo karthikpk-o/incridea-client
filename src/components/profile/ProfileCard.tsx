@@ -1,42 +1,43 @@
 /* eslint-disable */
-import { MeQuery, MeQueryVariables, type User } from "~/generated/generated";
 import * as THREE from "three";
+import { QueryResult } from "@apollo/client";
+import {
+  Environment,
+  Lightformer,
+  PerspectiveCamera,
+  RenderTexture,
+  useGLTF,
+  useTexture,
+} from "@react-three/drei";
 import {
   Canvas,
   extend,
-  useThree,
-  useFrame,
-  type ObjectMap,
-  type Object3DNode,
   MaterialNode,
+  type Object3DNode,
+  type ObjectMap,
+  useFrame,
+  useThree,
 } from "@react-three/fiber";
-import {
-  useGLTF,
-  useTexture,
-  PerspectiveCamera,
-  RenderTexture,
-  Environment,
-  Lightformer,
-} from "@react-three/drei";
 import {
   BallCollider,
   CuboidCollider,
   Physics,
-  RigidBody,
   type RapierRigidBody,
+  RigidBody,
   useRopeJoint,
   useSphericalJoint,
 } from "@react-three/rapier";
-import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import { Container, Root, Text, Image as ThreeImage } from "@react-three/uikit";
 import { damp } from "maath/easing";
+import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import { useEffect, useRef, useState } from "react";
 import { type GLTF } from "three-stdlib";
-import qrcodeDataURI from "~/utils/qr";
-import { idToPid } from "~/utils/id";
-import { QueryResult } from "@apollo/client";
-import { useAuth } from "~/hooks/useAuth";
+
 import { CONSTANT } from "~/constants";
+import { MeQuery, MeQueryVariables, type User } from "~/generated/generated";
+import { useAuth } from "~/hooks/useAuth";
+import { idToPid } from "~/utils/id";
+import qrcodeDataURI from "~/utils/qr";
 
 type BadgeGLTF = GLTF &
   ObjectMap & {
@@ -50,7 +51,7 @@ type BadgeGLTF = GLTF &
 function truncateText(text: string, maxChar = 20) {
   text = text.trim();
   if (text.length > maxChar) {
-    return text.slice(0, maxChar) + `${text.length}`;
+    return text.slice(0, maxChar) + "...";
   }
   return text;
 }
@@ -77,7 +78,7 @@ function ProfileCard({
         // backgroundImage: "url('/assets/png/id_bg.jpg')",
         touchAction: "none",
       }}
-      className="bg-cover bg-top bg-gradient-to-br  from-primary-900/80 via-primary-700/80 to-primary-900/80 backdrop-blur-sm border-secondary-500/50 border-1"
+      className="border-1 border-secondary-500/50 bg-gradient-to-br from-primary-900/80 via-primary-700/80 to-primary-900/80 bg-cover bg-top backdrop-blur-sm"
       onTouchStartCapture={handlePointerDown}
       onTouchEndCapture={handlePointerUp}
     >

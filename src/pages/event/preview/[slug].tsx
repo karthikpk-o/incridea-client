@@ -1,4 +1,4 @@
-import { useQuery, } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -21,16 +21,20 @@ import { env } from "~/env";
 import { EventByIdDocument } from "~/generated/generated";
 
 const Page = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   const { data, loading } = useQuery(EventByIdDocument, {
     variables: {
       id: router.query.slug as string,
     },
-  })
+  });
 
-  const event = data?.eventById.__typename === "QueryEventByIdSuccess" ? data.eventById.data : null
-  const error = data?.eventById.__typename === "Error" ? data.eventById.message : null
+  const event =
+    data?.eventById.__typename === "QueryEventByIdSuccess"
+      ? data.eventById.data
+      : null;
+  const error =
+    data?.eventById.__typename === "Error" ? data.eventById.message : null;
 
   const getEventAttributes = () => {
     if (!event) return [];
@@ -83,7 +87,7 @@ const Page = () => {
     ];
   };
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className={`relative flex items-center justify-center`}>
@@ -117,11 +121,11 @@ const Page = () => {
                   />
                 )}
                 <h1
-                  className={`px-4 pb-0 text-center font-life-craft text-3xl tracking-wider sm:p-0 md:text-6xl text-[#D79128]`}
+                  className={`px-4 pb-0 text-center font-life-craft text-3xl tracking-wider text-[#D79128] sm:p-0 md:text-6xl`}
                 >
                   {event.name}
                 </h1>
-                <div className={`px-4 pb-4 sm:p-0`}>
+                <div className={`sm:p-0 sm:px-4 sm:pb-4`}>
                   <EventDetails details={event.description ?? ""} />
                 </div>
               </div>
@@ -137,7 +141,7 @@ const Page = () => {
                 <div className={`order-2 w-full space-y-1.5`}>
                   {/* <hr className="w-48 h-1 mx-auto my-4 bg-secondary-800 border-0 rounded " /> */}
                   <h2
-                    className={`mb-2 text-2xl tracking-wider md:text-4xl text-[#D79128] font-bold`}
+                    className={`mb-2 text-2xl font-bold tracking-wider text-[#D79128] md:text-4xl`}
                   >
                     Details
                   </h2>
@@ -149,7 +153,7 @@ const Page = () => {
                           className={`md:text-md flex w-full items-center gap-2 rounded-full border border-secondary-400/40 bg-[#D79128] bg-opacity-30 p-1 px-2 text-left text-sm`}
                         >
                           {
-                            <attr.Icon className="bg-[#D79128] rounded-full h-full text-4xl  p-1 text-[#002C1B]" />
+                            <attr.Icon className="h-full rounded-full bg-[#D79128] p-1 text-4xl text-[#002C1B]" />
                           }
                           <p>
                             {attr.name} {": "}
@@ -166,7 +170,7 @@ const Page = () => {
                       {event.rounds.map((round, idx) => (
                         <div
                           key={idx}
-                          className={`items-center space-y-2 rounded-xl  border border-[#D79128] bg-opacity-30 px-3 py-2 text-white bg-[#D79128]`}
+                          className={`items-center space-y-2 rounded-xl border border-[#D79128] bg-[#D79128] bg-opacity-30 px-3 py-2 text-white`}
                         >
                           <div className={`font-semibold`}>
                             Round {round.roundNo}
@@ -176,7 +180,7 @@ const Page = () => {
                               className={`flex items-center gap-2`}
                               suppressHydrationWarning
                             >
-                              <span className="bg-[#D79128] h-full text-xl p-2 text-[#002C1B] rounded-full">
+                              <span className="h-full rounded-full bg-[#D79128] p-2 text-xl text-[#002C1B]">
                                 <BsFillCalendar2WeekFill />
                               </span>
                               {round.date &&
@@ -192,7 +196,7 @@ const Page = () => {
                               className={`flex items-center gap-2`}
                               suppressHydrationWarning
                             >
-                              <span className="bg-[#D79128] h-full text-xl p-2 text-[#002C1B] rounded-full">
+                              <span className="h-full rounded-full bg-[#D79128] p-2 text-xl text-[#002C1B]">
                                 <BiTimeFive />
                               </span>
                               {round.date &&
@@ -240,7 +244,7 @@ const Page = () => {
                     {event.organizers.map((organizer, idx) => (
                       <div
                         key={idx}
-                        className={`text-md w-full rounded-xl border border-[#D79128] p-3 text-white bg-[#D79128] bg-opacity-30`}
+                        className={`text-md w-full rounded-xl border border-[#D79128] bg-[#D79128] bg-opacity-30 p-3 text-white`}
                       >
                         <h3 className={`mb-2 text-lg font-semibold`}>
                           {organizer.user.name}
@@ -251,8 +255,10 @@ const Page = () => {
                               href={`mailto:${organizer.user.email}`}
                               className={`inline-flex items-center gap-2 overflow-x-auto text-sm hover:underline hover:underline-offset-4`}
                             >
-                              <span className="bg-[#D79128] h-full text-xl p-2 text-[#002C1B] rounded-full">
-                                <MdOutlineMailOutline className={`text-lg`} />{" "}
+                              <span className="h-full rounded-full bg-[#D79128] p-2 text-xl text-[#002C1B]">
+                                <MdOutlineMailOutline
+                                  className={`text-lg`}
+                                />{" "}
                               </span>
                               {organizer.user.email}
                             </a>
@@ -263,7 +269,7 @@ const Page = () => {
                               className={`inline-flex items-center gap-2 text-sm hover:underline hover:underline-offset-4`}
                             >
                               {" "}
-                              <span className="bg-[#D79128] h-full text-xl p-2 text-[#002C1B] rounded-full">
+                              <span className="h-full rounded-full bg-[#D79128] p-2 text-xl text-[#002C1B]">
                                 <BsTelephone className={`text-lg`} />{" "}
                               </span>
                               {organizer.user.phoneNumber}

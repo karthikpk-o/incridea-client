@@ -8,14 +8,13 @@ import { CiWarning } from "react-icons/ci";
 import { IoTodayOutline } from "react-icons/io5";
 
 import Event from "~/components/event";
+import { CONSTANT } from "~/constants";
 import {
   EventCategory,
   PublishedEventsDocument,
   type PublishedEventsQuery,
 } from "~/generated/generated";
 import { client } from "~/lib/apollo";
-
-import { CONSTANT } from "~/constants";
 
 enum AllCategory {
   ALL = "ALL",
@@ -71,13 +70,17 @@ const Page = ({ data }: Props) => {
             : CONSTANT.DATE.INCRIDEA.DAY3,
       ).getDate();
       tempFilteredEvents = tempFilteredEvents.filter((event) =>
-        event.rounds.some((round) => round.date?.getDate() === filteredDay),
+        event.rounds.some(
+          (round) =>
+            round.date && new Date(round.date).getDate() === filteredDay,
+        ),
       );
     }
     if (currentCategoryFilter !== AllCategory.ALL)
       tempFilteredEvents = tempFilteredEvents.filter(
         (event) =>
-          event.category.replace("_", "").toLowerCase() === currentCategoryFilter.toLocaleLowerCase()
+          event.category.replace("_", "").toLowerCase() ===
+          currentCategoryFilter.toLocaleLowerCase(),
       );
 
     setFilteredEvents(tempFilteredEvents);
@@ -108,29 +111,30 @@ const Page = ({ data }: Props) => {
           <div
             data-scroll-container
             ref={containerRef}
-            className={`relative px-2 md:px-10 ${filteredEvents.length > 0 ? "pt-28" : "pt-10 md:pt-20"
-              } flex flex-col items-center justify-center`}
+            className={`relative px-2 md:px-10 ${
+              filteredEvents.length > 0 ? "pt-28" : "pt-10 md:pt-20"
+            } flex flex-col items-center justify-center`}
           >
             <div
               data-scroll-section
-              className="mb-2 flex flex-col justify-center items-center"
+              className="mb-2 flex flex-col items-center justify-center"
             >
               <h1
                 data-scroll
-                className={`text-center font-life-craft tracking-wide text-white md:text-8xl text-5xl`}
+                className={`text-center font-life-craft text-5xl tracking-wide text-white md:text-8xl`}
               >
                 Events
               </h1>
 
               <h2
                 data-scroll
-                className={`text-md mx-2 mb-6 mt-2 text-center tracking-wide text-white md:mt-4 md:text-xl font`}
+                className={`text-md font mx-2 mb-6 mt-2 text-center tracking-wide text-white md:mt-4 md:text-xl`}
               >
-                40 Exciting Events Await, Each Marking a Unique Moment in Time&apos;s
-                Journey!
+                40 Exciting Events Await, Each Marking a Unique Moment in
+                Time&apos;s Journey!
               </h2>
 
-              <div className="relative w-[80%] md:w-[100%] basis-full lg:basis-[75%]">
+              <div className="relative w-[80%] basis-full md:w-[100%] lg:basis-[75%]">
                 <input
                   value={query}
                   onChange={handleSearch}
@@ -143,16 +147,16 @@ const Page = ({ data }: Props) => {
                   className="absolute right-6 top-3 text-gray-200"
                 />
               </div>
-              <div className="flex flex-row md:px-10 py-4 w-full justify-between">
-                <div className="flex justify-center md:flex-row items-center">
+              <div className="flex w-full flex-row justify-between py-4 md:px-10">
+                <div className="flex items-center justify-center md:flex-row">
                   <Menu as="div" className="relative flex w-full md:w-auto">
-                    <Menu.Button className="inline-flex h-[40px] w-[150px] min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-primary-200/80 bg-black/30 px-4 py-2 text-sm text-white md:text-lg md:-ml-12">
+                    <Menu.Button className="inline-flex h-[40px] w-[150px] min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-primary-200/80 bg-black/30 px-4 py-2 text-sm text-white md:-ml-12 md:text-lg">
                       <IoTodayOutline size="16" />
                       {currentDayFilter !== "All"
                         ? currentDayFilter
-                          .toLowerCase()
-                          .replace(/_/g, " ")
-                          .replace(/\b\w/g, (char) => char.toUpperCase())
+                            .toLowerCase()
+                            .replace(/_/g, " ")
+                            .replace(/\b\w/g, (char) => char.toUpperCase())
                         : "Day"}
                     </Menu.Button>
                     <Transition
@@ -163,15 +167,16 @@ const Page = ({ data }: Props) => {
                       leaveFrom="transform scale-100 opacity-100"
                       leaveTo="transform scale-95 opacity-0"
                     >
-                      <Menu.Items className="absolute top-11 mt-1 z-10 flex flex-col gap-2 overflow-hidden rounded-3xl border border-primary-300/80 bg-primary-800 p-2 text-center shadow-2xl shadow-black/80">
+                      <Menu.Items className="absolute top-11 z-10 mt-1 flex flex-col gap-2 overflow-hidden rounded-3xl border border-primary-300/80 bg-primary-800 p-2 text-center shadow-2xl shadow-black/80">
                         {dayFilters.map((filter) => (
                           <Menu.Item key={filter}>
                             {() => (
                               <button
-                                className={`${currentDayFilter === filter
-                                  ? "bg-white/20"
-                                  : "bg-black/10"
-                                  } w-36 rounded-full border border-primary-300/80 px-3 py-1.5 text-sm text-white transition-all duration-300 hover:bg-white/10`}
+                                className={`${
+                                  currentDayFilter === filter
+                                    ? "bg-white/20"
+                                    : "bg-black/10"
+                                } w-36 rounded-full border border-primary-300/80 px-3 py-1.5 text-sm text-white transition-all duration-300 hover:bg-white/10`}
                                 onClick={() => setCurrentDayFilter(filter)}
                               >
                                 {
@@ -201,9 +206,9 @@ const Page = ({ data }: Props) => {
                       <BiCategory size="16" />
                       {currentCategoryFilter !== AllCategory.ALL
                         ? currentCategoryFilter
-                          .toLowerCase()
-                          .replace(/_/g, " ")
-                          .replace(/\b\w/g, (char) => char.toUpperCase())
+                            .toLowerCase()
+                            .replace(/_/g, " ")
+                            .replace(/\b\w/g, (char) => char.toUpperCase())
                         : "Category"}
                     </Menu.Button>
                     <Transition
@@ -214,7 +219,7 @@ const Page = ({ data }: Props) => {
                       leaveFrom="transform scale-100 opacity-100"
                       leaveTo="transform scale-95 opacity-0"
                     >
-                      <Menu.Items className="absolute top-11 mt-1 flex z-10 flex-col gap-2 overflow-hidden rounded-3xl border border-primary-300/80 bg-primary-800 p-2 text-center shadow-2xl shadow-black/70">
+                      <Menu.Items className="absolute top-11 z-10 mt-1 flex flex-col gap-2 overflow-hidden rounded-3xl border border-primary-300/80 bg-primary-800 p-2 text-center shadow-2xl shadow-black/70">
                         {[
                           Object.keys(EventCategory),
                           Object.keys(AllCategory),
@@ -223,11 +228,12 @@ const Page = ({ data }: Props) => {
                             return (
                               <Menu.Item key={id * 100000000 + idx}>
                                 <button
-                                  className={`${currentCategoryFilter ===
+                                  className={`${
+                                    currentCategoryFilter ===
                                     (filter as EventCategory | AllCategory)
-                                    ? "bg-white/20"
-                                    : "bg-black/10"
-                                    } w-36 rounded-full border border-primary-200/80 px-3 py-1.5 text-sm text-white transition-all duration-300 hover:bg-white/10`}
+                                      ? "bg-white/20"
+                                      : "bg-black/10"
+                                  } w-36 rounded-full border border-primary-200/80 px-3 py-1.5 text-sm text-white transition-all duration-300 hover:bg-white/10`}
                                   onClick={() =>
                                     setCurrentCategoryFilter(
                                       filter as EventCategory | AllCategory,
@@ -252,16 +258,16 @@ const Page = ({ data }: Props) => {
               </div>
               <div
                 data-scroll
-                className="flex w-full flex-nowrap items-center gap-2 text-xl md:flex-nowrap justify-center md:-ml-10 md:-mt-[7.2%]"
+                className="flex w-full flex-nowrap items-center justify-center gap-2 text-xl md:-ml-10 md:-mt-[7.2%] md:flex-nowrap"
               >
                 {/* Center Buttons (Rulebook & Schedule) */}
-                <div className="flex flex-nowrap items-center justify-between gap-2 md:gap-14 md:flex-nowrap">
+                <div className="flex flex-nowrap items-center justify-between gap-2 md:flex-nowrap md:gap-14">
                   <a
                     href="https://drive.google.com/file/d/12f0EmP3QEQSmIuLVgb8gk13QPHeicZ5N/"
                     target="_blank"
                     download
                   >
-                    <button className="inline-flex h-[40px] min-w-0 w-auto items-center justify-center gap-2 whitespace-nowrap rounded-full border border-primary-200/80 bg-black/30 px-4 py-2 text-sm text-white md:text-lg">
+                    <button className="inline-flex h-[40px] w-auto min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-primary-200/80 bg-black/30 px-4 py-2 text-sm text-white md:text-lg">
                       Rule Book
                     </button>
                   </a>
@@ -270,7 +276,7 @@ const Page = ({ data }: Props) => {
                     target="_blank"
                     download
                   >
-                    <button className="inline-flex h-[40px] min-w-0 w-auto items-center justify-center gap-2 whitespace-nowrap rounded-full border border-primary-200/80 bg-black/30 px-4 py-2 text-sm text-white md:text-lg">
+                    <button className="inline-flex h-[40px] w-auto min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-primary-200/80 bg-black/30 px-4 py-2 text-sm text-white md:text-lg">
                       Schedule
                     </button>
                   </a>
@@ -283,7 +289,7 @@ const Page = ({ data }: Props) => {
               data-scroll-speed="0.7"
               className={
                 filteredEvents.length > 0
-                  ? `mx-auto grid h-full w-full max-w-7xl grid-cols-1 mb-20 justify-center gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`
+                  ? `mx-auto mb-20 grid h-full w-full max-w-7xl grid-cols-1 justify-center gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`
                   : "flex h-full w-full items-center justify-center"
               }
             >
