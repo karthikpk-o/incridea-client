@@ -1,4 +1,4 @@
-import { useQuery, } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -21,16 +21,20 @@ import { env } from "~/env";
 import { EventByIdDocument } from "~/generated/generated";
 
 const Page = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   const { data, loading } = useQuery(EventByIdDocument, {
     variables: {
       id: router.query.slug as string,
     },
-  })
+  });
 
-  const event = data?.eventById.__typename === "QueryEventByIdSuccess" ? data.eventById.data : null
-  const error = data?.eventById.__typename === "Error" ? data.eventById.message : null
+  const event =
+    data?.eventById.__typename === "QueryEventByIdSuccess"
+      ? data.eventById.data
+      : null;
+  const error =
+    data?.eventById.__typename === "Error" ? data.eventById.message : null;
 
   const getEventAttributes = () => {
     if (!event) return [];
@@ -83,7 +87,7 @@ const Page = () => {
     ];
   };
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className={`relative flex items-center justify-center`}>
@@ -121,7 +125,7 @@ const Page = () => {
                 >
                   {event.name}
                 </h1>
-                <div className={`px-4 pb-4 sm:p-0`}>
+                <div className={`sm:px-4 sm:pb-4 sm:p-0`}>
                   <EventDetails details={event.description ?? ""} />
                 </div>
               </div>
