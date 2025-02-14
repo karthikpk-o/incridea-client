@@ -2,6 +2,7 @@ import { generateUploadButton } from "@uploadthing/react";
 import { getSession } from "next-auth/react";
 import { memo, type ComponentProps } from "react";
 
+import type { OurFileRouter } from "~/server/uploadthing";
 import { env } from "~/env";
 
 const UploadButton = memo(
@@ -11,7 +12,7 @@ const UploadButton = memo(
     },
   ) => {
     const Comp = generateUploadButton({
-      url: `${env.NEXT_PUBLIC_SERVER_HTTP_URL}/uploadthing`,
+      url: `${env.NEXT_PUBLIC_BASE_URL}/api/uploadthing`,
     });
 
     return (

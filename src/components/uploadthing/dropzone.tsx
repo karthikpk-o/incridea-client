@@ -10,7 +10,7 @@ const UploadDropzone = memo((
   },
 ) => {
   const Comp = generateUploadDropzone({
-    url: `${env.NEXT_PUBLIC_SERVER_HTTP_URL}/uploadthing`,
+    url: `${env.NEXT_PUBLIC_BASE_URL}/api/uploadthing`,
   });
 
   return (
