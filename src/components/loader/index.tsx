@@ -5,8 +5,8 @@ import styles from "./loader.module.css";
 import { CONSTANT } from "~/constants";
 
 // Images in public folder for faster loading
-const hourglass = `/${CONSTANT.YEAR}/loader/hourglass.webp`;
-const logo = `/${CONSTANT.YEAR}/loader/Echoes_Of_Eternity_Logo.webp`
+const hourglass = CONSTANT.ASSETS.LOADER.HOURGLASS;
+const logo = CONSTANT.ASSETS.LOADER.EOELOGO;
 
 const LoadingScreen = () => {
   const containerRef = useRef(null);
@@ -53,13 +53,14 @@ const LoadingScreen = () => {
         </div>
         <div
           ref={logoRef}
-          className="absolute bottom-[32%] md:bottom-[30%] xl:-translate-1/2"
+          className="absolute bottom-[32%] md:bottom-[20%] xl:-translate-2/3"
         >
           <Image
             src={logo}
             width={300}
             height={300}
             alt="Echoes of Eternity Logo"
+            className="md:scale-100 scale-50"
           />
         </div>
       </div>

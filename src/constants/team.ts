@@ -5,7 +5,7 @@ type TeamMember = {
   linkedin: string;
   image: string;
   quote: string;
-}
+};
 
 const TEAM_MEMBERS: {
   [key: string]: TeamMember;
@@ -15,24 +15,8 @@ const TEAM_MEMBERS: {
     instagram: "https://www.instagram.com/satwikprabhu",
     github: "https://github.com/satwikrprabhu",
     linkedin: "https://www.linkedin.com/in/satwikprabhu",
-    image: "satwik_prabhu.jpg",
+    image: "satwik_prabhu.webp",
     quote: "I know where you live.",
-  },
-  "Keerthan K": {
-    role: "3D | Explore Page",
-    instagram: "https://www.instagram.com/keetha_k11",
-    github: "https://github.com/keetha1011",
-    linkedin: "https://www.linkedin.com/in/kkeerthan/",
-    image: "keerthan_k.jpg",
-    quote: "passion && :) >>>",
-  },
-  "Aryan Singh": {
-    role: "3D | Pronite",
-    instagram: "https://www.instagram.com/just_aryansingh",
-    github: "https://github.com/Wizhill05",
-    linkedin: "https://www.linkedin.com/in/justaryansingh",
-    quote: "but Attendance <<<",
-    image: "aryan_singh.jpg",
   },
   "A Omkar G Prabhu": {
     role: "Co-Head",
@@ -41,6 +25,22 @@ const TEAM_MEMBERS: {
     linkedin: "https://www.linkedin.com/in/prabhuomkar9/",
     image: "omkar.webp",
     quote: "Control yourself, Not others! Tbh atp idc",
+  },
+  "Keerthan K": {
+    role: "3D | Explore Page",
+    instagram: "https://www.instagram.com/keetha_k11",
+    github: "https://github.com/keetha1011",
+    linkedin: "https://www.linkedin.com/in/kkeerthan/",
+    image: "keerthan_k.webp",
+    quote: "passion && :) >>>",
+  },
+  "Aryan Singh": {
+    role: "3D | Pronite",
+    instagram: "https://www.instagram.com/just_aryansingh",
+    github: "https://github.com/Wizhill05",
+    linkedin: "https://www.linkedin.com/in/justaryansingh",
+    quote: "but Attendance <<<",
+    image: "aryan_singh.webp",
   },
   "Samarth H Shetty": {
     role: "Full Stack",
@@ -54,9 +54,8 @@ const TEAM_MEMBERS: {
     role: "Full Stack",
     instagram: "https://www.instagram.com/pratham_ak2004",
     github: "https://github.com/pratham-ak2004",
-    linkedin:
-      "https://www.linkedin.com/in/pratham-a-kadekar-8397a7249",
-    image: "pratham_a_kadekar.jpg",
+    linkedin: "https://www.linkedin.com/in/pratham-a-kadekar-8397a7249",
+    image: "pratham_a_kadekar.webp",
     quote: "Kon'nichiwa",
   },
   "Karthik Salian": {
@@ -64,7 +63,7 @@ const TEAM_MEMBERS: {
     github: "https://github.com/Karthik-S-Salian",
     instagram: "https://www.instagram.com/karthik_s_.salian/",
     linkedin: "https://www.linkedin.com/in/karthik-salian-3a7a26246/",
-    image: "karthik.png",
+    image: "karthik.webp",
     quote: "Once take a deep breath and say NO",
   },
   "Nandan R Pai": {
@@ -72,7 +71,7 @@ const TEAM_MEMBERS: {
     instagram: "https://www.instagram.com/nandanpi__/",
     github: "https://github.com/nandanpi",
     linkedin: "https://www.linkedin.com/in/nandanpai09",
-    image: "nandan.jpeg",
+    image: "nandan.webp",
     quote: "My touch is the solution to all problems 🥰",
   },
   "Rahul N Bangera": {
@@ -80,7 +79,7 @@ const TEAM_MEMBERS: {
     instagram: "https://www.instagram.com/rahul_n_bangera",
     github: "https://github.com/Bnir",
     linkedin: "https://www.linkedin.com/in/rahul-n-bangera",
-    image: "rahul.png",
+    image: "rahul.webp",
     quote: "Give 200% or Give nothing",
   },
   "Shishir Karkera": {
@@ -96,7 +95,7 @@ const TEAM_MEMBERS: {
     instagram: "https://www.instagram.com/athul_bhandary",
     github: "https://github.com/athul28",
     linkedin: "https://www.linkedin.com/in/athul-d-bhandary-0b1912247/",
-    image: "athul_ d_bhandary.jpg",
+    image: "athul_ d_bhandary.webp",
     quote: "Hey wassup!!!",
   },
   "Varshith Pawar H R": {
@@ -104,15 +103,16 @@ const TEAM_MEMBERS: {
     instagram: "https://www.instagram.com/mr.pawar_10/",
     github: "https://github.com/VarshithPawarHR",
     linkedin: "https://www.linkedin.com/in/varshithpawarhr",
-    image: "varshith.jpeg",
-    quote: "No bugs here—just your system struggling to keep up with our brilliance",
+    image: "varshith.webp",
+    quote:
+      "No bugs here—just your system struggling to keep up with our brilliance",
   },
   "Snehal Shetty": {
     role: "Full Stack",
     instagram: "https://www.instagram.com/shettysnehal__05",
     github: "https://github.com/shettysnehal",
     linkedin: "https://www.linkedin.com/in/snehalshetty105",
-    image: "snehal_shetty.jpeg",
+    image: "snehal_shetty.webp",
     quote: "Life so cooked that my luck is on airplane mode",
   },
   "Karthik P K": {
@@ -120,7 +120,7 @@ const TEAM_MEMBERS: {
     instagram: "https://www.instagram.com/_karthik_p_k/",
     github: "https://github.com/karthikpk-o",
     linkedin: "https://linkedin.com/in/karthik-p-k",
-    image: "karthik_p_k.jpg",
+    image: "karthik_p_k.webp",
     quote: "The trouble is, you think you have time.",
   },
   "Ashton Prince Mathias": {
@@ -128,7 +128,7 @@ const TEAM_MEMBERS: {
     instagram: "https://www.instagram.com/_ashtonmathias_/",
     github: "https://github.com/Subtilizer28",
     linkedin: "https://www.linkedin.com/in/ashtonmths/",
-    image: "ashton_mathias.jpg",
+    image: "ashton_mathias.webp",
     quote: '"your fone linging 📞"',
   },
   "Ishan Shetty": {
@@ -136,7 +136,7 @@ const TEAM_MEMBERS: {
     github: "https://github.com/Ishan-Shetty",
     linkedin: "https://www.linkedin.com/in/ishan-shetty-0a889821a/",
     instagram: "https://www.instagram.com/ishanshetty_",
-    image: "ishan.png",
+    image: "ishan.webp",
     quote: "I'm just a chill guy 👾",
   },
   "Gaurav Dhanraja": {
@@ -144,7 +144,7 @@ const TEAM_MEMBERS: {
     instagram: "https://instagram.com/gaurav.dhanraja",
     github: "https://github.com/gauravdhanraja",
     linkedin: "https://linkedin.com/in/gauravdhanraja",
-    image: "gaurav_dhanraja.jpg",
+    image: "gaurav_dhanraja.webp",
     quote: "Ishan's a stalker",
   },
   "Riyaz Ahmed": {
@@ -152,7 +152,7 @@ const TEAM_MEMBERS: {
     instagram: "https://www.instagram.com/ria_yz24",
     github: "https://github.com/RiaAug24",
     linkedin: "https://www.linkedin.com/in/riyaz-ahmed24",
-    image: "riyaz_ahmed.jpg",
+    image: "riyaz_ahmed.webp",
     quote: "Try to be the fitting piece, for a missing piece. 🧩",
   },
   "Len Mendonca": {
@@ -160,7 +160,7 @@ const TEAM_MEMBERS: {
     instagram: "https://www.instagram.com/lendanieo/",
     github: "https://github.com/len-mendonca",
     linkedin: "https://in.linkedin.com/in/len-mendonca",
-    image: "len_mendonca.png",
+    image: "len_mendonca.webp",
     quote: "Maria Pitache",
   },
   "Sathwik Nayak": {
@@ -168,7 +168,7 @@ const TEAM_MEMBERS: {
     instagram: "https://www.instagram.com/sathwik_hh",
     github: "https://github.com/002sathwik",
     linkedin: "https://www.linkedin.com/in/sathwik-h-085758246",
-    image: "satwik_h.png",
+    image: "satwik_h.webp",
     quote: "Being part of a team is the greatest contribution I've made.",
   },
   "Chaithra S Nayak": {
@@ -184,27 +184,25 @@ const TEAM_MEMBERS: {
     instagram: "https://www.instagram.com/ahmedmsayeem/",
     github: "https://github.com/ahmedmsayeem",
     linkedin: "https://www.linkedin.com/in/m-sayeem-ahmed-651a7b254",
-    image: "sayeem_ahmed.jpg",
+    image: "sayeem_ahmed.webp",
     quote: "womp womp",
   },
   "Prakash Waddar": {
     role: "Frontend",
     instagram: "https://www.instagram.com/____prakash____28",
     github: "https://github.com/prakashwaddar628",
-    linkedin:
-      "https://www.linkedin.com/in/prakash-l-waddar-422760203",
-    image: "prakash_waddar.jpg",
+    linkedin: "https://www.linkedin.com/in/prakash-l-waddar-422760203",
+    image: "prakash_waddar.webp",
     quote: "Break loops, not your spirit. Go beyond your limits",
   },
-  "Mustafa": {
+  Mustafa: {
     role: "Frontend",
     instagram: "https://www.instagram.com/mustafa._._.raza/",
     github: "https://github.com/Mustafa-DEV0",
-    linkedin:
-      "https://www.linkedin.com/in/mustafa-raza-b98163350",
-    image: "mustafa.png",
+    linkedin: "https://www.linkedin.com/in/mustafa-raza-b98163350",
+    image: "mustafa.webp",
     quote: "I write clean code… until the deadline says otherwise.",
   },
-}
+};
 
 export { TEAM_MEMBERS };

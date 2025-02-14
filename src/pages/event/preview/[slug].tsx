@@ -17,6 +17,7 @@ import { MdOutlineMailOutline } from "react-icons/md";
 
 import EventDetails from "~/components/general/event/eventDetails";
 import EventRegistration from "~/components/general/event/eventRegistration";
+import { CONSTANT } from "~/constants";
 import { env } from "~/env";
 import { EventByIdDocument } from "~/generated/generated";
 
@@ -93,7 +94,7 @@ const Page = () => {
     <div className={`relative flex items-center justify-center`}>
       <Image
         alt="events-bg"
-        src="/2025/eventBg.jpg"
+        src={CONSTANT.ASSETS.PUBLIC.EVENT_BG}
         height={1920}
         width={1080}
         priority
@@ -256,9 +257,7 @@ const Page = () => {
                               className={`inline-flex items-center gap-2 overflow-x-auto text-sm hover:underline hover:underline-offset-4`}
                             >
                               <span className="h-full rounded-full bg-[#D79128] p-2 text-xl text-[#002C1B]">
-                                <MdOutlineMailOutline
-                                  className={`text-lg`}
-                                />{" "}
+                                <MdOutlineMailOutline className={`text-lg`} />{" "}
                               </span>
                               {organizer.user.email}
                             </a>

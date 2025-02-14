@@ -1,5 +1,6 @@
 import { SPONSORS } from "~/constants/sponsors";
 import { TEAM_MEMBERS } from "~/constants/team";
+import { ASSETS } from "~/constants/images";
 
 const CONSTANT = {
   BASE_URL: "https://incridea.in" as const,
@@ -8,6 +9,7 @@ const CONSTANT = {
   TID_FORMAT: "T25-" as const,
   YEAR: 2025 as const,
   YEAR_SHORT: 25 as const,
+  ASSETS: ASSETS,
   REG_AMOUNT_IN_INR: {
     INTERNAL: 350,
     EXTERNAL: 450,
@@ -38,7 +40,7 @@ const CONSTANT = {
     TECH_TEAM: [11, 15, 2, 1, 10, 9, 509, 59, 4, 8, 13, 16, 291, 74],
   },
   SPONSORS: SPONSORS,
-  TEAM_MEMBERS: TEAM_MEMBERS
+  TEAM_MEMBERS: TEAM_MEMBERS,
 };
 
 export { CONSTANT };

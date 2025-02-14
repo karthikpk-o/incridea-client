@@ -18,7 +18,6 @@ import DeleteTeamModal from "~/components/general/profile/deleteTeam";
 import ConfirmTeamModal from "~/components/general/profile/confirmTeam";
 import LeaveTeamModal from "../general/profile/leaveTeamModal";
 import { CONSTANT } from "~/constants";
-import { env } from "~/env";
 
 const EventCard: FC<{
   teams: Extract<
@@ -48,7 +47,7 @@ const EventCard: FC<{
       <div className="flex flex-col items-center justify-center text-black">
         <div className="relative">
           <Image
-            src={event.image ?? `/${CONSTANT.YEAR}/vertical_logo.png`}
+            src={event.image ?? CONSTANT.ASSETS.PUBLIC.LOGO_RIM}
             alt={event.name}
             height={300}
             width={300}

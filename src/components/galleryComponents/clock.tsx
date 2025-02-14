@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useLoader } from "@react-three/fiber";
 import type * as THREE from "three";
 import { useDrag } from "@use-gesture/react";
@@ -10,6 +10,7 @@ import {
   Bloom,
   BrightnessContrast,
 } from "@react-three/postprocessing";
+import { CONSTANT } from "~/constants";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -41,13 +42,19 @@ const getSnapAngle = (angle: number): number => {
 };
 
 const Model = ({ handRef }: { handRef: React.RefObject<THREE.Group> }) => {
-  const gltf = useLoader(GLTFLoader, "/2025/gallery/3d/clock.glb", (loader) => {
+  const gltf = useLoader(GLTFLoader, CONSTANT.ASSETS["3D"].CLOCK, (loader) => {
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
     loader.setDRACOLoader(dracoLoader);
   }) as GLTFResult;
 
   const { nodes, materials } = gltf;
+
+  useEffect(() => {
+    if (handRef.current) {
+      handRef.current.rotation.y = Math.PI / 2;
+    }
+  }, [handRef]);
 
   return (
     <group
@@ -85,13 +92,16 @@ const Model = ({ handRef }: { handRef: React.RefObject<THREE.Group> }) => {
 type ClockProps = {
   onClockClick?: (angle: number) => void;
   year: number;
+  onRotationComplete?: (count: number) => void;
 };
 
-const Clock = ({ onClockClick, year }: ClockProps) => {
+const Clock = ({ onClockClick, year, onRotationComplete }: ClockProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const handRef = useRef<THREE.Group>(null);
   const gsapContextRef = useRef<gsap.Context | null>(null);
-  const previousAngleRef = useRef<number | null>(null); // Tracks the last angle during drag
+  const previousAngleRef = useRef<number | null>(null);
+  const cumulativeRotationRef = useRef<number>(0);
+  const [rotationCount, setRotationCount] = useState<number>(0);
 
   useEffect(() => {
     // Create GSAP context
@@ -105,6 +115,35 @@ const Clock = ({ onClockClick, year }: ClockProps) => {
       }
     };
   }, []);
+
+  const updateRotationCount = (prevAngle: number, currentAngle: number) => {
+    if (prevAngle === null) return;
+
+    // Calculate the change in angle
+    let deltaAngle = currentAngle - prevAngle;
+
+    // Adjust for angle wrapping
+    if (deltaAngle > Math.PI) {
+      deltaAngle -= 2 * Math.PI;
+    } else if (deltaAngle < -Math.PI) {
+      deltaAngle += 2 * Math.PI;
+    }
+
+    // Update cumulative rotation
+    cumulativeRotationRef.current += deltaAngle;
+
+    // Check for complete rotations (2π radians = one full rotation)
+    const completeRotations = Math.floor(
+      Math.abs(cumulativeRotationRef.current) / (2 * Math.PI),
+    );
+
+    if (completeRotations !== rotationCount) {
+      setRotationCount(completeRotations);
+      if (onRotationComplete) {
+        onRotationComplete(completeRotations);
+      }
+    }
+  };
 
   const normalizeAngle = (angle: number) => {
     while (angle > Math.PI) angle -= 2 * Math.PI;
@@ -120,6 +159,10 @@ const Clock = ({ onClockClick, year }: ClockProps) => {
     },
     [],
   );
+
+  useEffect(() => {
+    console.log("Rotation count:", rotationCount);
+  }, [rotationCount]);
 
   useEffect(() => {
     if (!handRef.current) return;
@@ -171,6 +214,7 @@ const Clock = ({ onClockClick, year }: ClockProps) => {
         return;
       }
 
+      updateRotationCount(previousAngleRef.current ?? 0, currentAngle);
       previousAngleRef.current = currentAngle;
 
       // Direct rotation application

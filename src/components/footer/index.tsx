@@ -6,8 +6,6 @@ import { BsFillSuitHeartFill, BsInstagram } from "react-icons/bs";
 import { FaYoutube } from "react-icons/fa";
 import { CONSTANT } from "~/constants";
 
-import { env } from "~/env";
-
 export default function Footer() {
   const router = useRouter();
   if (
@@ -33,7 +31,7 @@ export function FooterBody() {
       <div className="-mt-1 flex flex-col items-center justify-between gap-5 bg-primary-900 p-5 text-gray-100 md:flex-row">
         <div className="md:basis-1/5">
           <Image
-            src="/2025/logo-black.png"
+            src={CONSTANT.ASSETS.PUBLIC.LOGO_BLACK}
             width={150}
             height={100}
             alt="Incridea Logo"

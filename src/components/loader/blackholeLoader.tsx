@@ -7,9 +7,9 @@ import { LoaderContext } from "./loaderContext";
 import { CONSTANT } from "~/constants";
 
 // Images placed in public folder for faster loading
-const circleImage = `/${CONSTANT.YEAR}/landing/loader/circle.webp`;
-const backgroundImage = `/${CONSTANT.YEAR}/landing/loader/background.webp`;
-const logoImage = `/${CONSTANT.YEAR}/landing/loader/logo-combined.webp`;
+const circleImage = CONSTANT.ASSETS.LANDING.LOADERCIRCLE;
+const backgroundImage = CONSTANT.ASSETS.LANDING.LOADERBG;
+const logoImage = CONSTANT.ASSETS.PUBLIC.LOGO_COMBINED;
 
 export default function BlackHoleLoader() {
   const background = useRef(null);

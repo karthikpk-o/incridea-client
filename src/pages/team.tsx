@@ -6,7 +6,7 @@ const Page = () => {
     <div className="flex min-h-screen flex-col gap-y-8 bg-transparent pb-10 pt-32">
       <div className="px-4">
         <h1
-          className={`text-center font-life-craft text-5xl font-bold text-white lg:text-6xl`}
+          className={`text-center font-life-craft text-5xl text-white lg:text-6xl`}
         >
           Incridea&apos;s Technical Team
         </h1>
@@ -30,8 +30,6 @@ const Page = () => {
       </div>
     </div>
   );
-
-
 };
 
 export default Page;

@@ -37,6 +37,7 @@ import {
 
 import Image from "next/image";
 import { EventHandlers } from "@react-three/fiber/dist/declarations/src/core/events";
+import { CONSTANT } from "~/constants";
 
 const videos = [
   "https://res.cloudinary.com/dliarni5j/video/upload/v1739119567/shaan_z13zrz.mov",
@@ -59,11 +60,11 @@ const songname = [
   "Aadiyilalo - Masala Coffee",
 ];
 
-useGLTF.preload("/2025/pronites/singer.glb");
-useGLTF.preload("/2025/pronites/guitarist.glb");
-useGLTF.preload("/2025/Pronites/shaan.glb");
-useGLTF.preload("/2025/pronites/drums.glb");
-useGLTF.preload("/2025/Pronites/pianist.glb");
+useGLTF.preload(CONSTANT.ASSETS["3D"].SINGER);
+useGLTF.preload(CONSTANT.ASSETS["3D"].GUITARIST);
+useGLTF.preload(CONSTANT.ASSETS["3D"].SHAAN);
+useGLTF.preload(CONSTANT.ASSETS["3D"].DRUMS);
+useGLTF.preload(CONSTANT.ASSETS["3D"].PIANIST);
 
 export default function App() {
   const lightRef = useRef();
@@ -257,7 +258,7 @@ export default function App() {
                 <Image
                   width={400}
                   height={100}
-                  src="/2025/Pronites/shaan.webp"
+                  src={CONSTANT.ASSETS.PRONITE.SHAAN}
                   alt="Description"
                 />
               </div>
@@ -270,7 +271,7 @@ export default function App() {
                 <Image
                   width={400}
                   height={100}
-                  src="/2025/Pronites/masalacoffee.webp"
+                  src={CONSTANT.ASSETS.PRONITE.MASALACOFFEE}
                   alt="Description"
                 />
               </div>
@@ -461,7 +462,7 @@ export default function App() {
 }
 
 function ImagePlane() {
-  const texture = useTexture("/2025/Pronites/screentop.jpg"); // Add your image path here
+  const texture = useTexture(CONSTANT.ASSETS.PRONITE.SCREENTOP); // Add your image path here
 
   return (
     <mesh position={[-0.7, 23.8, -2]} rotation={[0, 0, 0]}>

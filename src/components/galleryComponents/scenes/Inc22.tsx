@@ -4,6 +4,7 @@ import { Draggable } from "gsap/dist/Draggable";
 import Image from "next/image";
 import Modal from "../gallery-modal";
 import PreviewComponent from "../previewComponent/preview-component";
+import { CONSTANT } from "~/constants";
 
 gsap.registerPlugin(Draggable);
 
@@ -124,7 +125,7 @@ const Inc22 = ({ imgArr }: { imgArr: string[] }) => {
         >
           <div className="relative translate-y-[10%] right-[8%] w-[90vw] sm:w-[200vw] h-[100vh] sm:h-[50vh] max-w-[1000px] max-h-[800px] sm:translate-y-[70%] sm:right-[4%]">
             <Image
-              src="/2025/gallery/tablet.png"
+              src={CONSTANT.ASSETS.GALLERY.TABLET}
               alt="Tablet frame"
               layout="fill"
               objectFit="contain"
@@ -160,7 +161,7 @@ const Inc22 = ({ imgArr }: { imgArr: string[] }) => {
               imgArr={imgArr}
               index={activeIndex}
               afterMovieLink="JHgT5PzLc4Q"
-              thumbnailSrc="/2025/gallery/thumbnails/incridea22.webp"
+              thumbnailSrc={CONSTANT.ASSETS.GALLERY.THUMBNAIL22}
             />
           </Modal>
         </div>

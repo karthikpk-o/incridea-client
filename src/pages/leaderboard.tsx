@@ -5,7 +5,7 @@ import { type NextPage } from "next";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import styles from "~/components/event/styles.module.css";
-import FallingItem from "~/components/login/fallingItem";
+import FallingItem from "~/components/leaderboard/fallingItem";
 import Spinner from "~/components/spinner";
 import { CONSTANT } from "~/constants";
 import { GetXpLeaderboardDocument } from "~/generated/generated";
@@ -117,7 +117,7 @@ const LeaderBoard: NextPage = () => {
         ([userId, data]) => ({
           userId,
           ...data,
-        })
+        }),
       );
 
       // Sort the array in descending order based on total points

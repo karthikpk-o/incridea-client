@@ -16,6 +16,7 @@ import LeaderBoard from "~/components/profile/LeaderBoard";
 import { Button } from "~/components/button/button";
 import { UserPen } from "lucide-react";
 import AvatarModal from "~/components/profile/avatarModal";
+import { CONSTANT } from "~/constants";
 
 const Profile: NextPage = () => {
   const { error, user: user, loading } = useAuth();
@@ -65,7 +66,12 @@ const Profile: NextPage = () => {
       <div className="flex h-screen flex-col items-center justify-center space-y-3 text-center">
         {/* Todo: Any graphic to fill space */}
         <div className="z-10 mt-8 flex h-96 items-center justify-center">
-          <Image src="/2025/gamer.png" alt="404" width={400} height={400} />
+          <Image
+            src={CONSTANT.ASSETS.PUBLIC.GAMER}
+            alt="404"
+            width={400}
+            height={400}
+          />
         </div>
         <h1 className="-translate-y-10 text-lg text-white lg:text-xl">
           Hey there! You need to login to view your profile page.
