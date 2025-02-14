@@ -73,7 +73,7 @@ const Event = ({
     tl.fromTo(
       shine,
       { x: "-100%" },
-      { x: "100%", duration: 0.5, ease: "power1.inOut" },
+      { x: "100%", duration: 0.5, ease: "power1.inOut" }
     );
 
     const button = buttonRef.current;
@@ -94,7 +94,7 @@ const Event = ({
     <div
       event-scroll
       onClick={() => router.push(generateEventUrl(event.name, event.id))}
-      className={`relative flex w-full -mt-16 md:-mt-12 justify-center items-center max-w-[80%] sm:max-w-sm md:max-w-md cursor-pointer flex-col rounded-2xl transition-transform duration-300 hover:scale-[1.02] mx-auto sm:mx-0`}
+      className={`relative flex w-full mb items-center max-w-[80%] sm:max-w-sm md:max-w-md cursor-pointer flex-col rounded-2xl transition-transform duration-300 hover:scale-[1.02] mx-auto sm:mx-0`}
       style={{ willChange: "transform" }}
     >
       <svg

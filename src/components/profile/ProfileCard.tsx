@@ -50,7 +50,7 @@ type BadgeGLTF = GLTF &
 function truncateText(text: string, maxChar = 20) {
   text = text.trim();
   if (text.length > maxChar) {
-    return text.slice(0, maxChar) + `${text.length}`;
+    return text.slice(0, maxChar) + "...";
   }
   return text;
 }

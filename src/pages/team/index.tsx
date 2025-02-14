@@ -51,9 +51,9 @@ const teamMembers: {
       role: "Team Lead | Full Stack",
       instagram: "https://www.instagram.com/satwikprabhu",
       github: "https://github.com/satwikrprabhu",
-      linkedin: "https://www.linkedin.com/in/satwik_prabhu",
+      linkedin: "https://www.linkedin.com/in/satwikprabhu",
       image: "/2025/team/satwik_prabhu.jpg",
-      quote: "I know where you live!",
+      quote: "I know where you live.",
     },
     {
       name: "Keerthan K",
@@ -129,7 +129,7 @@ const teamMembers: {
       quote: "Give 200% or Give nothing",
     },
     {
-      name: "Shishir G Karkera",
+      name: "Shishir Karkera",
       role: "Media Co-Head | Capture Incridea Head",
       instagram: "https://www.instagram.com/shishir.karkeraa",
       github: "https://github.com/shishirkarkeraa",

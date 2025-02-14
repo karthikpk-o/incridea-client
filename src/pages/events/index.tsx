@@ -71,7 +71,7 @@ const Page = ({ data }: Props) => {
             : CONSTANT.DATE.INCRIDEA.DAY3,
       ).getDate();
       tempFilteredEvents = tempFilteredEvents.filter((event) =>
-        event.rounds.some((round) => round.date?.getDate() === filteredDay),
+        event.rounds.some((round) => round.date && new Date(round.date).getDate() === filteredDay),
       );
     }
     if (currentCategoryFilter !== AllCategory.ALL)
