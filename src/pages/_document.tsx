@@ -1,5 +1,4 @@
-import { Head, Html, Main, NextScript } from "next/document";
-
+import { Html, Head, Main, NextScript } from "next/document";
 import { env } from "~/env";
 
 export default function Document() {

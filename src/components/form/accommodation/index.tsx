@@ -189,7 +189,7 @@ const AccommodationForm: FunctionComponent = () => {
             <div>
               <label className="mb-2 block text-sm text-white">Upload ID</label>
               <UploadButton
-                endpoint="accomodation"
+                endpoint="accommodation"
                 onUploadBegin={() => {
                   setUploading(true);
                 }}

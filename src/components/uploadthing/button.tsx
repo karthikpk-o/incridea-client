@@ -2,29 +2,27 @@ import { generateUploadButton } from "@uploadthing/react";
 import { getSession } from "next-auth/react";
 import { memo, type ComponentProps } from "react";
 
-import type { OurFileRouter } from "~/server/uploadthing";
+import type { UploadRouter } from "~/server/uploadthing/router";
 import { env } from "~/env";
+
+const InternalUploadButton = generateUploadButton<UploadRouter>({
+  url: `${env.NEXT_PUBLIC_THIS_APP_URL}/api/uploadthing`,
+});
 
 const UploadButton = memo(
   (
-    props: ComponentProps<ReturnType<typeof generateUploadButton>> & {
+    props: ComponentProps<typeof InternalUploadButton> & {
       customId?: string;
     },
-  ) => {
-    const Comp = generateUploadButton({
-      url: `${env.NEXT_PUBLIC_BASE_URL}/api/uploadthing`,
-    });
-
-    return (
-      <Comp
-        {...props}
-        headers={async () => ({
-          Authorization: (await getSession())?.accessToken ?? "",
-          ...(props.customId ? { custom_id: props.customId } : {}),
-        })}
-      />
-    );
-  },
+  ) => (
+    <InternalUploadButton
+      {...props}
+      headers={async () => ({
+        Authorization: (await getSession())?.accessToken ?? "",
+        ...(props.customId ? { custom_id: props.customId } : {}),
+      })}
+    />
+  )
 );
 
 UploadButton.displayName = "UploadButton";

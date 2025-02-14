@@ -16,21 +16,19 @@ import "./src/env";
 const config: NextConfig = {
   distDir: process.env.BUILD_DIR ?? ".next",
 
-  reactStrictMode: true,
+  experimental: {
+    // typedRoutes: true,
+  },
 
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "res.cloudinary.com",
+        hostname: "*.incridea.in",
       },
       {
         protocol: "https",
-        hostname: "incridea.in",
-      },
-      {
-        protocol: "https",
-        hostname: "utfs.io",
+        hostname: "*.utfs.io",
       },
       {
         protocol: "https",
@@ -40,17 +38,10 @@ const config: NextConfig = {
         protocol: "https",
         hostname: "example.com",
       },
-      // {
-      //   protocol: "https",
-      //   hostname: "placehold.co",
-      // },
     ],
   },
 
-  // webpack: (config) => {
-  //   config.resolve.fallback = { fs: false };
-  //   return config;
-  // },
+  reactStrictMode: true,
 };
 
 export default config;

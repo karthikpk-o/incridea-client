@@ -25,8 +25,16 @@ const Register: NextPage = () => {
   );
 
   if (userLoading) return <Loader />;
-  if (!user) void router.push("/login");
-  if (user && user?.role !== Role.User) void router.push("/profile");
+
+  if (!user) {
+    void router.push("/login")
+    return <Loader />
+  }
+
+  if (user.role !== Role.User) {
+    void router.push("/profile")
+    return <Loader />
+  }
 
   return (
     <div className="min-h-screen px-4 pb-10 pt-32 text-white md:px-6">

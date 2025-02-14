@@ -5,15 +5,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Parallax from "parallax-js";
 import { useEffect, useRef, useState } from "react";
-import { BsFillSuitHeartFill } from "react-icons/bs";
 
 import { AuthStatus, useAuth } from "~/hooks/useAuth";
 import { cn } from "~/lib/utils";
 import styles from "~/components/coming-soon/shootingStars.module.css";
 import { SessionProvider } from "next-auth/react";
 import HomeButton from "~/components/button/home";
+import { CONSTANT } from "~/constants";
 
-export default function Landing() {
+export default function Page() {
   return (
     <SessionProvider>
       <main className="relative h-screen overflow-hidden select-none">
@@ -36,6 +36,7 @@ export const HomeFooter = () => {
 
     return () => clearTimeout(timeout);
   }, [show]);
+
   return (
     <footer
       className={cn(
@@ -86,7 +87,7 @@ export const HomeFooter = () => {
             Made with &nbsp;<span className="text-red-600 text-sm">❤</span>
             &nbsp; by Technical Team
           </Link>
-          © Incridea 2025
+          © Incridea {CONSTANT.YEAR}
         </p>
       )}
     </footer>

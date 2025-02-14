@@ -35,7 +35,7 @@ const QuizImageUpload = React.memo(
 
     const deleteImage = async (url: string) => {
       const res = await fetch(
-        `${env.NEXT_PUBLIC_SERVER_URL}/uploadrthing/delete`,
+        `${env.NEXT_PUBLIC_SERVER_HTTP_URL}/api/uploadthing/delete`,
         {
           method: "POST",
           headers: {
@@ -45,28 +45,33 @@ const QuizImageUpload = React.memo(
           body: JSON.stringify({ url }),
         },
       );
+
+      if (res.ok) {
+        toast.success("Image deleted", { position: "bottom-right" });
+      } else {
+        toast.error("Image deletion failed", { position: "bottom-right" });
+      }
     };
 
     return (
       <>
         <div
-          className={`bodyFont flex grow items-center justify-center rounded-b-md md:rounded-md ${
-            highlighted ? "bg-blue/20 ring-2 ring-amber-500" : "bg-black/20"
-          }`}
-          // onClick={() => {
-          //   inputRef.current?.click();
-          // }}
-          // onDragOver={(e) => {
-          //   e.preventDefault();
-          //   setHighlighted(true);
-          // }}
-          // onDragLeave={(e) => {
-          //   e.preventDefault();
-          //   setHighlighted(false);
-          // }}
-          // onDrop={(e) => {
-          //   e.preventDefault();
-          //   setHighlighted(false);
+          className={`bodyFont flex grow items-center justify-center rounded-b-md md:rounded-md ${highlighted ? "bg-blue/20 ring-2 ring-amber-500" : "bg-black/20"
+            }`}
+        // onClick={() => {
+        //   inputRef.current?.click();
+        // }}
+        // onDragOver={(e) => {
+        //   e.preventDefault();
+        //   setHighlighted(true);
+        // }}
+        // onDragLeave={(e) => {
+        //   e.preventDefault();
+        //   setHighlighted(false);
+        // }}
+        // onDrop={(e) => {
+        //   e.preventDefault();
+        //   setHighlighted(false);
 
         //   const droppedFile = Array.from(e.dataTransfer.files);
 
@@ -109,7 +114,7 @@ const QuizImageUpload = React.memo(
           )}
         </div>
         <UploadButton
-          endpoint="quizQuestionImgUploader"
+          endpoint="quiz"
           className="mt-6"
           onBeforeUploadBegin={(files) => {
             //   setImage(files[0]!);
@@ -150,9 +155,18 @@ const QuizImageUpload = React.memo(
           }}
           onUploadError={(error) => {
             console.log(error);
-            toast.error("Image upload failed, please upload other image", {
-              position: "bottom-right",
-            });
+            if (error.message === "Invalid config: FileSizeMismatch") {
+              toast.error(
+                "Image upload failed, please upload image less than 512KB",
+                {
+                  position: "bottom-right",
+                },
+              );
+            } else {
+              toast.error("Image upload failed, please upload other image", {
+                position: "bottom-right",
+              });
+            }
             setManualLoading(false);
           }}
         />

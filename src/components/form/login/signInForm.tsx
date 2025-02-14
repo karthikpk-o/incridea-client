@@ -2,8 +2,6 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
   type FormEventHandler,
-  type FunctionComponent,
-  use,
   useState,
 } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
@@ -11,19 +9,17 @@ import { BiErrorCircle } from "react-icons/bi";
 
 import { Button } from "~/components/button/button";
 import Spinner from "~/components/spinner";
+import { AuthFormType } from "~/enums";
 
-type SignInFormProps = {
-  setWhichForm: (
-    whichForm: "signIn" | "resetPassword" | "signUp" | "resendEmail",
-  ) => void;
-  setGotDialogBox: (gotDialogBox: boolean) => void;
-  redirectUrl?: string;
-};
 
-const SignInForm: FunctionComponent<SignInFormProps> = ({
-  setWhichForm,
-  setGotDialogBox,
+const SignInForm = ({
+  setCurrentForm,
   redirectUrl,
+}: {
+  setCurrentForm: (
+    currentForm: AuthFormType,
+  ) => void;
+  redirectUrl?: string;
 }) => {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
   const [error, setError] = useState<string>("");
@@ -57,12 +53,10 @@ const SignInForm: FunctionComponent<SignInFormProps> = ({
           } else {
             setError(res.error);
           }
-          setGotDialogBox(true);
         }
 
         if (res?.ok) {
           setError("");
-          setGotDialogBox(false);
           setUserInfo({ email: "", password: "" });
           await router.push(
             redirectUrl ? decodeURIComponent(redirectUrl) : "/register",
@@ -119,7 +113,7 @@ const SignInForm: FunctionComponent<SignInFormProps> = ({
         </div>
 
         <button
-          onClick={() => setWhichForm("resetPassword")}
+          onClick={() => setCurrentForm(AuthFormType.RESET_PASSWORD)}
           type="button"
           className="-md:mt-1 mb-2 w-fit text-start text-sm text-accent-300 hover:underline"
         >
@@ -148,7 +142,7 @@ const SignInForm: FunctionComponent<SignInFormProps> = ({
               {verifyError && (
                 <button
                   type="button"
-                  onClick={() => setWhichForm("resendEmail")}
+                  onClick={() => setCurrentForm(AuthFormType.RESEND_EMAIL)}
                   className="inline-block text-start text-sm font-normal text-red-500 underline transition-colors hover:text-red-700"
                 >
                   Click here to resend verification email
@@ -165,7 +159,7 @@ const SignInForm: FunctionComponent<SignInFormProps> = ({
           </h4>
           <Button
             onClick={() => {
-              setWhichForm("signUp");
+              setCurrentForm(AuthFormType.SIGN_UP);
             }}
             variant={"ghost"}
             className="mx-1 mt-5 font-life-craft text-lg tracking-widest"

@@ -5,11 +5,11 @@ import Dashboard from '~/components/layout/dashboard'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { UploadButton } from '~/components/uploadthing/button'
-import { CONSTANT } from '~/constants'
 import { Role } from '~/generated/generated'
 import { AuthStatus, useAuth } from '~/hooks/useAuth'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import { Label } from '~/components/ui/label'
+import { type UploadRouterEndpoints, uploadRouterEndpoints } from '~/server/uploadthing/router'
 
 const Page = () => {
   const router = useRouter()
@@ -26,13 +26,13 @@ const Page = () => {
 }
 
 const InnerPage = () => {
-  const [liveCustomId, setLiveCustomId] = useState("")
-  const [liveEndpoint, setLiveEndpoint] = useState<typeof CONSTANT.UPLOADTHING_ENDPOINTS[number]>("asset")
+  const [liveCustomId, setLiveCustomId] = useState<string>("")
+  const [liveEndpoint, setLiveEndpoint] = useState<UploadRouterEndpoints[number]>("asset")
 
-  const [dataSet, setDataSet] = useState(false);
+  const [dataSet, setDataSet] = useState<boolean>(false);
 
-  const [customId, setCustomId] = useState("")
-  const [endpoint, setEndpoint] = useState("")
+  const [customId, setCustomId] = useState<string>("")
+  const [endpoint, setEndpoint] = useState<UploadRouterEndpoints[number]>("asset")
 
 
   const onUploadBegin = useMemo<ComponentProps<typeof UploadButton>["onUploadBegin"]>(() => () => {
@@ -56,13 +56,13 @@ const InnerPage = () => {
         <Label>Endpoint</Label>
         <Select
           value={liveEndpoint}
-          onValueChange={(value) => setLiveEndpoint(value as typeof CONSTANT.UPLOADTHING_ENDPOINTS[number])}>
+          onValueChange={(value) => setLiveEndpoint(value as UploadRouterEndpoints[number])}>
           <SelectTrigger className="w-full">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {
-              CONSTANT.UPLOADTHING_ENDPOINTS.map((ep, idx) => (
+              uploadRouterEndpoints.map((ep, idx) => (
                 <SelectItem key={idx} value={ep}>{ep}</SelectItem>
               ))
             }

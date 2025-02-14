@@ -5,14 +5,12 @@ import { FaAngleLeft } from "react-icons/fa";
 
 import { Button } from "~/components/button/button";
 import Spinner from "~/components/spinner";
+import { AuthFormType } from "~/enums";
 import { EmailVerificationDocument } from "~/generated/generated";
 
-type Props = {
-  setWhichForm: (whichForm: "signIn" | "resetPassword" | "signUp") => void;
-  setGotDialogBox: (gotDialogBox: boolean) => void;
-};
-
-const ResendEmail = ({ setWhichForm, setGotDialogBox }: Props) => {
+const ResendEmail = ({ setCurrentForm }: {
+  setCurrentForm: (currentForm: AuthFormType) => void;
+}) => {
   const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
@@ -20,8 +18,6 @@ const ResendEmail = ({ setWhichForm, setGotDialogBox }: Props) => {
     emailVerificationMutation,
     { data, loading, error: emailVerificationError },
   ] = useMutation(EmailVerificationDocument);
-
-  if (emailVerificationError) setGotDialogBox(true);
 
   const handleSubmit = async () => {
     setError(null);
@@ -34,14 +30,6 @@ const ResendEmail = ({ setWhichForm, setGotDialogBox }: Props) => {
     }).then((res) => {
       if (res.data?.sendEmailVerification.__typename === "Error") {
         setError(res.data.sendEmailVerification.message);
-        setGotDialogBox(true);
-      }
-
-      if (
-        res.data?.sendEmailVerification.__typename ===
-        "MutationSendEmailVerificationSuccess"
-      ) {
-        setGotDialogBox(true);
       }
     });
   };
@@ -49,9 +37,8 @@ const ResendEmail = ({ setWhichForm, setGotDialogBox }: Props) => {
   return (
     <>
       <form
-        className={`relative flex min-h-full flex-col justify-center gap-2 px-3 py-3 ${
-          loading && "pointer-events-none cursor-not-allowed"
-        }`}
+        className={`relative flex min-h-full flex-col justify-center gap-2 px-3 py-3 ${loading && "pointer-events-none cursor-not-allowed"
+          }`}
         onSubmit={async (e) => {
           e.preventDefault();
           await handleSubmit();
@@ -61,7 +48,7 @@ const ResendEmail = ({ setWhichForm, setGotDialogBox }: Props) => {
           Resend Verification Email
         </h2>
         {data?.sendEmailVerification.__typename ===
-        "MutationSendEmailVerificationSuccess" ? (
+          "MutationSendEmailVerificationSuccess" ? (
           <div className="flex flex-col items-center gap-2 rounded-md bg-primary-900/70 p-4 pb-2 text-center font-semibold text-secondary-600">
             <BiCheckCircle size={"2rem"} />
             <div className="mb-5 flex flex-col items-center gap-3 rounded-md text-center font-semibold">
@@ -127,7 +114,7 @@ const ResendEmail = ({ setWhichForm, setGotDialogBox }: Props) => {
         <Button
           variant={"ghost"}
           className="font-life-craft text-lg tracking-widest"
-          onClick={() => setWhichForm("signIn")}
+          onClick={() => setCurrentForm(AuthFormType.SIGN_IN)}
         >
           <FaAngleLeft /> Go Back
         </Button>

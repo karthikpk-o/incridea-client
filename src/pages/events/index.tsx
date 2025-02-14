@@ -111,9 +111,8 @@ const Page = ({ data }: Props) => {
           <div
             data-scroll-container
             ref={containerRef}
-            className={`relative px-2 md:px-10 ${
-              filteredEvents.length > 0 ? "pt-28" : "pt-10 md:pt-20"
-            } flex flex-col items-center justify-center`}
+            className={`relative px-2 md:px-10 ${filteredEvents.length > 0 ? "pt-28" : "pt-10 pb-24 md:pt-20"
+              } flex flex-col items-center justify-center`}
           >
             <div
               data-scroll-section
@@ -154,9 +153,9 @@ const Page = ({ data }: Props) => {
                       <IoTodayOutline size="16" />
                       {currentDayFilter !== "All"
                         ? currentDayFilter
-                            .toLowerCase()
-                            .replace(/_/g, " ")
-                            .replace(/\b\w/g, (char) => char.toUpperCase())
+                          .toLowerCase()
+                          .replace(/_/g, " ")
+                          .replace(/\b\w/g, (char) => char.toUpperCase())
                         : "Day"}
                     </Menu.Button>
                     <Transition
@@ -172,11 +171,10 @@ const Page = ({ data }: Props) => {
                           <Menu.Item key={filter}>
                             {() => (
                               <button
-                                className={`${
-                                  currentDayFilter === filter
-                                    ? "bg-white/20"
-                                    : "bg-black/10"
-                                } w-36 rounded-full border border-primary-300/80 px-3 py-1.5 text-sm text-white transition-all duration-300 hover:bg-white/10`}
+                                className={`${currentDayFilter === filter
+                                  ? "bg-white/20"
+                                  : "bg-black/10"
+                                  } w-36 rounded-full border border-primary-300/80 px-3 py-1.5 text-sm text-white transition-all duration-300 hover:bg-white/10`}
                                 onClick={() => setCurrentDayFilter(filter)}
                               >
                                 {
@@ -206,9 +204,9 @@ const Page = ({ data }: Props) => {
                       <BiCategory size="16" />
                       {currentCategoryFilter !== AllCategory.ALL
                         ? currentCategoryFilter
-                            .toLowerCase()
-                            .replace(/_/g, " ")
-                            .replace(/\b\w/g, (char) => char.toUpperCase())
+                          .toLowerCase()
+                          .replace(/_/g, " ")
+                          .replace(/\b\w/g, (char) => char.toUpperCase())
                         : "Category"}
                     </Menu.Button>
                     <Transition
@@ -221,35 +219,35 @@ const Page = ({ data }: Props) => {
                     >
                       <Menu.Items className="absolute top-11 z-10 mt-1 flex flex-col gap-2 overflow-hidden rounded-3xl border border-primary-300/80 bg-primary-800 p-2 text-center shadow-2xl shadow-black/70">
                         {[
-                          Object.keys(EventCategory),
-                          Object.keys(AllCategory),
-                        ].map((e, idx) => {
-                          return e.map((filter, id) => {
-                            return (
-                              <Menu.Item key={id * 100000000 + idx}>
-                                <button
-                                  className={`${
-                                    currentCategoryFilter ===
-                                    (filter as EventCategory | AllCategory)
-                                      ? "bg-white/20"
-                                      : "bg-black/10"
+                          EventCategory.Core,
+                          EventCategory.Technical,
+                          EventCategory.NonTechnical,
+                          EventCategory.Special,
+                          AllCategory.ALL,
+                        ].map((filter, idx) => {
+                          return (
+                            <Menu.Item key={idx}>
+                              <button
+                                className={`${currentCategoryFilter ===
+                                  (filter)
+                                  ? "bg-white/20"
+                                  : "bg-black/10"
                                   } w-36 rounded-full border border-primary-200/80 px-3 py-1.5 text-sm text-white transition-all duration-300 hover:bg-white/10`}
-                                  onClick={() =>
-                                    setCurrentCategoryFilter(
-                                      filter as EventCategory | AllCategory,
-                                    )
-                                  }
-                                >
-                                  {filter
-                                    .replace("_", " ")
-                                    .toLowerCase()
-                                    .replace(/\b\w/g, (char) =>
-                                      char.toUpperCase(),
-                                    )}
-                                </button>
-                              </Menu.Item>
-                            );
-                          });
+                                onClick={() =>
+                                  setCurrentCategoryFilter(
+                                    filter,
+                                  )
+                                }
+                              >
+                                {filter
+                                  .replace("_", " ")
+                                  .toLowerCase()
+                                  .replace(/\b\w/g, (char) =>
+                                    char.toUpperCase(),
+                                  )}
+                              </button>
+                            </Menu.Item>
+                          );
                         })}
                       </Menu.Items>
                     </Transition>

@@ -3,9 +3,8 @@ import { Combobox, Transition } from "@headlessui/react";
 import Link from "next/link";
 import {
   useState,
-  type FormEventHandler,
-  type FunctionComponent,
   Fragment,
+  type FormEvent,
 } from "react";
 import {
   AiFillEye,
@@ -18,22 +17,20 @@ import { BsChevronExpand } from "react-icons/bs";
 import { Button } from "~/components/button/button";
 import Spinner from "~/components/spinner";
 import { CONSTANT } from "~/constants";
+import { AuthFormType } from "~/enums";
 import {
   CollegesDocument,
   EmailVerificationDocument,
   SignUpDocument,
 } from "~/generated/generated";
 
-type SignUpFormProps = {
-  setWhichForm: (
-    whichForm: "signIn" | "resetPassword" | "signUp" | "resendEmail",
-  ) => void;
-  setGotDialogBox: (gotDialogBox: boolean) => void;
-};
 
-const SignUpForm: FunctionComponent<SignUpFormProps> = ({
-  setWhichForm,
-  setGotDialogBox,
+const SignUpForm = ({
+  setCurrentForm,
+}: {
+  setCurrentForm: (
+    currentForm: AuthFormType,
+  ) => void;
 }) => {
   const [userInfo, setUserInfo] = useState({
     name: "",
@@ -52,19 +49,13 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = ({
   const [signUpMutation, { loading, error: mutationError }] =
     useMutation(SignUpDocument);
 
-  if (mutationError) setGotDialogBox(false);
-
   const [
     emailVerificationMutation,
     { loading: emailVerificationLoading, error: emailVerificationError },
   ] = useMutation(EmailVerificationDocument);
 
-  if (emailVerificationError) setGotDialogBox(true);
-
   const { data: collegeData, loading: collegesLoading } =
     useQuery(CollegesDocument);
-
-  if (emailVerificationError) setGotDialogBox(true);
 
   const sortColleges = () => {
     if (collegeData?.colleges.__typename !== "QueryCollegesSuccess") return [];
@@ -84,7 +75,7 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = ({
       .sort((a, b) => {
         return a.name.localeCompare(b.name);
       });
-    return [nmamit, ...sortedColleges, other];
+    return [...(nmamit ? [nmamit] : []), ...sortedColleges, ...(other ? [other] : [])];
   };
 
   const sortedColleges = sortColleges();
@@ -118,16 +109,15 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = ({
     }).then((res) => {
       if (res.data?.sendEmailVerification.__typename === "Error") {
         setError(res.data.sendEmailVerification.message);
-        setGotDialogBox(true);
       } else {
         setEmailSuccess(true);
-        setGotDialogBox(true);
       }
     });
   };
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     setVerifyError(false);
     setError("");
 
@@ -142,7 +132,12 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = ({
       return;
     }
 
-    if (selectedCollege?.name === CONSTANT.COLLEGE_NAME) {
+    if (!selectedCollege) {
+      setError("Please select a college");
+      return;
+    }
+
+    if (selectedCollege.name === CONSTANT.COLLEGE_NAME) {
       if (userInfo.email.split("@").length > 1) {
         setError('Please only enter your USN without "@nmamit.in"');
         return;
@@ -162,11 +157,11 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = ({
       return;
     }
 
-    signUpMutation({
+    const { data: signUpData } = await signUpMutation({
       variables: {
         name: userInfo.name,
         email:
-          selectedCollege?.name === CONSTANT.COLLEGE_NAME
+          selectedCollege.name === CONSTANT.COLLEGE_NAME
             ? `${userInfo.email.trim()}@nmamit.in`
             : userInfo.email,
         password: userInfo.password,
@@ -174,38 +169,42 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = ({
         collegeId: Number(userInfo.college),
       },
     })
-      .then(async (res) => {
-        if (res.data?.signUp.__typename === "MutationSignUpSuccess") {
-          await emailVerificationMutation({
-            variables: {
-              email:
-                selectedCollege?.name === CONSTANT.COLLEGE_NAME
-                  ? `${userInfo.email}@nmamit.in`
-                  : userInfo.email,
-            },
-          }).then((res) => {
-            if (res.data?.sendEmailVerification.__typename === "Error") {
-              setError(res.data.sendEmailVerification.message);
-              setGotDialogBox(true);
-            }
 
-            if (
-              res.data?.sendEmailVerification.__typename ===
-              "MutationSendEmailVerificationSuccess"
-            ) {
-              setEmailSuccess(true);
-              setGotDialogBox(true);
-            }
-          });
-        }
+    if (!signUpData) {
+      setError("An error occurred!");
+      return
+    }
 
-        if (res.data?.signUp.__typename === "Error") {
-          setError(res.data.signUp.message);
-          if (res.data.signUp.message.includes("verify")) setVerifyError(true);
-          setGotDialogBox(true);
-        }
-      })
-      .catch(console.log);
+    if (signUpData.signUp.__typename === "Error") {
+      setError(signUpData.signUp.message);
+      if (signUpData.signUp.message.includes("verify")) setVerifyError(true);
+      return
+    }
+
+    const { data: emailVerifyData } = await emailVerificationMutation({
+      variables: {
+        email:
+          selectedCollege?.name === CONSTANT.COLLEGE_NAME
+            ? `${userInfo.email}@nmamit.in`
+            : userInfo.email,
+      },
+    })
+
+    if (!emailVerifyData) {
+      setError("An error occurred!");
+      return
+    }
+
+    if (emailVerifyData.sendEmailVerification.__typename === "Error") {
+      setError(emailVerifyData.sendEmailVerification.message);
+      return
+    }
+
+    if (typeof window !== "undefined")
+      // Checked in /login route
+      window.localStorage.setItem("user-has-signed-up", "true");
+
+    setEmailSuccess(true);
   };
 
   // NOTE: change handler for all fields except college
@@ -283,8 +282,7 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = ({
                         intent={"primary"}
                       />
                     </div>
-                  ) : filteredColleges?.length === 0 && query !== "" ? (
-                    //FIXME no need to touch
+                  ) : filteredColleges.length === 0 && query !== "" ? (
                     <div className="relative select-none px-4 py-2 text-xs font-semibold text-gray-700 md:text-base">
                       College not found. Please{" "}
                       <Link
@@ -295,15 +293,15 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = ({
                       </Link>
                     </div>
                   ) : (
-                    filteredColleges?.map((college) => (
+                    filteredColleges?.map((college, idx) => (
                       <Combobox.Option
+                        key={idx}
                         className={({ active }) =>
                           `relative cursor-pointer select-none px-4 py-2 text-xs md:text-base ${active
                             ? "bg-secondary-600 text-white"
                             : "text-gray-900"
                           }`
                         }
-                        key={college?.id}
                         value={college}
                       >
                         {college?.name}
@@ -434,7 +432,7 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = ({
             {verifyError && (
               <button
                 type="button"
-                onClick={() => setWhichForm("resendEmail")}
+                onClick={() => setCurrentForm(AuthFormType.RESEND_EMAIL)}
                 className="inline-block text-start text-sm font-normal text-red-500 underline transition-colors hover:text-red-700"
               >
                 Click here to resend verification email
@@ -467,23 +465,6 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = ({
         </div>
       )}
 
-      <div className="relative mt-2 flex flex-col text-center">
-        <hr className="my-3 border-accent-50" />
-        <h4 className="absolute right-1/2 top-0.5 mx-auto w-max translate-x-1/2 rounded-full bg-accent-900/90 px-3 text-sm text-accent-50 md:px-2">
-          Already have an account?
-        </h4>
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setWhichForm("signIn");
-          }}
-          type="button"
-          className="mt-4 font-life-craft text-lg tracking-widest"
-        >
-          Sign in instead
-        </Button>
-      </div>
-
       {(loading || emailVerificationLoading) && (
         <div className="absolute inset-0 z-10 flex h-full w-full cursor-not-allowed flex-col items-center justify-center gap-4 rounded-lg opacity-60">
           <Spinner className="my-0 h-fit text-[#dd5c6e]" intent={"primary"} />
@@ -492,6 +473,24 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = ({
           )}
         </div>
       )}
+
+      <div className="relative flex flex-col text-center">
+        <hr className="my-3 border-accent-50" />
+        <h4 className="absolute right-1/2 top-0.5 mx-auto w-max translate-x-1/2 rounded-full bg-accent-900/90 px-5 py-0.5 text-sm text-accent-50">
+          Already have an account?
+        </h4>
+        <Button
+          variant={"ghost"}
+          onClick={() => {
+            setCurrentForm(AuthFormType.SIGN_IN);
+          }}
+          type="button"
+          className="mt-4 font-life-craft text-lg tracking-widest"
+        >
+          Sign in instead
+        </Button>
+      </div>
+
     </form>
   );
 };

@@ -1,32 +1,33 @@
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { type FunctionComponent, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { GiConfirmed } from "react-icons/gi";
 import { MdError } from "react-icons/md";
-import { toast } from "sonner";
 
 import Spinner from "~/components/spinner";
 import { VerifyEmailDocument } from "~/generated/generated";
 
-const VerifyEmailComponent: FunctionComponent = () => {
+const VerifyEmail = () => {
   const router = useRouter();
+  const { token }: { token?: string } = router.query;
+
   const [error, setError] = useState<string | null>(null);
   const [isMutationExecuted, setIsMutationExecuted] = useState<boolean>(false);
-
-  const token = useRouter().query.token as string | undefined;
 
   const [verifyMutation, { data, loading }] = useMutation(VerifyEmailDocument);
 
   useEffect(() => {
-    if (token && !isMutationExecuted) {
-      setIsMutationExecuted(true);
-      void verifyMutation({ variables: { token } }).then((res) => {
-        if (res.data?.verifyEmail.__typename === "Error") {
-          setError(res.data.verifyEmail.message);
-        }
-      });
+    const verifyToken = async () => {
+      if (token && !isMutationExecuted) {
+        setIsMutationExecuted(true);
+        const { data: verifyData } = await verifyMutation({ variables: { token } })
+        if (verifyData?.verifyEmail.__typename === "Error")
+          setError(verifyData.verifyEmail.message);
+      }
     }
+
+    void verifyToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, isMutationExecuted]);
 
@@ -62,4 +63,4 @@ const VerifyEmailComponent: FunctionComponent = () => {
   );
 };
 
-export default VerifyEmailComponent;
+export default VerifyEmail

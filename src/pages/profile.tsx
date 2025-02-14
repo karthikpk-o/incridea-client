@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import "locomotive-scroll/dist/locomotive-scroll.css";
-import { type HTMLAttributes, useEffect } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { AddXpDocument, GetUserXpDocument, Role } from "~/generated/generated";
 import Loader from "~/components/loader";
@@ -11,7 +11,6 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { type NextPage } from "next";
 import Image from "next/image";
-import { env } from "~/env";
 import Link from "next/link";
 import LeaderBoard from "~/components/profile/LeaderBoard";
 import { Button } from "~/components/button/button";

@@ -1,7 +1,7 @@
 import { createRouteHandler } from "uploadthing/next-legacy";
 
-import { ourFileRouter } from "~/server/uploadthing";
+import { uploadRouter } from "~/server/uploadthing/router";
 
 export default createRouteHandler({
-  router: ourFileRouter,
+  router: uploadRouter,
 });
