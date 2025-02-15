@@ -15,8 +15,8 @@ interface SEOProps {
  * Handles all meta tags and SEO-related head elements
  * Provides default values for Capture Incridea website
  */
-const BaseSEO = ({ 
-  title = "Incridea | Techno-Cultural Fest of NMAM Institute of Technology", 
+const BaseSEO = ({
+  title = "Incridea'25 | Techno-Cultural Fest of NMAM Institute of Technology",
   description = " National level techno-cultural fest, NMAMIT, Nitte. Innovate. Create. Ideate.",
   image = "/favicon/favicon-16x16.png",
   url = "https://incridea.in"
@@ -28,7 +28,7 @@ const BaseSEO = ({
       <meta name="description" content={description} />
 
       <meta name="keywords" content="incridea, incredia ,nmamit,capture incridea,nitte,college fest" />
-      
+
       {/* Social Media Meta Tags */}
       {/* Open Graph */}
       <meta property="og:type" content="website" />
@@ -48,7 +48,7 @@ const BaseSEO = ({
       <meta name="robots" content="index, follow" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="canonical" href={url} />
-      
+
       {/* Favicon Configuration */}
       <link rel="icon" type="image/png" href="/favicon/favicon.ico" />
       <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />

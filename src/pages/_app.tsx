@@ -131,7 +131,12 @@ export default function App({
 
       <ApolloProvider client={apolloClient}>
         <Toaster />
-        <BaseSEO />
+        <BaseSEO {...(router.pathname !== "/" && {
+          title: (() => {
+            const p = router.pathname.split("/")[1] ?? ""
+            return p.charAt(0).toUpperCase() + p.slice(1)
+          })() + " | " + "Incridea'25",
+        })} />
         <LoaderProvider>
           <BackGroundGradient>
             <div

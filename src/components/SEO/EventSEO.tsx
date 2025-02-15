@@ -27,6 +27,7 @@ const EventSEO = ({
     console.log(title, description, image, url)
     return (
         <Head>
+            <title>{title}</title>
             {/* Open Graph */}
             <meta property="og:url" content={url ?? "https://incridea.in"} />
             <meta property="og:title" content={title ?? "Incridea | Techno-Cultural Fest of NMAM Institute of Technology"} />
