@@ -2,7 +2,7 @@ import { useMutation } from "@apollo/client";
 import Image from "next/image";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { AddXpDocument,GetUserXpDocument } from "~/generated/generated";
+import { AddXpDocument, GetUserXpDocument } from "~/generated/generated";
 import Banner from "~/components/aboutUs/banner";
 import { CONSTANT } from "~/constants";
 import { AuthStatus, useAuth } from "~/hooks/useAuth";
@@ -19,8 +19,8 @@ const images = [
 ];
 
 const About = () => {
-   const session = useAuth();
-  
+  const session = useAuth();
+
   const [isActive, setIsActive] = useState(false);
   const [calledXp, setCalledXp] = useState(false);
 
@@ -32,29 +32,8 @@ const About = () => {
     awaitRefetchQueries: true,
   });
 
-  const handleAddXp = () => {
-    if(session.status === AuthStatus.AUTHENTICATED){
-    if (calledXp) {
-      return;
-    }
-    setCalledXp(true);
-    const promise = addXp().then((res) => {
-      if (res.data?.addXP.__typename === "MutationAddXPSuccess") {
-        toast.success(
-          `Congratulations! You have found ${res.data?.addXP.data.level.point} Time Stones!`,
-          {
-            position: "bottom-center",
-            style: {
-              backgroundColor: "#f1e5d0",
-              color: "#005c39",
-              fontWeight: "bold",
-            },
-          },
-        );
-      }
-    });
-     }
-     else{
+  const handleAddXp = async () => {
+    if (session.status !== AuthStatus.AUTHENTICATED) {
       toast.error("Please login to collect the Time Stones!", {
         position: "bottom-center",
         style: {
@@ -63,8 +42,28 @@ const About = () => {
           fontWeight: "bold",
         },
       });
-     }
+      return
+    }
+
+    if (calledXp)
+      return;
+
+    setCalledXp(true);
+    const { data } = await addXp()
+    if (data?.addXP.__typename === "MutationAddXPSuccess")
+      toast.success(
+        `Congratulations! You have found ${data.addXP.data.level.point} Time Stones!`,
+        {
+          position: "bottom-center",
+          style: {
+            backgroundColor: "#f1e5d0",
+            color: "#005c39",
+            fontWeight: "bold",
+          },
+        },
+      );
   };
+
   return (
     <div className="max-w-screen-2xl mx-auto p-4 md:p-32 pb-10 flex flex-col gap-y-2 md:gap-16">
       <div className="flex min-h-screen flex-col gap-y-2 md:gap-16">
@@ -201,7 +200,7 @@ const About = () => {
                 className={`object-contain logo ${isActive ? "active" : ""} object-contain origin-bottom animate-shakelogo`}
                 height={400}
                 width={400}
-                onClick={()=>handleAddXp()} 
+                onClick={async () => await handleAddXp()}
               />
               {images.map(({ id, alt }) => (
                 // eslint-disable-next-line @next/next/no-img-element

@@ -16,6 +16,8 @@ import BackGroundGradient from "~/components/layout/background";
 import { LoaderProvider } from "~/components/loader/loaderContext";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import BaseSEO from "~/components/SEO/BaseSEO";
+import { scan } from "react-scan";
+import { env } from "~/env";
 
 const Navbar = dynamic(() => import("~/components/navbar"), { ssr: false });
 
@@ -51,7 +53,6 @@ export const trap = LocalFont({
       weight: "800",
       style: "normal",
     },
-
     {
       path: "../font/Trap-SemiBold.otf",
       weight: "500",
@@ -76,9 +77,12 @@ export default function App({
   initialApolloState,
 }: AppProps & { initialApolloState?: NormalizedCacheObject }) {
   const router = useRouter();
+
   const apolloClient = useApollo(initialApolloState);
-  const [isLoading, setIsLoading] = useState(false);
+
   const loadingTimeout = useRef<NodeJS.Timeout>();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLoadingStart = useCallback((url: string) => {
     if (url === "/") return;
@@ -115,6 +119,14 @@ export default function App({
       router.events.off("routeChangeError", handleLoadingComplete);
     };
   }, [router, handleLoadingStart, handleLoadingComplete]);
+
+  useEffect(() => {
+    scan({
+      enabled: env.NEXT_PUBLIC_NODE_ENV === "development",
+      log: true,
+    });
+  }, []);
+
   const shouldRenderNavbar =
     !router.pathname.startsWith("/explore") &&
     !router.pathname.startsWith("/theme") &&
@@ -125,18 +137,23 @@ export default function App({
       <GoogleAnalytics
         gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ""}
       />
+
       <AnimatePresence mode="wait">
         {isLoading && <LoadingScreen />}
       </AnimatePresence>
 
       <ApolloProvider client={apolloClient}>
         <Toaster />
-        <BaseSEO {...(router.pathname !== "/" && {
-          title: (() => {
-            const p = router.pathname.split("/")[1] ?? ""
-            return p.charAt(0).toUpperCase() + p.slice(1)
-          })() + " | " + "Incridea'25",
-        })} />
+
+        <BaseSEO
+          {...(router.pathname !== "/" && {
+            title: (() => {
+              const p = router.pathname.split("/")[1] ?? ""
+              return p.charAt(0).toUpperCase() + p.slice(1)
+            })() + " | " + "Incridea'25",
+          })}
+        />
+
         <LoaderProvider>
           <BackGroundGradient>
             <div
@@ -148,7 +165,10 @@ export default function App({
             >
               {shouldRenderNavbar && <Navbar />}
               <AnimatePresence mode="wait">
-                <Component key={router.pathname} {...pageProps} />
+                <Component
+                  key={router.pathname}
+                  {...pageProps}
+                />
               </AnimatePresence>
               <Footer />
             </div>
