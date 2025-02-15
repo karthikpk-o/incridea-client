@@ -20,7 +20,7 @@ const Page = () => {
             key={idx}
             name={name}
             role={details.role}
-            image={`/${CONSTANT.YEAR}/team/${details.image}`}
+            image={details.image}
             linkedin={details.linkedin}
             instagram={details.instagram}
             github={details.github}

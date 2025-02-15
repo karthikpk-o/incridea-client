@@ -13,8 +13,16 @@ const Accommodation: NextPage = () => {
   const { user, loading } = useAuth();
 
   if (loading) return <Loader />;
-  if (!user) void router.push("/login");
-  if (user?.college?.id == "1") void router.push("/profile");
+
+  if (!user) {
+    void router.push("/login");
+    return <>Redirecting...</>;
+  }
+
+  if (user?.college?.id == "1") {
+    void router.push("/profile");
+    return <>Redirecting...</>;
+  }
 
   return (
     <>

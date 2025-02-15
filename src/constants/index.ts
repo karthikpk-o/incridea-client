@@ -1,6 +1,6 @@
 import { SPONSORS } from "~/constants/sponsors";
 import { TEAM_MEMBERS } from "~/constants/team";
-import { ASSETS } from "~/constants/images";
+import { ASSETS } from "~/constants/assets";
 
 const CONSTANT = {
   BASE_URL: "https://incridea.in" as const,

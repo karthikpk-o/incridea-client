@@ -21,42 +21,42 @@ const Navbar = () => {
     label: string;
     href: string;
   }[] = [
-    {
-      id: 3,
-      label: "Home",
-      href: "/",
-    },
-    {
-      id: 2,
-      label: "Explore",
-      href: "/explore",
-    },
-    {
-      id: 1,
-      label: "Events",
-      href: "/events",
-    },
-    // {
-    //   id: 4,
-    //   label: "Sponsors",
-    //   href: "/sponsors",
-    // },
-    {
-      id: 4,
-      label: "Gallery",
-      href: "/gallery",
-    },
-    {
-      id: 5,
-      label: "Pronites",
-      href: "/pronites",
-    },
-    {
-      id: 6,
-      label: "About",
-      href: "/about",
-    },
-  ];
+      {
+        id: 3,
+        label: "Home",
+        href: "/",
+      },
+      {
+        id: 2,
+        label: "Explore",
+        href: "/explore",
+      },
+      {
+        id: 1,
+        label: "Events",
+        href: "/events",
+      },
+      // {
+      //   id: 4,
+      //   label: "Sponsors",
+      //   href: "/sponsors",
+      // },
+      {
+        id: 4,
+        label: "Gallery",
+        href: "/gallery",
+      },
+      {
+        id: 5,
+        label: "Pronites",
+        href: "/pronites",
+      },
+      {
+        id: 6,
+        label: "About",
+        href: "/about",
+      },
+    ];
 
   useEffect(() => {
     gsap.set(textRef.current, { opacity: 1 });
@@ -100,7 +100,7 @@ const Navbar = () => {
           clipPath:
             "polygon(3% 0%, 97% 0%, 100% 50%, 97% 100%, 3% 100%, 0% 50%)",
         }}
-        className="fixed font-life-craft tracking-wider w-full top-0 bg-white/10 backdrop-blur-2xl h-16 md:flex hidden items-center justify-center rounded-full z-50"
+        className="fixed font-life-craft tracking-wider w-full top-0 bg-white/10 backdrop-blur-2xl h-16 lg:flex hidden items-center justify-center rounded-full z-50"
       >
         <div className="flex items-center 2xl:mr-[20rem] lg:mr-[15rem] mr-[11rem] xl:gap-x-20 lg:gap-x-12 gap-x-8 text-2xl">
           {tabs.slice(0, 3).map((tab) => (
@@ -172,7 +172,7 @@ const Navbar = () => {
           ))}
         </div>
       </nav>
-      <MobileNav user={user}/>
+      <MobileNav user={user} />
     </>
   );
 };

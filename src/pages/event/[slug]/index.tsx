@@ -20,11 +20,11 @@ import EventDetails from "~/components/general/event/eventDetails";
 import EventRegistration from "~/components/general/event/eventRegistration";
 import { CONSTANT } from "~/constants";
 import EventSEO from "~/components/SEO/EventSEO";
-import { env } from "~/env";
 import {
   EventByIdDocument,
   type EventByIdQuery,
   type EventByIdQueryVariables,
+  EventType,
   PublishedEventsSlugDocument,
 } from "~/generated/generated";
 import { client } from "~/lib/apollo";
@@ -147,7 +147,7 @@ const Page = ({ event, error }: Props) => {
         Icon: IoPeopleOutline,
       },
       {
-        name: eventTypeText ? "Maximum Participants" : "Maximum Teams", //eventTypeText would be empty for solo events
+        name: event.eventType === EventType.Team || event.eventType === EventType.TeamMultipleEntry ? "Maximum Teams" : "Maximum Participants",
         text: event.maxTeams,
         Icon: IoInformationOutline,
       },
@@ -391,10 +391,12 @@ const Page = ({ event, error }: Props) => {
               )}
             </div>
           </section>
-        </div>
-      );
+        </>
+      )}
+    </div>
+  );
 };
 
-      export default Page;
+export default Page;
 
-      export {getStaticPaths, getStaticProps};
+export { getStaticPaths, getStaticProps };

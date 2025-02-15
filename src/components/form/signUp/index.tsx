@@ -338,7 +338,7 @@ const SignUpForm = ({
             {verifyError && (
               <button
                 type="button"
-                onClick={() => setWhichForm("resendEmail")}
+                onClick={() => setCurrentForm("RESEND_EMAIL")}
                 className="inline-block text-start text-sm font-normal text-red-500 underline transition-colors hover:text-red-700"
               >
                 Click here to resend verification email

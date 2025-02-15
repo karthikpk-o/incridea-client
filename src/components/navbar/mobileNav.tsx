@@ -370,13 +370,13 @@ const MobileNav = ({
           clipPath:
             "polygon(3% 0%, 97% 0%, 100% 50%, 97% 100%, 3% 100%, 0% 50%)",
         }}
-        className="fixed w-screen top-4 bg-white/10 backdrop-blur-2xl h-16 flex md:hidden justify-between items-center px-6 z-40"
+        className="fixed w-screen top-4 bg-white/10 backdrop-blur-2xl h-16 flex lg:hidden justify-between items-center px-6 z-40"
       >
         <Link href="/">
           {isClient && (
             <Image
               className="w-24 transition-opacity hover:opacity-75"
-              src={`/2025/logo.png`}
+              src={`/2025/logo.webp`}
               alt="Logo"
               width={100}
               height={80}
