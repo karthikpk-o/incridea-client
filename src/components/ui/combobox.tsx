@@ -1,17 +1,16 @@
 "use client";
 
-import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "~/lib/utils";
-import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
+import * as React from "react";
+
+import { Button, type ButtonProps } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
-  CommandGroup,
+  CommandList,
   CommandInput,
   CommandItem,
-  CommandList,
+  CommandGroup,
 } from "~/components/ui/command";
 import {
   Popover,
@@ -19,92 +18,102 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 
-interface ComboboxProps {
-  options: { value?: string; label?: string }[];
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
+import { cn } from "~/lib/utils";
+
+type Props = ButtonProps & {
+  data: {
+    id: string;
+    name: string;
+    [key: string]: unknown;
+  }[];
+  value?: string;
+  setValue?: (value: string) => void;
+  placeholder: string;
+  keywords?: string[];
+  popoverClassName?: string;
 }
 
-export function Combobox({
-  options,
+const ComboBox: React.FunctionComponent<Props> = ({
+  data,
   value,
-  onChange,
-  placeholder = "College",
-}: ComboboxProps) {
+  setValue,
+  placeholder,
+  className,
+  children,
+  keywords,
+  popoverClassName,
+  ...props
+}) => {
   const [open, setOpen] = React.useState(false);
-  const [query, setQuery] = React.useState("");
-  const [filteredOptions, setFilteredOptions] = React.useState(options);
 
-  React.useEffect(() => {
-    setFilteredOptions(
-      options.filter((option) =>
-        option?.label?.toLowerCase().includes(query.toLowerCase()),
-      ),
-    );
-  }, [query, options]);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full justify-between border-b-[1px] hover:bg-transparent px-[4px] py-[8px] rounded-none border-gray-400"
-        >
-          <span
-            className="truncate text-white text-sm"
-            style={{ fontWeight: 100 }}
+    <div ref={containerRef} >
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            {...props}
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={cn("justify-between truncate", className)}
           >
-            {value
-              ? options.find((o) => o.value === value)?.label
-              : placeholder}
-          </span>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="p-0">
-        <Command style={{ backgroundColor: "white" }}>
-          {/* <CommandInput
-            placeholder="Search..."
-            value={query}
-            onValueChange={(val) => setQuery(val)}
-          /> */}
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup>
-              {filteredOptions.map((option) => (
-                <CommandItem
-                  key={option.value}
-                  value={option.value}
-                  className="cursor-pointer font-trap"
-                  onSelect={() => {
-                    onChange(option?.value ?? "");
-                    setOpen(false);
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#ac7420";
-                    e.currentTarget.style.color = "white";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
-                    e.currentTarget.style.color = "black";
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4 ",
-                      value === option.value ? "opacity-100" : "opacity-0",
-                    )}
-                  />
-                  {option.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+
+            {data.find((ele) => ele.id === value)?.name ?? placeholder}
+            <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          container={containerRef.current}
+          className={cn("p-0", popoverClassName)}
+        >
+          <Command
+            loop
+          >
+            <CommandInput placeholder={placeholder} />
+            <CommandList>
+              <CommandEmpty >No results. {children}</CommandEmpty>
+              <CommandGroup>
+                {data.map((ele) => (
+                  <CommandItem
+                    className="font-trap"
+                    key={ele.id}
+                    value={ele.id}
+                    onSelect={(currentValue) => {
+                      setValue?.(currentValue === value ? "" : ele.id);
+                      setOpen(false);
+                    }}
+                    // By default, command searches in the values provided
+                    // Since we want to uniquely identify each item we have passed the id
+                    // But we are not searching indexed on the id, rather indexed on the name
+                    // Hence we provide additional keywords to match name and get correct results
+                    // FIXME(Omkar): This still searches against id provided, implement custom filter() on Command
+                    keywords={[
+                      ele.name,
+                      ...(keywords?.map((key) => {
+                        const temp = ele[key];
+                        if (typeof temp === "string") return temp;
+                        else return "";
+                      }) ?? []),
+                    ]}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === ele.id ? "opacity-100" : "opacity-0",
+                      )}
+                    />
+                    {ele.name}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
-}
+};
+
+export { ComboBox };

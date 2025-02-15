@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Parallax from "parallax-js";
 import { useEffect, useRef, useState } from "react";
-import { BsFillSuitHeartFill } from "react-icons/bs";
 
 import { AuthStatus, useAuth } from "~/hooks/useAuth";
 import { cn } from "~/lib/utils";
@@ -143,6 +142,7 @@ export const HomeUi = () => {
         ease: "power1.inOut",
       });
     });
+
   }, []);
 
   return (

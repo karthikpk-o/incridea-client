@@ -164,6 +164,7 @@ const SignInForm: FunctionComponent<SignInFormProps> = ({
             New here?
           </h4>
           <Button
+            type="button"
             onClick={() => {
               setWhichForm("signUp");
             }}
