@@ -166,7 +166,7 @@ const Navbar = () => {
           ))}
         </div>
       </nav>
-      <MobileNav />
+      <MobileNav user={user}/>
     </>
   );
 };
