@@ -7,6 +7,7 @@ import { TbArrowBackUp } from "react-icons/tb";
 import Button from "~/components/button";
 import Loader from "~/components/loader";
 import { CONSTANT } from "~/constants";
+import { ASSETS } from "~/constants/assets";
 import { useAuth } from "~/hooks/useAuth";
 
 const Accommodation: NextPage = () => {
@@ -74,11 +75,11 @@ const Accommodation: NextPage = () => {
               </li>
               <li>
                 External Accommodation Details:{" "}
-                {/* TODO(Omkar): add the excel */}
                 <Link
-                  href="https://docs.google.com/spreadsheets/d/1Y2QheAsJjUr54LAvzXVVJjIGFXXBNTsn/edit#gid=1791495064"
+                  href={ASSETS.PUBLIC.EXTERNAL_ACCOMMODATION}
                   target="_blank"
                   className="underline"
+                  download
                 >
                   Accommodation Details Excel Sheet
                 </Link>{" "}

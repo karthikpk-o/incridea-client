@@ -11,6 +11,7 @@ const ASSETS = {
     EVENT_BG: "/2025/eventBg.webp",
     GAMER: "/2025/gamer.webp",
     RYOKO: "/2025/ryoko.webp",
+    EXTERNAL_ACCOMMODATION: "/2025/Incridea'25 External Accommodation List.xlsx",
   },
   PROFILE: {
     TROPHY: "/2025/profile/trophy.webp",
