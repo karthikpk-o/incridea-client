@@ -12,34 +12,35 @@ import { useAuth } from "~/hooks/useAuth";
 const Page = () => {
   const router = useRouter();
   const { user, loading: userLoading } = useAuth();
-  const { redirectUrl }: {
+  const {
+    redirectUrl,
+  }: {
     redirectUrl?: string;
-  } = router.query
+  } = router.query;
 
   const layoutRef = useRef<ElementRef<typeof LoginLayout>>(null);
 
-  const [currentForm, setCurrentForm] = useState<
-    AuthFormType
-  >((
+  const [currentForm, setCurrentForm] = useState<AuthFormType>(
     typeof window !== "undefined" &&
       // Set in signup mutation success
       localStorage.getItem("user-has-signed-up")
       ? AuthFormType.SIGN_IN
-      : AuthFormType.SIGN_UP
-  ));
+      : AuthFormType.SIGN_UP,
+  );
 
-  const changeCard = useCallback(async (
-    newForm: AuthFormType,
-  ) => {
-    if (currentForm === newForm) return;
+  const changeCard = useCallback(
+    async (newForm: AuthFormType) => {
+      if (currentForm === newForm) return;
 
-    const gearAudio = new Audio(`/${CONSTANT.YEAR}/audio/gearsounds.mp3`);
-    await gearAudio.play();
+      const gearAudio = new Audio(CONSTANT.ASSETS.AUDIO.GEARSOUND);
+      await gearAudio.play();
 
-    layoutRef.current?.triggerGears();
+      layoutRef.current?.triggerGears();
 
-    setCurrentForm(newForm);
-  }, [currentForm]);
+      setCurrentForm(newForm);
+    },
+    [currentForm],
+  );
 
   if (userLoading) return <Loader />;
 
@@ -78,7 +79,7 @@ const Page = () => {
           setCurrentForm={changeCard}
         />
       </div>
-    </LoginLayout >
+    </LoginLayout>
   );
 };
 

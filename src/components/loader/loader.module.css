@@ -20,7 +20,7 @@
 .hourglass {
   position: absolute;
   z-index: 2;
-  top: 24%;
+  top: 20%;
   animation: rotateHourglass 3s linear infinite;
   transform-origin: center;
 }

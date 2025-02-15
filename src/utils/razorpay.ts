@@ -38,7 +38,7 @@ export const makePayment = async (setSDKLoading?: (_: boolean) => void) => {
       amount: data.createPaymentOrder.data.amount,
       order_id: data.createPaymentOrder.data.orderId,
       description: `Incridea ${CONSTANT.YEAR} Registration`,
-      image: "/logo.png",
+      image: "/logo.webp",
       handler: async function () {
         await client.refetchQueries({
           include: ["MeQuery"],
@@ -87,7 +87,7 @@ export const makeTeamPayment = async (
       amount: data.eventPaymentOrder.data.amount,
       order_id: data.eventPaymentOrder.data.orderId,
       description: `Register for ${data.eventPaymentOrder.data.Team.event.name}`,
-      image: "/logo.png",
+      image: "/logo.webp",
       handler: async function () {
         await client.refetchQueries({
           include: ["MyTeam"],

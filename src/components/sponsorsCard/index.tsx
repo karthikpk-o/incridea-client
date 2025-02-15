@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import { type Sponsor } from "~/constants/sponsors";
+import { CONSTANT } from "~/constants";
 
 const SponsorGearCarousel = ({
   sponsors,
@@ -26,7 +27,7 @@ const SponsorGearCarousel = ({
   const isAnimating = useRef(false);
 
   useEffect(() => {
-    audioRef.current = new Audio("/2025/audio/GearClockAudio.mp3");
+    audioRef.current = new Audio(CONSTANT.ASSETS.AUDIO.GEARCLOCK);
     if (audioRef.current) {
       audioRef.current.volume = 0.2;
     }
@@ -145,7 +146,7 @@ const SponsorGearCarousel = ({
           >
             <div className="size-72 sm:w-[301px] sm:h-[301px] md:w-72 md:h-72 lg:w-[291px] lg:h-[291px]">
               <img
-                src="/2025/sponsors/GearClock.png"
+                src={CONSTANT.ASSETS.PUBLIC.GEARCLOCK}
                 alt="SmallGear"
                 className="w-full h-full"
               />
@@ -158,7 +159,7 @@ const SponsorGearCarousel = ({
           >
             <div className="sm:w-[541px] sm:h-[541px] md:w-[581px] md:h-[581px] lg:w-[696px] lg:h-[696px]">
               <img
-                src="/2025/sponsors/GearClock.png"
+                src={CONSTANT.ASSETS.PUBLIC.GEARCLOCK}
                 alt="LargerGear"
                 className="w-full h-full"
               />
@@ -183,9 +184,7 @@ const SponsorGearCarousel = ({
                     className="object-contain"
                   />
                 </div>
-                <div
-                  className="text-center"
-                >
+                <div className="text-center">
                   {sponsors[currentIndex] && (
                     <>
                       <h3 className="text-2xl text-amber-500 mb-2 font-life-craft">

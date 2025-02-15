@@ -4,6 +4,7 @@ import { Draggable } from "gsap/dist/Draggable";
 import { MotionPathPlugin } from "gsap/dist/MotionPathPlugin";
 import Modal from "../gallery-modal";
 import PreviewComponent from "../previewComponent/preview-component";
+import { CONSTANT } from "~/constants";
 
 gsap.registerPlugin(Draggable, MotionPathPlugin);
 
@@ -253,7 +254,7 @@ const Inc24 = ({ imgArr }: { imgArr: string[] }) => {
             imgArr={imgArr}
             index={activeIndex}
             afterMovieLink="YoWeuaSMytk"
-            thumbnailSrc="public/2025/gallery/thumbnails/incridea24.webp"
+            thumbnailSrc={CONSTANT.ASSETS.GALLERY.THUMBNAIL24}
           />
         </Modal>
       </div>

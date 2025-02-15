@@ -7,6 +7,7 @@ import { useAuth } from "~/hooks/useAuth";
 import { Role } from "~/generated/generated";
 import { useRouter } from "next/router";
 import { cn } from "~/lib/utils";
+import { CONSTANT } from "~/constants";
 
 const Navbar = () => {
   const logoRef = useRef(null);
@@ -20,42 +21,42 @@ const Navbar = () => {
     label: string;
     href: string;
   }[] = [
-      {
-        id: 3,
-        label: "Home",
-        href: "/",
-      },
-      {
-        id: 2,
-        label: "Explore",
-        href: "/explore",
-      },
-      {
-        id: 1,
-        label: "Events",
-        href: "/events",
-      },
-      // {
-      //   id: 4,
-      //   label: "Sponsors",
-      //   href: "/sponsors",
-      // },
-      {
-        id: 4,
-        label: "Gallery",
-        href: "/gallery",
-      },
-      {
-        id: 5,
-        label: "Pronites",
-        href: "/pronites",
-      },
-      {
-        id: 6,
-        label: "About",
-        href: "/about",
-      },
-    ];
+    {
+      id: 3,
+      label: "Home",
+      href: "/",
+    },
+    {
+      id: 2,
+      label: "Explore",
+      href: "/explore",
+    },
+    {
+      id: 1,
+      label: "Events",
+      href: "/events",
+    },
+    // {
+    //   id: 4,
+    //   label: "Sponsors",
+    //   href: "/sponsors",
+    // },
+    {
+      id: 4,
+      label: "Gallery",
+      href: "/gallery",
+    },
+    {
+      id: 5,
+      label: "Pronites",
+      href: "/pronites",
+    },
+    {
+      id: 6,
+      label: "About",
+      href: "/about",
+    },
+  ];
 
   useEffect(() => {
     gsap.set(textRef.current, { opacity: 1 });
@@ -122,7 +123,7 @@ const Navbar = () => {
           <div className="relative w-16 h-6 flex justify-center items-center">
             <Image
               ref={logoRef}
-              src="/2025/vertical_logo.png"
+              src={CONSTANT.ASSETS.PUBLIC.LOGO_RIM}
               alt="Logo"
               className="absolute size-5 opacity-0 translate-y-1"
               width={40}
@@ -136,7 +137,9 @@ const Navbar = () => {
                   : user.role === Role.User
                     ? "/register"
                     : pathname === "/profile"
-                      ? user.role !== Role.Participant ? "/dashboard" : "/"
+                      ? user.role !== Role.Participant
+                        ? "/dashboard"
+                        : "/"
                       : "/profile"
               }
               className={cn(
@@ -149,7 +152,10 @@ const Navbar = () => {
                 : user.role === Role.User
                   ? "REGISTER"
                   : pathname === "/profile"
-                    ? user.role !== Role.Participant ? "DASHBOARD" : "HOME" : "PROFILE"}
+                    ? user.role !== Role.Participant
+                      ? "DASHBOARD"
+                      : "HOME"
+                    : "PROFILE"}
             </Link>
           </div>
         </button>

@@ -20,8 +20,8 @@ export const angleToScenes: { [key: number]: number[] } = {
 };
 
 const Gallery: NextPage = () => {
-  const [activeYear, setActiveYear] = useState<number>(0);
-  const [changedYear, setChangedYear] = useState<number>(0);
+  const [activeYear, setActiveYear] = useState<number>(3);
+  const [changedYear, setChangedYear] = useState<number>(3);
   const clockRef = useRef<HTMLDivElement | null>(null);
   const [clockPos, setClockPos] = useState<{ x: number; y: number }>({
     x: 0,
@@ -32,10 +32,10 @@ const Gallery: NextPage = () => {
   useEffect(() => {
     const updateClockPosition = () => {
       if (clockRef.current) {
-        const posi = clockRef.current.getBoundingClientRect();
+        const pos = clockRef.current.getBoundingClientRect();
         setClockPos({
-          x: posi.left + posi.width / 2,
-          y: posi.top + posi.height / 2,
+          x: pos.left + pos.width / 2,
+          y: pos.top,
         });
       }
     };
@@ -64,8 +64,8 @@ const Gallery: NextPage = () => {
     "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYsgayYKyv6z8fXkcpKN4d150uF3GeYwRV6MPgi",
     "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYsXRoxBB0wR70aACo8TtYy9qKWzrHGVkx2jm5N",
     "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYs1k4cPVuzeuBm64XfVxryzsUInKvlch8jGYk5",
-    "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYsxsD4X3fD7Rd4EMFQmCBav9AunfUTXIybKc5q"
-  ]
+    "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYsxsD4X3fD7Rd4EMFQmCBav9AunfUTXIybKc5q",
+  ];
 
   const img2023 = [
     "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYsKSsLAKJsFfnityNQc1AgbmkjCXPlrzTMdS9D",
@@ -78,7 +78,7 @@ const Gallery: NextPage = () => {
     "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYsaW0ECTLUAYWwfIge5Buk6C2r1ycR3MhalptJ",
     "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYs7Ia5OnUWmhgn3FxJEjMV60R2YUlHPbwf1sdX",
     "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYszOx6zTAkVLni9IlUhGbwxyXJmDt8KsqSTcjZ",
-  ]
+  ];
 
   const img2024 = [
     "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYskqPH0tF3f75EiyprLQFWulsoOtNSn2b8xMwB",
@@ -91,7 +91,7 @@ const Gallery: NextPage = () => {
     "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYsXFlYkD0wR70aACo8TtYy9qKWzrHGVkx2jm5N",
     "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYsEvRbcLQ8mqF2GyD8viAZRnWJQ3hjbBM6tUpO",
     "https://qmahmrnhvk.ufs.sh/f/WiEIO6HN9rYstAlogWJ1LGkCIZ5WMu0egqnyRjzJB4TVNcOv",
-  ]
+  ];
 
   const renderActiveYearComponent = (): JSX.Element | null => {
     const components = [
@@ -102,6 +102,12 @@ const Gallery: NextPage = () => {
     ];
     return components[activeYear] ?? null;
   };
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setChangedYear(3);
+  //   }, 1000);
+  // }, [])
 
   useEffect(() => {
     gsap.fromTo(
@@ -156,9 +162,9 @@ const Gallery: NextPage = () => {
         <div
           data-depth="0.4"
           className="absolute -z-10
-             w-[140%] h-[140%] -mt-[20%] -mb-[20%]  /* Mobile adjustments */
-             sm:w-[130%] sm:h-[130%] sm:-mt-[15%] sm:-mb-[15%]  /* Small screens */
-             md:w-[120%] md:h-[120%] md:-mt-[10%] md:-mb-[10%]  /* Desktops */
+             w-[140%] h-[140%] -mt-[20%] -mb-[20%]
+             sm:w-[130%] sm:h-[130%] sm:-mt-[15%] sm:-mb-[15%]
+             md:w-[120%] md:h-[120%] md:-mt-[10%] md:-mb-[10%]
              bg-[url('/2025/gallery/galleryBg.webp')] bg-cover bg-center bg-no-repeat
              blur-[5px] brightness-75"
         ></div>

@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 
 import { type PublishedEventsQuery } from "~/generated/generated";
 import { generateEventUrl } from "~/utils/url";
+import { CONSTANT } from "~/constants";
 
 const Event = ({
   event,
@@ -156,7 +157,7 @@ const Event = ({
         </foreignObject>
 
         <image
-          href="/2025/logo-white.png"
+          href={CONSTANT.ASSETS.PUBLIC.LOGO_WHITE}
           x="21"
           y="-8"
           width="30"

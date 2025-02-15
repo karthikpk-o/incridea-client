@@ -5,14 +5,14 @@ import Banner from "~/components/aboutUs/banner";
 import { CONSTANT } from "~/constants";
 
 const images = [
-  { id: "1.webp", alt: "Image 1" },
-  { id: "2.webp", alt: "Image 2" },
-  { id: "3.webp", alt: "Image 3" },
-  { id: "4.webp", alt: "Image 4" },
-  { id: "5.webp", alt: "Image 5" },
-  { id: "6.webp", alt: "Image 6" },
-  { id: "7.webp", alt: "Image 7" },
-  { id: "8.webp", alt: "Image 8" },
+  { id: CONSTANT.ASSETS.ABOUT.IMAGE1, alt: "Image 1" },
+  { id: CONSTANT.ASSETS.ABOUT.IMAGE2, alt: "Image 2" },
+  { id: CONSTANT.ASSETS.ABOUT.IMAGE3, alt: "Image 3" },
+  { id: CONSTANT.ASSETS.ABOUT.IMAGE4, alt: "Image 4" },
+  { id: CONSTANT.ASSETS.ABOUT.IMAGE5, alt: "Image 5" },
+  { id: CONSTANT.ASSETS.ABOUT.IMAGE6, alt: "Image 6" },
+  { id: CONSTANT.ASSETS.ABOUT.IMAGE7, alt: "Image 7" },
+  { id: CONSTANT.ASSETS.ABOUT.IMAGE8, alt: "Image 8" },
 ];
 
 const About = () => {
@@ -21,13 +21,12 @@ const About = () => {
   return (
     <div className="max-w-screen-2xl mx-auto p-4 md:p-32 pb-10 flex flex-col gap-y-2 md:gap-16">
       <div className="flex min-h-screen flex-col gap-y-2 md:gap-16">
-
         <Banner video={"https://vimeo.com/1055845788?share=copy"} credits="" />
 
         <span className="text-base text-secondary-100 md:text-lg xl:text-xl">
           <div className="flex flex-col items-center justify-between gap-8 lg:flex-row">
             <Image
-              src="/2025/nitteLogoWhite.png"
+              src={CONSTANT.ASSETS.PUBLIC.NITTE_LOGO}
               alt="image"
               loading="lazy"
               className="top-0 h-full w-3/4 object-contain object-center md:w-1/3"
@@ -71,7 +70,7 @@ const About = () => {
       <span className="text-base text-secondary-100 md:text-lg xl:text-xl">
         <div className="relative flex flex-col items-center justify-between gap-16 lg:flex-row">
           {/* Gallery Section - Contained width, proper spacing */}
-          <div className="relative w-full lg:w-2/4 md:pt-24 pt-40 pb-28">
+          <div className="relative w-full lg:w-1/3 md:pt-24 pt-40 pb-28 my-4">
             <style jsx>{`
               .gallery {
                 --s: min(120px, 80vw);
@@ -149,7 +148,7 @@ const About = () => {
             <div className="gallery" onClick={() => setIsActive(!isActive)}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/2025/logo-rim-white.png"
+                src={CONSTANT.ASSETS.PUBLIC.LOGO_RIM_WHITE}
                 alt="Incridea Logo"
                 loading="lazy"
                 className={`object-contain logo ${isActive ? "active" : ""} object-contain origin-bottom animate-shakelogo`}
@@ -160,7 +159,7 @@ const About = () => {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   key={id}
-                  src={`/2025/about/${id}`}
+                  src={id}
                   alt={alt}
                   className={`${isActive ? "active " : ""}`}
                 />
@@ -169,7 +168,7 @@ const About = () => {
           </div>
 
           {/* Content Section - More width, proper spacing */}
-          <div className="relative z-0 w-full lg:w-2/4 px-2 lg:pl-14 flex justify-center items-center">
+          <div className="relative z-0 w-full lg:w-2/3 px-2 flex justify-center items-center">
             <div className="max-w-3xl text-justify">
               Incridea is a colossal national-level techno-cultural fest with an
               audience pool spread among{" "}
@@ -189,8 +188,8 @@ const About = () => {
               footfall of around <span className="font-bold">45,000</span>,
               making it one of the most happening fests in the region. With
               grand successes over the years and a flair for perfection, we
-              intend to make Incridea &apos;{CONSTANT.YEAR_SHORT} and grand success and the best
-              one so far.
+              intend to make Incridea &apos;{CONSTANT.YEAR_SHORT} and grand
+              success and the best one so far.
             </div>
           </div>
         </div>
