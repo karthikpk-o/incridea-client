@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import Button from "~/components/button";
+import { CONSTANT } from "~/constants";
 import { GetStoneVisibilitiesDocument } from "~/generated/generated";
 import { useAuth } from "~/hooks/useAuth";
 
@@ -63,7 +64,7 @@ export default function ExploreNav() {
         {user ? (
           <div className="flex flex-row items-center space-x-1 text-white">
             <Image
-              src={"/2025/assets/explore/stone.webp"}
+              src={CONSTANT.ASSETS.EXPLORE.STONE}
               width={100}
               height={100}
               alt="map"

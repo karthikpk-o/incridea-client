@@ -1,7 +1,9 @@
-import { Experience } from "~/components/explore_2025/Medieval_Component";
-import ExploreNav from "~/components/explore/exploreNav";
+import { useEffect, useRef, useState } from "react";
+
 import AudioPlayer from "~/components/explore/audioPlayer";
-import { useRef, useState, useEffect } from "react";
+import ExploreNav from "~/components/explore/exploreNav";
+import { Experience } from "~/components/explore_2025/Medieval_Component";
+import { CONSTANT } from "~/constants";
 
 function Medieval() {
   const [isMuted, setIsMuted] = useState(() => {
@@ -52,7 +54,7 @@ function Medieval() {
     <div className="h-screen w-screen overflow-hidden">
       <AudioPlayer
         mainThemeAudioRef={mainThemeAudioRef}
-        mainTheme={`/2025/assets/explore/audio/level2.mp3`}
+        mainTheme={CONSTANT.ASSETS.AUDIO.LEVEL2}
         isMuted={isMuted}
         setIsMuted={setIsMuted}
       ></AudioPlayer>
