@@ -34,7 +34,6 @@ import { useEffect, useRef, useState } from "react";
 import { type GLTF } from "three-stdlib";
 
 import { CONSTANT } from "~/constants";
-import { MeQuery, MeQueryVariables, type User } from "~/generated/generated";
 import { useAuth } from "~/hooks/useAuth";
 import { idToPid } from "~/utils/id";
 import qrcodeDataURI from "~/utils/qr";

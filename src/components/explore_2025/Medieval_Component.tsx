@@ -9,6 +9,7 @@ import * as UIButtons from "~/components/explore_2025/UI";
 import { CharacterController } from "~/components/explore_2025/characterController";
 import LoadingScreen from "~/components/explore_2025/Loader";
 import { Map } from "~/components/explore_2025/Map";
+import { CONSTANT } from "~/constants";
 
 import { Portal } from "./Portal";
 import Poi from "./Stone";
@@ -42,8 +43,8 @@ export const Experience = () => {
   const [isRunOn, setIsRunOn] = useState(false);
   const [showLoading, setShowLoading] = useState(true);
   const images: string[] = [
-    "/2025/assets/explore/loading_background.webp",
-    "/2025/assets/explore/loading_foreground.webp",
+    CONSTANT.ASSETS.EXPLORE.LOADING_BACKGROUND,
+    CONSTANT.ASSETS.EXPLORE.LOADING_FOREGROUND,
   ];
 
   useEffect(() => {

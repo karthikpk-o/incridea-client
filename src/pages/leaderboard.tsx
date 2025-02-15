@@ -4,6 +4,7 @@ import { useQuery } from "@apollo/client";
 import { type NextPage } from "next";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+
 import styles from "~/components/event/styles.module.css";
 import FallingItem from "~/components/leaderboard/fallingItem";
 import Spinner from "~/components/spinner";
@@ -165,12 +166,12 @@ const LeaderBoard: NextPage = () => {
       )}
       <div className="relative min-h-screen bg-gradient-to-b">
         <div className="relative min-h-screen py-32">
-          <div className="flex flex-col justify-center items-center py-6">
-            <h1 className="font-life-craft text-white py-6 text-7xl font-bold">
+          <div className="flex flex-col items-center justify-center py-6">
+            <h1 className="py-6 font-life-craft text-7xl tracking-wider text-white">
               Time Stone Leaderboard
             </h1>
 
-            <h3 className="mx-2  text-center text-xl text-white md:mx-0 md:text-xl ">
+            <h3 className="mx-2 text-center text-xl text-white md:mx-0 md:text-xl">
               Uncover Hidden Time Stones and Level Up Your Experience!
             </h3>
           </div>
@@ -201,24 +202,24 @@ const LeaderBoard: NextPage = () => {
                   color: getRankStyle(i + 1).text,
                   borderColor: getRankStyle(i + 1).border,
                 }}
-                className="border-2 p-4 flex h-16 flex-row items-center justify-center rounded-lg shadow-2xl relative"
+                className="relative flex h-16 flex-row items-center justify-center rounded-lg border-2 p-4 shadow-2xl"
               >
                 <h1 className="flex basis-1/4 items-center justify-center text-center text-base md:gap-1 md:text-xl">
                   {i + 1}.
                   <Image
                     src={
                       i === 0
-                        ? `/${CONSTANT.YEAR}/leaderboard/level3.png`
+                        ? CONSTANT.ASSETS.LEADERBOARD.LEVEL3
                         : i === 1
-                          ? `/${CONSTANT.YEAR}/leaderboard/level2.png`
+                          ? CONSTANT.ASSETS.LEADERBOARD.LEVEL2
                           : i === 2
-                            ? `/${CONSTANT.YEAR}/leaderboard/level1.png`
-                            : `/${CONSTANT.YEAR}/leaderboard/level4.png`
+                            ? CONSTANT.ASSETS.LEADERBOARD.LEVEL1
+                            : CONSTANT.ASSETS.LEADERBOARD.LEVEL4
                     }
                     width={isMobile ? 20 : 50}
                     height={isMobile ? 20 : 50}
                     alt="medal"
-                    className="z-30 flex w-10 items-center justify-center bg-transparent drop-shadow-md text-5xl md:w-auto "
+                    className="z-30 flex w-10 items-center justify-center bg-transparent text-5xl drop-shadow-md md:w-auto"
                   />
                 </h1>
                 <h1 className="mx-2 flex basis-1/4 items-center justify-center text-center text-sm font-semibold md:text-xl">
@@ -227,14 +228,14 @@ const LeaderBoard: NextPage = () => {
                 <h1 className="flex basis-1/4 items-center justify-center text-center text-sm font-semibold capitalize md:text-xl">
                   {user.name}
                 </h1>
-                <h1 className="flex basis-1/4 flex-row items-center justify-center text-center text-sm font-semibold md:text-xl ">
+                <h1 className="flex basis-1/4 flex-row items-center justify-center text-center text-sm font-semibold md:text-xl">
                   {user.levelPoints}
                   <Image
-                    src={"/2025/assets/explore/stone.webp"}
+                    src={CONSTANT.ASSETS.EXPLORE.STONE}
                     width={isMobile ? 40 : 100}
                     height={isMobile ? 40 : 100}
                     alt="Time Stone"
-                    className=" w-12 md:w-2 lg:w-8 bg-transparent transition-all absolute lg:right-[8%] drop-shadow-md right-[2%] md:right-[2%]"
+                    className="absolute right-[2%] w-12 bg-transparent drop-shadow-md transition-all md:right-[2%] md:w-2 lg:right-[8%] lg:w-8"
                   />
                 </h1>
               </div>

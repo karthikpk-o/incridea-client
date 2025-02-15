@@ -1,19 +1,20 @@
 import { useQuery } from "@apollo/client";
 import { Bed, LogOut, QrCode, User } from "lucide-react";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FaAward } from "react-icons/fa";
+
 import { Button } from "~/components/button/button";
 import { CONSTANT } from "~/constants";
-import Image from "next/image";
 import {
   GetUserXpDocument,
   GetXpLeaderboardDocument,
 } from "~/generated/generated";
 import { AuthStatus, useAuth } from "~/hooks/useAuth";
-import toast from "react-hot-toast";
 
 const techTeamPid = CONSTANT.PID.TECH_TEAM;
 
@@ -156,10 +157,10 @@ function LeaderBoard({
   }, [Leaderboard, userId]);
 
   return (
-    <div className="w-full flex flex-col gap-2  items-center justify-evenly row-span-1 border-secondary-500/50 border-t-2 p-2">
-      <div className="w-full flex xl:flex-row md:flex-col sm:flex-row flex-col justify-between items-center flex-nowrap gap-2 sm:max-w-full max-w-sm">
+    <div className="row-span-1 flex w-full flex-col items-center justify-evenly gap-2 border-t-2 border-secondary-500/50 p-2">
+      <div className="flex w-full max-w-sm flex-col flex-nowrap items-center justify-between gap-2 sm:max-w-full sm:flex-row md:flex-col xl:flex-row">
         <Button
-          className="w-full hover:scale-[105%] hover:bg-primary-800/60 text-white hover:text-white sm:max-w-full max-w-sm"
+          className="w-full max-w-sm text-white hover:scale-[105%] hover:bg-primary-800/60 hover:text-white sm:max-w-full"
           variant={"outline"}
           onClick={() => setQr()}
         >
@@ -187,24 +188,24 @@ function LeaderBoard({
           Log out <LogOut />
         </Button>
       </div>
-      <div className="w-full h-fit relative overflow-hidden rounded-xl border-secondary-500/50 border-2 mt-2">
+      <div className="relative mt-2 h-fit w-full overflow-hidden rounded-xl border-2 border-secondary-500/50">
         <div
           className={`h-2 bg-amber-600`}
           style={{ width: `${progress}%` }}
         ></div>
       </div>
 
-      <div className="text-white w-full px-2 mb-2">
-        <div className="flex justify-between w-full mb-4 flex-row px-4 max-w-md mx-auto">
-          <div className="font-semibold text-sm">
+      <div className="mb-2 w-full px-2 text-white">
+        <div className="mx-auto mb-4 flex w-full max-w-md flex-row justify-between px-4">
+          <div className="text-sm font-semibold">
             Domain{" "}
-            <span className="text-secondary-500 font-bold text-base">
+            <span className="text-base font-bold text-secondary-500">
               {level} 🗺
             </span>
           </div>
-          <div className="font-semibold text-sm">
+          <div className="text-sm font-semibold">
             Timestones{" "}
-            <span className="text-secondary-500 font-bold text-base">
+            <span className="text-base font-bold text-secondary-500">
               {xp} 💎
             </span>
           </div>
@@ -212,18 +213,18 @@ function LeaderBoard({
 
         {rank === 0 ? (
           <>
-            <div className="text-sm opacity-90 text-center my-2">
+            <div className="my-2 text-center text-sm opacity-90">
               You need to collect {needMneedMoreore} 💎 TimeStones to join the
               leaderboard
             </div>
           </>
         ) : (
           <>
-            <div className="border bg-primary-500/20 border-secondary-500 max-w-md mx-auto rounded-full px-4 py-2 flex flex-row justify-between items-center">
-              <div className="text-sm flex flex-row flex-nowrap gap-1 font-semibold">
+            <div className="mx-auto flex max-w-md flex-row items-center justify-between rounded-full border border-secondary-500 bg-primary-500/20 px-4 py-2">
+              <div className="flex flex-row flex-nowrap gap-1 text-sm font-semibold">
                 <Image
                   className="size-10"
-                  src={`/${CONSTANT.YEAR}/profile/trophy.webp`}
+                  src={CONSTANT.ASSETS.PROFILE.TROPHY}
                   alt="trophy"
                   width={100}
                   height={100}
@@ -233,7 +234,7 @@ function LeaderBoard({
                   <p className="text-accent-400">Rank {rank}</p>
                 </div>
               </div>
-              <div className="text-sm flex flex-col gap-1 font-semibold">
+              <div className="flex flex-col gap-1 text-sm font-semibold">
                 <p>You need</p>
                 <p>
                   <span className="text-accent-400">{needMneedMoreore}</span> 💎
@@ -244,7 +245,7 @@ function LeaderBoard({
           </>
         )}
       </div>
-      <div className="w-full flex flex-col gap-2 items-center">
+      <div className="flex w-full flex-col items-center gap-2">
         {/* TODO: Move component to the top */}
         {/* <div className="w-full flex xl:flex-row md:flex-col sm:flex-row flex-col justify-between items-center flex-nowrap gap-2 sm:max-w-full max-w-sm">
           <Button
@@ -275,7 +276,7 @@ function LeaderBoard({
           </Button>
         </div> */}
 
-        <div className="w-full flex xl:flex-row md:flex-col sm:flex-row flex-col justify-between items-center flex-nowrap gap-2 sm:max-w-full max-w-sm">
+        <div className="flex w-full max-w-sm flex-col flex-nowrap items-center justify-between gap-2 sm:max-w-full sm:flex-row md:flex-col xl:flex-row">
           <Button
             onClick={() => router.push("/leaderboard")}
             className="w-full px-1"
@@ -287,7 +288,7 @@ function LeaderBoard({
           {session.status === AuthStatus.AUTHENTICATED &&
             session.user.college &&
             session.user.college.id !== "1" && (
-              <Button className="py-2 w-full px-1 hover:scale-[105%]" asChild>
+              <Button className="w-full px-1 py-2 hover:scale-[105%]" asChild>
                 <Link href="/accommodation">
                   <Bed />
                   Accomodation
