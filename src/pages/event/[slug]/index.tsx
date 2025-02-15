@@ -250,10 +250,10 @@ const Page = ({ event, error }: Props) => {
                       attr.text ? (
                         <div
                           key={attr.name}
-                          className={`md:text-md flex w-full items-center gap-2 rounded-full border border-secondary-400/40 bg-[#D79128] bg-opacity-30 p-1 px-2 text-left text-sm`}
+                          className={`md:text-md flex w-full items-center gap-2 rounded-full border border-secondary-400/40 bg-[#D79128] bg-opacity-30 p-1.5 px-2 text-left text-sm`}
                         >
                           {
-                            <attr.Icon className="bg-[#D79128] rounded-full h-full text-4xl  p-1 text-[#002C1B]" />
+                            <attr.Icon className="bg-[#D79128] rounded-3xl h-full text-4xl  p-1 text-[#002C1B]" />
                           }
                           <p>
                             {attr.name} {": "}
@@ -266,7 +266,7 @@ const Page = ({ event, error }: Props) => {
                     )}
                   </div>
                   <div className={`text-sm`}>
-                    <div className={`grid grid-cols-1 gap-2`}>
+                    <div className={`grid grid-cols-1 gap-2 mt-2`}>
                       {event.rounds.map((round) => (
                         <div
                           key={round.roundNo}
@@ -288,7 +288,8 @@ const Page = ({ event, error }: Props) => {
                                     "en-IN",
                                     {
                                       day: "numeric",
-                                      month: "short",
+                                      month: "long",
+                                      year: "numeric",
                                     },
                                   )
                                 : ""}
@@ -301,7 +302,7 @@ const Page = ({ event, error }: Props) => {
                                 <BiTimeFive />
                               </span>
                               {round.date
-                                ? new Date(round.date).toLocaleDateString(
+                                ? new Date(round.date).toLocaleTimeString(
                                     "en-IN",
                                     {
                                       hour: "numeric",

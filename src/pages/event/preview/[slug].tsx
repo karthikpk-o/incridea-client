@@ -150,10 +150,10 @@ const Page = () => {
                       attr.text ? (
                         <div
                           key={idx}
-                          className={`md:text-md flex w-full items-center gap-2 rounded-full border border-secondary-400/40 bg-[#D79128] bg-opacity-30 p-1 px-2 text-left text-sm`}
+                          className={`md:text-md flex w-full items-center gap-2 rounded-full border border-secondary-400/40 bg-[#D79128] bg-opacity-30 p-1.5 px-2 text-left text-sm`}
                         >
                           {
-                            <attr.Icon className="bg-[#D79128] rounded-full h-full text-4xl  p-1 text-[#002C1B]" />
+                            <attr.Icon className="bg-[#D79128] rounded-3xl h-full text-4xl  p-1 text-[#002C1B]" />
                           }
                           <p>
                             {attr.name} {": "}
@@ -183,14 +183,16 @@ const Page = () => {
                               <span className="bg-[#D79128] h-full text-xl p-2 text-[#002C1B] rounded-full">
                                 <BsFillCalendar2WeekFill />
                               </span>
-                              {round.date &&
-                                new Date(round.date).toLocaleDateString(
-                                  "en-IN",
-                                  {
-                                    day: "numeric",
-                                    month: "short",
-                                  },
-                                )}
+                              {round.date
+                                ? new Date(round.date).toLocaleDateString(
+                                    "en-IN",
+                                    {
+                                      day: "numeric",
+                                      month: "long",
+                                      year: "numeric",
+                                    },
+                                  )
+                                : ""}
                             </p>
                             <p
                               className={`flex items-center gap-2`}
@@ -199,15 +201,16 @@ const Page = () => {
                               <span className="bg-[#D79128] h-full text-xl p-2 text-[#002C1B] rounded-full">
                                 <BiTimeFive />
                               </span>
-                              {round.date &&
-                                new Date(round.date).toLocaleTimeString(
-                                  "en-IN",
-                                  {
-                                    hour: "numeric",
-                                    minute: "numeric",
-                                    hour12: true,
-                                  },
-                                )}
+                              {round.date
+                                ? new Date(round.date).toLocaleTimeString(
+                                    "en-IN",
+                                    {
+                                      hour: "numeric",
+                                      minute: "numeric",
+                                      hour12: true,
+                                    },
+                                  )
+                                : ""}
                             </p>
                           </div>
                         </div>
