@@ -121,7 +121,7 @@ const Page = () => {
                   />
                 )}
                 <h1
-                  className={`px-4 pb-0 text-center font-life-craft text-3xl tracking-wider sm:p-0 md:text-6xl text-[#D79128]`}
+                  className={`px-4 pb-0 text-center font-life-craft text-4xl tracking-wider sm:p-0 md:text-6xl text-[#D79128]`}
                 >
                   {event.name}
                 </h1>
