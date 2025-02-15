@@ -144,6 +144,7 @@ export const HomeUi = () => {
         ease: "power1.inOut",
       });
     });
+
   }, []);
 
   return (

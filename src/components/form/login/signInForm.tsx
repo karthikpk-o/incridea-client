@@ -158,6 +158,7 @@ const SignInForm = ({
             New here?
           </h4>
           <Button
+            type="button"
             onClick={() => {
               setCurrentForm(AuthFormType.SIGN_UP);
             }}

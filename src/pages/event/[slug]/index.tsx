@@ -223,7 +223,7 @@ const Page = ({ event, error }: Props) => {
                     />
                   )}
                   <h1
-                    className={`px-4 pb-0 text-center font-life-craft text-3xl tracking-wider text-[#D79128] sm:p-0 md:text-6xl`}
+                    className={`px-4 pb-0 text-center font-life-craft text-4xl tracking-wider text-[#D79128] sm:p-0 md:text-6xl`}
                   >
                     {event.name}
                   </h1>
@@ -252,10 +252,10 @@ const Page = ({ event, error }: Props) => {
                         attr.text ? (
                           <div
                             key={attr.name}
-                            className={`md:text-md flex w-full items-center gap-2 rounded-full border border-secondary-400/40 bg-[#D79128] bg-opacity-30 p-1 px-2 text-left text-sm`}
+                            className={`md:text-md flex w-full items-center gap-2 rounded-full border border-secondary-400/40 bg-[#D79128] bg-opacity-30 p-1.5 px-2 text-left text-sm`}
                           >
                             {
-                              <attr.Icon className="h-full rounded-full bg-[#D79128] p-1 text-4xl text-[#002C1B]" />
+                              <attr.Icon className="h-full rounded-3xl bg-[#D79128] p-1 text-4xl text-[#002C1B]" />
                             }
                             <p>
                               {attr.name} {": "}
@@ -268,7 +268,7 @@ const Page = ({ event, error }: Props) => {
                       )}
                     </div>
                     <div className={`text-sm`}>
-                      <div className={`grid grid-cols-1 gap-2`}>
+                      <div className={`grid grid-cols-1 gap-2 mt-2`}>
                         {event.rounds.map((round) => (
                           <div
                             key={round.roundNo}
@@ -286,11 +286,12 @@ const Page = ({ event, error }: Props) => {
                                   <BsFillCalendar2WeekFill />
                                 </span>
                                 {round.date
-                                  ? new Date(round.date).toLocaleTimeString(
+                                  ? new Date(round.date).toLocaleDateString(
                                     "en-IN",
                                     {
                                       day: "numeric",
-                                      month: "short",
+                                      month: "long",
+                                      year: "numeric",
                                     },
                                   )
                                   : ""}
@@ -299,11 +300,11 @@ const Page = ({ event, error }: Props) => {
                                 className={`flex items-center gap-2`}
                                 suppressHydrationWarning
                               >
-                                <span className="h-full rounded-full bg-[#D79128] p-2 text-xl text-[#002C1B]">
+                                <span className="bg-[#D79128] h-full text-xl p-2 text-[#002C1B] rounded-full">
                                   <BiTimeFive />
                                 </span>
                                 {round.date
-                                  ? new Date(round.date).toLocaleDateString(
+                                  ? new Date(round.date).toLocaleTimeString(
                                     "en-IN",
                                     {
                                       hour: "numeric",
@@ -390,7 +391,6 @@ const Page = ({ event, error }: Props) => {
               )}
             </div>
           </section>
-      )}
         </div>
       );
 };

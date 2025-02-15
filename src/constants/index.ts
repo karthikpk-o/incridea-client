@@ -4,7 +4,7 @@ import { ASSETS } from "~/constants/images";
 
 const CONSTANT = {
   BASE_URL: "https://incridea.in" as const,
-  COLLEGE_NAME: "NMAM Institute of Technology",
+  NMAMIT_COLLEGE_ID: 1,
   PID_FORMAT: "INC25-" as const,
   TID_FORMAT: "T25-" as const,
   YEAR: 2025 as const,
