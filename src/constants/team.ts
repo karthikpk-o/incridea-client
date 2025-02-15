@@ -189,6 +189,14 @@ const TEAM_MEMBERS: {
     image: ASSETS.TEAM.SAYEEM_AHMED,
     quote: "womp womp",
   },
+  "Sourav Bangera": {
+    role: "Digital | Explore Videos",
+    instagram: "https://www.instagram.com/grungygrid?igsh=OGQ5ZDc2ODk2ZA==",
+    github: "",
+    linkedin: "https://www.linkedin.com/in/souravbangera",
+    image: ASSETS.TEAM.SOURAV_BANGERA,
+    quote: "i wish to be touched by Nandan"
+  },
   "Prakash Waddar": {
     role: "Frontend",
     instagram: "https://www.instagram.com/____prakash____28",

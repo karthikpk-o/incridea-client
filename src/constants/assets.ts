@@ -46,9 +46,7 @@ const ASSETS = {
     LEVEL2: "/2025/leaderboard/level2.png",
     LEVEL3: "/2025/leaderboard/level3.png",
     LEVEL4: "/2025/leaderboard/level4.png",
-    TABLET: "/2025/leaderboard/tablet.png",
     TIMESTONE: "/2025/leaderboard/timestone.png",
-    TIMESTONEXP: "/2025/leaderboard/timestoneXP.png",
   },
   "3D": {
     BLUE_STONE: "/2025/explore/models/blue_stone.glb",
@@ -125,6 +123,7 @@ const ASSETS = {
     SAYEEM_AHMED: "/2025/team/sayeem_ahmed.webp",
     SHISHIR: "/2025/team/shishir.webp",
     SNEHAL_SHETTY: "/2025/team/snehal_shetty.webp",
+    SOURAV_BANGERA: '/2025/team/sourav_bangera.webp',
     VARSHITH: "/2025/team/varshith.webp",
   },
 };

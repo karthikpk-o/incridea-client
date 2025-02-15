@@ -1,28 +1,6 @@
 import Image from "next/image";
-import React, { type FunctionComponent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CONSTANT } from "~/constants";
-
-type Prop = {
-  delay: number;
-};
-
-const elements: string[] = [
-  "timestone.png",
-  "timestone.png",
-  "timestone.png",
-  "timestone.png",
-  "timestone.png",
-  "timestone.png",
-  "timestone.png",
-  "timestone.png",
-  "timestone.png",
-  "timestone.png",
-  "timestone.png",
-] as const;
-
-const getElement: () => number = () => {
-  return Math.floor(Math.random() * 11);
-};
 
 const getSize: () => { width: number; height: number } = () => {
   const size = Math.floor(Math.random() * 40) + 40;
@@ -33,15 +11,15 @@ const getPosition: () => number = () => {
   return Math.floor(Math.random() * 80) + 10;
 };
 
-const FallingItem: FunctionComponent<Prop> = ({ delay }) => {
-  const [src, setSrc] = useState(elements[getElement()]!);
+const FallingItem = ({ delay }: {
+  delay: number;
+}) => {
   const [left, setLeft] = useState(getPosition());
   const [size, setSize] = useState(getSize());
 
   useEffect(() => {
     setTimeout(() => {
       setInterval(() => {
-        setSrc(elements[getElement()]!);
         setLeft(getPosition());
         setSize(getSize());
         // TODO: 100000 should be same as that in animation duration of free-fall in tailwind.config.js
@@ -62,7 +40,7 @@ const FallingItem: FunctionComponent<Prop> = ({ delay }) => {
     >
       <Image
         src={CONSTANT.ASSETS.LEADERBOARD.TIMESTONE}
-        alt={src}
+        alt={CONSTANT.ASSETS.LEADERBOARD.TIMESTONE}
         width={size.width}
         height={size.height}
         style={{

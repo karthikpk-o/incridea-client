@@ -4,9 +4,35 @@ import {
   UTFiles,
   type FileRouter,
 } from "uploadthing/next-legacy";
-import { authenticateUser } from "~/server/uploadthing/authenticateUser";
 import { UploadThingError } from "uploadthing/server";
-import { Role } from "~/generated/generated";
+import { MeDocument, Role } from "~/generated/generated";
+import { type NextApiRequest, type NextApiResponse } from "next";
+import { client } from "~/lib/apollo";
+import { getToken } from "next-auth/jwt";
+
+const authenticateUser = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const token = await getToken({ req: req })
+    if (!token) return null;
+
+    const { data } = await client.query({
+      query: MeDocument,
+      context: {
+        headers: {
+          "Authorization": `Bearer ${token.accessToken}`
+        }
+      }
+    })
+
+    if (data.me.__typename === "Error")
+      return null;
+
+    return data.me.data
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+};
 
 const f = createUploadthing();
 
@@ -14,15 +40,15 @@ export const uploadRouter = {
   asset: f({
     image: {
       maxFileCount: 50,
-      maxFileSize: "64MB",
+      maxFileSize: "512KB",
     },
     video: {
       maxFileCount: 50,
-      maxFileSize: "64MB",
+      maxFileSize: "16MB",
     },
     "model/gltf-binary": {
       maxFileCount: 50,
-      maxFileSize: "64MB",
+      maxFileSize: "4MB",
     },
   })
     .middleware(async ({ req, res, files }) => {
@@ -45,16 +71,16 @@ export const uploadRouter = {
       };
     })
     .onUploadError((error) => {
-      console.error("Error uploading asset:", error);
+      console.error("Error uploading asset: ", error);
     })
     .onUploadComplete((data) => {
-      console.log("Gallery Image:", data.file.url);
+      console.log("Gallery Image: ", data.file.url);
     }),
 
   event: f({
     image: {
       maxFileCount: 1,
-      maxFileSize: "1MB",
+      maxFileSize: "512KB",
     },
   })
     .middleware(async ({ req, res, files }) => {
@@ -77,16 +103,16 @@ export const uploadRouter = {
       };
     })
     .onUploadError((error) => {
-      console.error("Error uploading asset:", error);
+      console.error("Error uploading asset: ", error);
     })
     .onUploadComplete((data) => {
-      console.log("Event Image:", data.file.url);
+      console.log("Event Image: ", data.file.url);
     }),
 
   quiz: f({
     image: {
       maxFileCount: 1,
-      maxFileSize: "1MB",
+      maxFileSize: "512KB",
     },
   })
     .middleware(async ({ req, res, files }) => {
@@ -109,10 +135,10 @@ export const uploadRouter = {
       };
     })
     .onUploadError((error) => {
-      console.error("Error uploading asset:", error);
+      console.error("Error uploading asset: ", error);
     })
     .onUploadComplete((data) => {
-      console.log("Question Image:", data.file.url);
+      console.log("Question Image: ", data.file.url);
     }),
 
   accommodation: f({
@@ -141,10 +167,10 @@ export const uploadRouter = {
       };
     })
     .onUploadError((error) => {
-      console.error("Error uploading asset:", error);
+      console.error("Error uploading asset: ", error);
     })
     .onUploadComplete((data) => {
-      console.log("Accomodation Image:", data.file.url);
+      console.log("Accomodation Image: ", data.file.url);
     }),
 } satisfies FileRouter;
 

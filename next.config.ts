@@ -13,6 +13,8 @@ import { type NextConfig } from "next";
  */
 import "./src/env";
 
+import "./src/check-assets";
+
 const config: NextConfig = {
   distDir: process.env.BUILD_DIR ?? ".next",
 

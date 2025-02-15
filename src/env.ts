@@ -84,4 +84,10 @@ export const env = createEnv({
    * `SOME_VAR=''` will throw an error.
    */
   emptyStringAsUndefined: true,
+
+  onInvalidAccess: (variable) => {
+    throw new Error(
+      "❌ Attempted to access a server-side environment variable on the client: " + variable,
+    );
+  },
 });
