@@ -82,26 +82,30 @@ const Page = ({ data }: Props) => {
           fontWeight: "bold",
         },
       });
-      return
-    }
-
-    if (calledXp)
       return;
-
-    setCalledXp(true);
-    const { data } = await addXp()
-    if (data?.addXP.__typename === "MutationAddXPSuccess")
-      toast.success(
-        `Congratulations! You have found ${data.addXP.data.level.point} Time Stones!`,
-        {
-          position: "bottom-center",
-          style: {
-            backgroundColor: "#f1e5d0",
-            color: "#005c39",
-            fontWeight: "bold",
+    }
+  
+    if (calledXp) return;
+  
+    try {
+      setCalledXp(true);
+      const { data } = await addXp();
+      if (data?.addXP.__typename === "MutationAddXPSuccess")
+        toast.success(
+          `Congratulations! You have found ${data.addXP.data.level.point} Time Stones!`,
+          {
+            position: "bottom-center",
+            style: {
+              backgroundColor: "#f1e5d0",
+              color: "#005c39",
+              fontWeight: "bold",
+            },
           },
-        },
-      );
+        );
+    } catch (error) {
+      console.error("Error adding timestone:", error);
+      setCalledXp(false);
+    }
   };
 
   useEffect(() => {
@@ -131,7 +135,7 @@ const Page = ({ data }: Props) => {
     setFilteredEvents(tempFilteredEvents);
   }, [currentDayFilter, currentCategoryFilter, data]);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
     setCurrentDayFilter("All");
     setCurrentCategoryFilter(AllCategory.ALL);
@@ -144,8 +148,10 @@ const Page = ({ data }: Props) => {
         ),
       );
     }
-    if(e.target.value === "easteregg" || e.target.value === "easter egg") {
-      handleAddXp();
+    const searchValue = e.target.value.toLowerCase();
+    const searchArray = ["easteregg", "easter egg", "time stone", "timestone"];
+    if (searchArray.includes(searchValue)) {
+       await handleAddXp();
     }
   };
 
