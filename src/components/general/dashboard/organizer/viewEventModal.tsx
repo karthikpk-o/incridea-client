@@ -14,6 +14,7 @@ import {
 import Button from "~/components/button";
 import EventDetails from "~/components/general/event/eventDetails";
 import Modal from "~/components/modal";
+import { env } from "~/env";
 import { type EventByOrganizerQuery } from "~/generated/generated";
 
 export default function ViewEventModal({
@@ -85,9 +86,8 @@ export default function ViewEventModal({
       >
         <div className="p-5 md:p-6">
           <div
-            className={`${
-              event.image ? "h-64" : "h-40 bg-gray-800/25"
-            } relative mb-3 flex w-full items-end overflow-hidden rounded-lg bg-cover bg-center`}
+            className={`${event.image ? "h-64" : "h-40 bg-gray-800/25"
+              } relative mb-3 flex w-full items-end overflow-hidden rounded-lg bg-cover bg-center`}
             style={{
               backgroundImage: event.image ? `url(${event.image})` : "none",
             }}
@@ -105,7 +105,7 @@ export default function ViewEventModal({
               className="absolute bottom-5 right-10"
               href={`/event/preview/${event.id}`}
             >
-              <Button intent={"secondary"}>Preview</Button>
+              <Button intent="primary">Preview</Button>
             </Link>
           </div>
 
@@ -114,7 +114,7 @@ export default function ViewEventModal({
               attr.text ? (
                 <div
                   key={attr.name}
-                  className="flex shrink-0 grow items-center gap-2 rounded-lg bg-gray-600 px-3 py-2"
+                  className="flex shrink-0 grow items-center gap-2 rounded-lg border border-[#D79128] bg-[#D79128] bg-opacity-35 px-3 py-2 backdrop-blur-md"
                 >
                   {<attr.Icon />}
                   <p>
@@ -127,7 +127,7 @@ export default function ViewEventModal({
               ),
             )}
           </div>
-          <div className="mt-2.5 rounded-lg bg-gray-600 p-3">
+          <div className="mt-2.5 rounded-lg border border-[#D79128] bg-[#D79128] bg-opacity-35 p-3 backdrop-blur-md">
             <div className="mb-3 flex items-center gap-2">
               <IoCreateOutline />
               <p className="font-semibold">Description</p>

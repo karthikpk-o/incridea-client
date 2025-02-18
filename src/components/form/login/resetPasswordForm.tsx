@@ -1,20 +1,18 @@
 import { useMutation } from "@apollo/client";
-import { type FormEventHandler, type FunctionComponent, useState } from "react";
+import { type FormEventHandler, useState } from "react";
 import { BiCheckCircle, BiErrorCircle } from "react-icons/bi";
 import { FaAngleLeft } from "react-icons/fa";
 
-import Button from "~/components/button";
+import { Button } from "~/components/button/button";
 import Spinner from "~/components/spinner";
+import { AuthFormType } from "~/enums";
 import { ResetPasswordEmailDocument } from "~/generated/generated";
 
-type ResetPasswordFormProps = {
-  setWhichForm: (whichForm: "signIn" | "resetPassword") => void;
-  setGotDialogBox: (gotDialogBox: boolean) => void;
-};
 
-const ResetPasswordForm: FunctionComponent<ResetPasswordFormProps> = ({
-  setWhichForm,
-  setGotDialogBox,
+const ResetPasswordForm = ({
+  setCurrentForm
+}: {
+  setCurrentForm: (currentForm: AuthFormType) => void;
 }) => {
   const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +21,6 @@ const ResetPasswordForm: FunctionComponent<ResetPasswordFormProps> = ({
     ResetPasswordEmailDocument,
   );
 
-  if (mutationError) setGotDialogBox(true);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     // add some client side validations like empty fields, password length, etc.
@@ -39,14 +36,7 @@ const ResetPasswordForm: FunctionComponent<ResetPasswordFormProps> = ({
       .then((res) => {
         if (res.data?.sendPasswordResetEmail.__typename === "Error") {
           setError(res.data.sendPasswordResetEmail.message);
-          setGotDialogBox(true);
         }
-
-        if (
-          res.data?.sendPasswordResetEmail.__typename ===
-          "MutationSendPasswordResetEmailSuccess"
-        )
-          setGotDialogBox(true);
       })
       .catch(console.log);
   };
@@ -54,9 +44,8 @@ const ResetPasswordForm: FunctionComponent<ResetPasswordFormProps> = ({
   return (
     <>
       <form
-        className={`relative flex min-h-full flex-col justify-center gap-2 px-3 py-3 ${
-          loading && "pointer-events-none cursor-not-allowed"
-        }`}
+        className={`relative flex min-h-full flex-col justify-center gap-2 px-3 py-3 ${loading && "pointer-events-none cursor-not-allowed"
+          }`}
         onSubmit={handleSubmit}
       >
         <h2 className="pb-1 text-center text-2xl font-semibold">
@@ -64,9 +53,9 @@ const ResetPasswordForm: FunctionComponent<ResetPasswordFormProps> = ({
         </h2>
 
         {data?.sendPasswordResetEmail.__typename ===
-        "MutationSendPasswordResetEmailSuccess" ? (
+          "MutationSendPasswordResetEmailSuccess" ? (
           <>
-            <div className="flex flex-col items-center gap-2 rounded-md bg-secondary-300 p-4 text-center font-semibold text-[#d7037f]">
+            <div className="flex flex-col items-center gap-2 rounded-md bg-primary-900/70 p-4 pb-2 text-center font-semibold text-secondary-600 mt-4">
               <BiCheckCircle size={"2rem"} /> Reset link sent to your email.
               Please check your inbox.
             </div>
@@ -84,11 +73,14 @@ const ResetPasswordForm: FunctionComponent<ResetPasswordFormProps> = ({
               }}
               type="email"
               required
-              className="md:focus:border-[#dd5c6e]-500 border-b border-gray-400 bg-transparent px-1 py-2 outline-none transition-all placeholder:text-white"
+              className="md:focus:border-[#dd5c6e]-500 border-b border-gray-400 bg-transparent px-1 py-2 outline-none transition-all placeholder:text-white/90"
               placeholder="Email"
             />
 
-            <Button type="submit" className="mt-4">
+            <Button
+              type="submit"
+              className="mt-4 mb-2 font-life-craft text-lg tracking-widest"
+            >
               Send Reset Link
             </Button>
 
@@ -99,18 +91,17 @@ const ResetPasswordForm: FunctionComponent<ResetPasswordFormProps> = ({
             )}
 
             {(error ?? mutationError) && (
-              <div className="flex min-w-full items-center gap-3 overflow-x-auto rounded-md bg-primary-900/70 p-2 px-4 font-semibold text-red-500">
-                <BiErrorCircle size={"1.3rem"} />
+              <div className="flex min-w-full items-center gap-3 overflow-x-auto rounded-md bg-primary-900/70 p-2 px-4 text-sm font-semibold text-red-500">
+                <BiErrorCircle size={"2rem"} />
                 {error ?? mutationError?.message}
               </div>
             )}
           </>
         )}
         <Button
-          intent={"ghost"}
-          className="mt-5"
-          onClick={() => setWhichForm("signIn")}
-          style={{ backgroundColor: "#00995e", color: "#f7e9d4" }}
+          variant={"ghost"}
+          className="mt-3 font-life-craft text-lg tracking-widest"
+          onClick={() => setCurrentForm(AuthFormType.SIGN_IN)}
         >
           <FaAngleLeft /> Go Back
         </Button>

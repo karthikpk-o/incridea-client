@@ -2,10 +2,10 @@ import { type NextPage } from "next";
 
 const Terms: NextPage = () => {
   return (
-    <div className="overflow-y-auto overflow-x-hidden text-gray-100 p-10 pt-20">
+    <div className="overflow-y-auto overflow-x-hidden text-gray-100 p-10 pt-32">
       <div className="mx-auto w-full max-w-7xl">
         <h1
-          className={`mb-3 text-center text-6xl font-life-craft tracking-wider`}
+          className={`mb-3 text-center md:text-6xl text-4xl font-life-craft tracking-wider`}
         >
           Terms and Conditions
         </h1>

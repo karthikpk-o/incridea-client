@@ -3,10 +3,12 @@ import { type NextPage } from "next";
 const Privacy: NextPage = () => {
   return (
     <div
-      className={`relative min-h-screen overflow-y-auto overflow-x-hidden text-gray-100 p-10 pt-20`}
+      className={`relative min-h-screen overflow-y-auto overflow-x-hidden text-gray-100 p-10 pt-32`}
     >
       <div className="mx-auto w-full max-w-7xl">
-        <h1 className={`text-center text-6xl font-life-craft tracking-wider`}>
+        <h1
+          className={`text-center md:text-6xl text-4xl font-life-craft tracking-wider`}
+        >
           Incridea 2025 Privacy Policy
         </h1>
         <div className="mt-10">

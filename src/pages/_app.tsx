@@ -8,13 +8,16 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { Toaster } from "react-hot-toast";
 import LocalFont from "next/font/local";
 import Footer from "~/components/footer";
-import HeadComponent from "~/components/head";
 import LoadingScreen from "~/components/loader";
 import { useApollo } from "~/lib/apollo";
 import { cn } from "~/lib/utils";
 import "~/styles/globals.css";
 import BackGroundGradient from "~/components/layout/background";
 import { LoaderProvider } from "~/components/loader/loaderContext";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import BaseSEO from "~/components/SEO/BaseSEO";
+import { scan } from "react-scan";
+import { env } from "~/env";
 
 const Navbar = dynamic(() => import("~/components/navbar"), { ssr: false });
 
@@ -50,7 +53,6 @@ export const trap = LocalFont({
       weight: "800",
       style: "normal",
     },
-
     {
       path: "../font/Trap-SemiBold.otf",
       weight: "500",
@@ -75,24 +77,29 @@ export default function App({
   initialApolloState,
 }: AppProps & { initialApolloState?: NormalizedCacheObject }) {
   const router = useRouter();
+
   const apolloClient = useApollo(initialApolloState);
-  const [isLoading, setIsLoading] = useState(false);
+
   const loadingTimeout = useRef<NodeJS.Timeout>();
 
-  const handleLoadingStart = useCallback(() => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLoadingStart = useCallback((url: string) => {
+    if (url === "/") return;
+
     // Clear any existing timeout
     if (loadingTimeout.current) {
       clearTimeout(loadingTimeout.current);
     }
 
-    // Only show loading screen if loading takes more than 300ms
+    // Show loading screen only if page takes more than 500ms to load
     loadingTimeout.current = setTimeout(() => {
       setIsLoading(true);
-    }, 300);
+    }, 500);
   }, []);
 
   const handleLoadingComplete = useCallback(() => {
-    // Clear the timeout to prevent showing loader after completion
+    // Clear timeout if page loads before timeout
     if (loadingTimeout.current) {
       clearTimeout(loadingTimeout.current);
     }
@@ -100,48 +107,68 @@ export default function App({
   }, []);
 
   useEffect(() => {
-    router.events.on("routeChangeStart", handleLoadingStart);
+    const onRouteChangeStart = (url: string) => handleLoadingStart(url);
+
+    router.events.on("routeChangeStart", onRouteChangeStart);
     router.events.on("routeChangeComplete", handleLoadingComplete);
     router.events.on("routeChangeError", handleLoadingComplete);
 
     return () => {
-      if (loadingTimeout.current) {
-        clearTimeout(loadingTimeout.current);
-      }
-      router.events.off("routeChangeStart", handleLoadingStart);
+      router.events.off("routeChangeStart", onRouteChangeStart);
       router.events.off("routeChangeComplete", handleLoadingComplete);
       router.events.off("routeChangeError", handleLoadingComplete);
     };
   }, [router, handleLoadingStart, handleLoadingComplete]);
 
+  useEffect(() => {
+    scan({
+      enabled: env.NEXT_PUBLIC_NODE_ENV === "development",
+      log: true,
+    });
+  }, []);
+
   const shouldRenderNavbar =
     !router.pathname.startsWith("/explore") &&
-    !router.pathname.startsWith("/theme");
+    !router.pathname.startsWith("/theme") &&
+    !router.pathname.startsWith("/coming-soon");
 
   return (
     <>
+      <GoogleAnalytics
+        gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ""}
+      />
+
       <AnimatePresence mode="wait">
         {isLoading && <LoadingScreen />}
       </AnimatePresence>
 
       <ApolloProvider client={apolloClient}>
-        <HeadComponent
-          title="Incridea"
-          description="Official Website of Incridea 2025, National level techno-cultural fest, NMAMIT, Nitte. Innovate. Create. Ideate."
+        <Toaster />
+
+        <BaseSEO
+          {...(router.pathname !== "/" && {
+            title: (() => {
+              const p = router.pathname.split("/")[1] ?? ""
+              return p.charAt(0).toUpperCase() + p.slice(1)
+            })() + " | " + "Incridea'25",
+          })}
         />
+
         <LoaderProvider>
           <BackGroundGradient>
-            <Toaster />
             <div
               className={cn(
                 trap.variable,
                 lifeCraft.variable,
-                "min-h-screen font-trap tracking-wider text-lg",
+                "min-h-screen font-trap tracking-wider sm:text-lg text-sm",
               )}
             >
               {shouldRenderNavbar && <Navbar />}
               <AnimatePresence mode="wait">
-                <Component key={router.pathname} {...pageProps} />
+                <Component
+                  key={router.pathname}
+                  {...pageProps}
+                />
               </AnimatePresence>
               <Footer />
             </div>

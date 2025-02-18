@@ -19,6 +19,7 @@
 .DS_Store
 *.pem
 .vscode/*
+.idea/*
 
 # debug
 npm-debug.log*
@@ -53,3 +54,5 @@ dist/
 **/public/fallback-*.js
 
 .eslintcache
+
+*.local.ts

@@ -1,16 +1,18 @@
+import { useMutation } from "@apollo/client";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { CapsuleCollider, RigidBody } from "@react-three/rapier";
-import { useEffect, useRef, useState, useMemo, type ComponentRef } from "react";
+import { type ComponentRef, useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import type * as THREE from "three";
-import { MathUtils, Vector3, Raycaster } from "three";
+import { MathUtils, Raycaster, Vector3 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
 import { Character } from "~/components/explore_2025/Character";
 import stonesData from "~/components/explore_2025/data/data.json";
 import { useRouter } from "next/router";
+import { UpdateStoneVisibilitiesDocument } from "~/generated/generated";
+import { useAuth } from "~/hooks/useAuth";
 
-// Utility functions for angle normalization and interpolation
 const normalizeAngle = (angle: number) => {
   while (angle > Math.PI) angle -= 2 * Math.PI;
   while (angle < -Math.PI) angle += 2 * Math.PI;
@@ -30,7 +32,7 @@ const lerpAngle = (start: number, end: number, t: number) => {
   return normalizeAngle(start + (end - start) * t);
 };
 
-type Stone = {
+export type Stone = {
   id: number;
   pos: [number, number, number];
 };
@@ -42,7 +44,7 @@ type Location = {
 };
 
 // Process stone and location data
-const stones: Stone[] = stonesData.stones.map((stone) => ({
+export const stones: Stone[] = stonesData.stones.map((stone) => ({
   ...stone,
   pos: [stone.pos[0] ?? 0, stone.pos[1] ?? 0, stone.pos[2] ?? 0] as [
     number,
@@ -63,7 +65,6 @@ export const CharacterController = () => {
   const [isLandscape, setIsLandscape] = useState(
     window.innerWidth > window.innerHeight,
   );
-
   const router = useRouter();
 
   useEffect(() => {
@@ -95,8 +96,10 @@ export const CharacterController = () => {
   const [animation, setAnimation] = useState("idle");
   const [spacebarPressed, setSpacebarPressed] = useState(false);
   const [spacebarDisabled, setSpacebarDisabled] = useState(false);
-  const [throwOutOfThePage, setThrowOutOfThePage] = useState(false);
   const [visibility, setVisibility] = useState<boolean[]>([]);
+  const prevVisibility = useRef<boolean[]>([]);
+  const { user } = useAuth();
+  const [setStoneVisiblity] = useMutation(UpdateStoneVisibilitiesDocument);
 
   const handleJump = () => {
     const keyDownEvent = new KeyboardEvent("keydown", {
@@ -118,8 +121,11 @@ export const CharacterController = () => {
 
   useEffect(() => {
     const onMouseDown = (event: MouseEvent | TouchEvent) => {
-      const target = event.target as HTMLElement;
-      if (target.id === "jump") return;
+      const target = (event.target as HTMLElement).closest("[id]");
+      if (!target) return;
+
+      if (target.id === "jump" || target.id === "shift") return;
+
       if (target.id === "w") {
         get().forward = true;
       }
@@ -132,16 +138,18 @@ export const CharacterController = () => {
       if (target.id === "d") {
         get().right = true;
       }
-      if (target.id === "shift") {
-        get().run = true;
-      }
     };
+
     const onMouseUp = (event: MouseEvent | TouchEvent) => {
-      const target = event.target as HTMLElement;
+      const target = (event.target as HTMLElement).closest("[id]");
+      if (!target) return;
+
       if (target.id === "jump") {
         handleJump();
         return;
       }
+      if (target.id === "shift") return;
+
       if (target.id === "w") {
         get().forward = false;
       }
@@ -154,39 +162,94 @@ export const CharacterController = () => {
       if (target.id === "d") {
         get().right = false;
       }
+    };
+
+    const onRunClick = (event: MouseEvent | TouchEvent) => {
+      const target = (event.target as HTMLElement).closest("[id]");
+      if (!target) return;
       if (target.id === "shift") {
-        get().run = false;
+        get().run = !get().run;
       }
     };
+
     document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
     document.addEventListener("touchstart", onMouseDown);
     document.addEventListener("touchend", onMouseUp);
+    document.addEventListener("click", onRunClick);
+
     return () => {
       document.removeEventListener("mousedown", onMouseDown);
       document.removeEventListener("mouseup", onMouseUp);
       document.removeEventListener("touchstart", onMouseDown);
       document.removeEventListener("touchend", onMouseUp);
+      document.removeEventListener("click", onRunClick);
     };
   }, [get]);
 
-  useEffect(() => {
-    const storedVisibility = localStorage.getItem("stoneVisibility");
-    if (storedVisibility) {
-      setVisibility(JSON.parse(storedVisibility) as never);
-    } else {
-      const initialVisibility = stones.map(() => true);
-      setVisibility(initialVisibility);
-      localStorage.setItem(
-        "stoneVisibility",
-        JSON.stringify(initialVisibility),
-      );
+  // Update the stone visibilities on change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleSetTimeStone = async (visibilityString: string) => {
+    try {
+      await setStoneVisiblity({
+        variables: { stoneId: visibilityString },
+      });
+    } catch (error) {
+      console.error("Error updating stone visibilities:", error);
     }
-  }, []);
+  };
+
+  // TimeStones: update the visibility (and trigger the mutation if changed)
+  useEffect(() => {
+    const updateVisibility = () => {
+      const storedVisibility = localStorage.getItem("stoneVisibility");
+      if (storedVisibility) {
+        const parsedVisibility = JSON.parse(storedVisibility) as boolean[];
+        const visibilityString = parsedVisibility
+          .map((v) => (v ? "1" : "0"))
+          .join("");
+        const prevVisibilityString = prevVisibility.current
+          .map((v) => (v ? "1" : "0"))
+          .join("");
+
+        if (visibilityString !== prevVisibilityString) {
+          if (user) {
+            void handleSetTimeStone(visibilityString);
+          }
+        }
+        setVisibility(parsedVisibility);
+        prevVisibility.current = parsedVisibility; // Update previous state
+      } else {
+        const initialVisibility = stones.map(() => true);
+        setVisibility(initialVisibility);
+        localStorage.setItem(
+          "stoneVisibility",
+          JSON.stringify(initialVisibility),
+        );
+        prevVisibility.current = initialVisibility; // Store initial value
+      }
+    };
+
+    // Run once immediately...
+    void updateVisibility();
+
+    const interval = setInterval(() => {
+      void updateVisibility;
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [handleSetTimeStone]);
+
+  const stoneModels = useMemo(() => {
+    return stones.map((stone, index) => {
+      if (!visibility[index]) return null;
+      return <mesh key={stone.id} position={stone.pos}></mesh>;
+    });
+  }, [visibility]);
 
   const countdowns = useRef(
     new Map<number, { timer: NodeJS.Timeout; count: number }>(),
   );
+  const redirectedLocations = useRef(new Set<number>());
 
   useFrame(({ camera, scene }) => {
     if (rb.current) {
@@ -201,7 +264,6 @@ export const CharacterController = () => {
       playerPosition.set(pos.x, pos.y, pos.z);
       if (pos.y < -9) {
         playerPosition.set(0, 0, 0);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         rb.current.setTranslation({ x: 0, y: 0, z: 0 }, true);
         toast.error("You fell off the map! Respawning...");
       }
@@ -265,15 +327,14 @@ export const CharacterController = () => {
         setAnimation("jump");
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       rb.current.setLinvel(vel, true);
 
-      // Check if the player is within 0.5 units of any stone
+      // Check if the player is close to any stone
       stones.forEach((stone, index) => {
         const distance = Math.sqrt(
           (pos.x - stone.pos[0]) ** 2 +
-            (pos.y - stone.pos[1]) ** 2 +
-            (pos.z - stone.pos[2]) ** 2,
+          (pos.y - stone.pos[1]) ** 2 +
+          (pos.z - stone.pos[2]) ** 2,
         );
         if (distance <= 0.5 && visibility[index]) {
           const newVisibility = [...visibility];
@@ -287,69 +348,79 @@ export const CharacterController = () => {
         }
       });
 
-      // Check if the player is within 1 unit of any location
+      // Location redirection logic
       locations.forEach((location) => {
         const distance = Math.sqrt(
           (pos.x - (location.pos?.[0] ?? 0)) ** 2 +
-            (pos.z - (location.pos?.[1] ?? 0)) ** 2,
+          (pos.z - (location.pos?.[1] ?? 0)) ** 2,
         );
 
-        if (!throwOutOfThePage) {
-          if (distance <= 0.5) {
-            if (!countdowns.current.has(location.id)) {
-              let count = 5;
-              const timer = setInterval(() => {
-                // Recalculate distance inside the callback
-                const currentDistance = Math.sqrt(
-                  (pos.x - (location.pos?.[0] ?? 0)) ** 2 +
-                    (pos.z - (location.pos?.[1] ?? 0)) ** 2,
-                );
-                // If user is out of range, cancel the countdown.
-                if (currentDistance > 0.5) {
-                  clearInterval(timer);
-                  countdowns.current.delete(location.id);
-                  return;
-                }
+        if (redirectedLocations.current.has(location.id)) {
+          if (distance > 0.5) {
+            redirectedLocations.current.delete(location.id);
+          }
+          return;
+        }
 
-                count -= 1;
-                if (count <= 0) {
-                  setThrowOutOfThePage(true);
-                  clearInterval(timer);
-                  countdowns.current.delete(location.id);
-                  void router.push(location.href);
+        if (distance <= 0.5) {
+          if (!countdowns.current.has(location.id)) {
+            let count = 5;
+            const timer = setInterval(() => {
+              const currentDistance = Math.sqrt(
+                (pos.x - (location.pos?.[0] ?? 0)) ** 2 +
+                (pos.z - (location.pos?.[1] ?? 0)) ** 2,
+              );
+
+              // If the user has moved out of range, cancel the countdown.
+              if (currentDistance > 0.5) {
+                clearInterval(timer);
+                countdowns.current.delete(location.id);
+                return;
+              }
+
+              count -= 1;
+              if (count <= 0) {
+                redirectedLocations.current.add(location.id);
+                clearInterval(timer);
+                countdowns.current.delete(location.id);
+                if (location.id != 4) {
+                  window.open(location.href, "_blank");
                 } else {
-                  toast(
-                    (t) => (
-                      <span>
-                        Redirecting in {count} seconds...
-                        <button
-                          onClick={() => {
-                            clearInterval(timer);
-                            countdowns.current.delete(location.id);
-                            toast.dismiss(t.id);
-                          }}
-                          style={{ marginLeft: "10px", color: "blue" }}
-                        >
-                          Cancel
-                        </button>
-                      </span>
-                    ),
-                    {
-                      id: location.id.toString(),
-                    },
-                  );
+                  void router.push(location.href);
                 }
-              }, 1000);
-              countdowns.current.set(location.id, { timer, count });
-              toast(`Redirecting in ${count} seconds...`, {
-                id: location.id.toString(),
-              });
-            }
-          } else {
-            if (countdowns.current.has(location.id)) {
-              clearInterval(countdowns.current.get(location.id)!.timer);
-              countdowns.current.delete(location.id);
-            }
+              } else {
+                toast(
+                  (t) => (
+                    <span>
+                      {location.id == 1
+                        ? `Opening RuleBook in ${count}`
+                        : location.id == 4
+                          ? `Exiting level in ${count}`
+                          : ""}
+                      <button
+                        onClick={() => {
+                          redirectedLocations.current.add(location.id);
+                          clearInterval(timer);
+                          countdowns.current.delete(location.id);
+                          toast.dismiss(t.id);
+                        }}
+                        style={{ marginLeft: "10px", color: "blue" }}
+                      >
+                        Cancel
+                      </button>
+                    </span>
+                  ),
+                  { id: location.id.toString() },
+                );
+              }
+            }, 1000);
+            countdowns.current.set(location.id, { timer, count });
+            toast("", { id: location.id.toString() });
+          }
+        } else {
+          if (countdowns.current.has(location.id)) {
+            clearInterval(countdowns.current.get(location.id)!.timer);
+            countdowns.current.delete(location.id);
           }
         }
       });
@@ -360,17 +431,16 @@ export const CharacterController = () => {
       cameraPosition.current.getWorldPosition(cameraWorldPosition.current);
       cameraTarget.current.getWorldPosition(cameraLookAtWorldPosition.current);
 
-      // Set up the raycaster
-      raycaster.current.set(
-        cameraLookAtWorldPosition.current,
-        cameraDirection.current,
-      );
       cameraDirection.current
         .subVectors(
           cameraWorldPosition.current,
           cameraLookAtWorldPosition.current,
         )
         .normalize();
+      raycaster.current.set(
+        cameraLookAtWorldPosition.current,
+        cameraDirection.current,
+      );
 
       const intersects = raycaster.current.intersectObjects(
         scene.children,
@@ -381,9 +451,9 @@ export const CharacterController = () => {
         intersects.length > 0 &&
         intersects[0] &&
         intersects[0].distance <
-          cameraWorldPosition.current.distanceTo(
-            cameraLookAtWorldPosition.current,
-          )
+        cameraWorldPosition.current.distanceTo(
+          cameraLookAtWorldPosition.current,
+        )
       ) {
         if (intersects[0]) {
           const newCameraPos = cameraLookAtWorldPosition.current
@@ -401,7 +471,7 @@ export const CharacterController = () => {
         camera.position.lerp(cameraWorldPosition.current, 0.1);
       }
 
-      cameraLookAt.current.lerp(cameraLookAtWorldPosition.current, 0.1);
+      cameraLookAt.current.lerp(cameraLookAtWorldPosition.current, 1);
       camera.lookAt(cameraLookAt.current);
     }
 
@@ -414,19 +484,13 @@ export const CharacterController = () => {
     }
   });
 
-  const stoneModels = useMemo(() => {
-    return stones.map((stone, index) => {
-      if (!visibility[index]) return null;
-      return (
-        <mesh key={stone.id} position={stone.pos}>
-          {/* Add your geometry and material here */}
-        </mesh>
-      );
-    });
-  }, [visibility]);
-
   return (
-    <RigidBody colliders={false} lockRotations ref={rb}>
+    <RigidBody
+      colliders={false}
+      lockRotations
+      ref={rb}
+      position={[0.4, 8, -3]}
+    >
       <group ref={container}>
         <group ref={cameraTarget} position-z={1} />
         <group ref={cameraPosition} position-y={0.5} position-z={-1.5} />

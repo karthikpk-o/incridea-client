@@ -1,12 +1,12 @@
-import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
+import React from "react";
+
+import { CONSTANT } from "~/constants";
 
 export function Portal(props: { props: never }) {
-  const { nodes, materials } = useGLTF(
-    "/2025/assets/explore/models/portal.glb",
-  );
+  const { nodes, materials } = useGLTF(CONSTANT.ASSETS["3D"].PORTAL);
   return (
     <RigidBody type="fixed" colliders="trimesh">
       <group
@@ -48,14 +48,14 @@ export function Portal(props: { props: never }) {
           geometry={(nodes.Plane003 as THREE.Mesh).geometry}
           material={
             new THREE.MeshPhysicalMaterial({
-              roughness: 0.2, // Smooth surface
-              metalness: 0.4, // Not metallic
-              transmission: 0.7, // Makes it transparent like glass
+              roughness: 0.1,
+              metalness: 0.4,
+              transmission: 0.3,
               transparent: true,
-              opacity: 1, // Keep opacity at 1 when using transmission
-              ior: 1.5, // Index of Refraction (adjust for different glass types)
-              thickness: 0.3, // Adjust for depth effect
-              color: 0x00ffcc,
+              opacity: 1,
+              ior: 1.5,
+              thickness: 0.1,
+              color: 0x66ffcc,
               side: THREE.DoubleSide,
             })
           }
@@ -246,4 +246,4 @@ export function Portal(props: { props: never }) {
   );
 }
 
-useGLTF.preload("/2025/assets/explore/models/portal.glb");
+useGLTF.preload(CONSTANT.ASSETS["3D"].PORTAL);

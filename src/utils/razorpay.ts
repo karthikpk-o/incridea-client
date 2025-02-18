@@ -1,4 +1,6 @@
 import Router from "next/router";
+import toast from "react-hot-toast";
+import { CONSTANT } from "~/constants";
 
 import { env } from "~/env";
 import {
@@ -30,13 +32,13 @@ export const makePayment = async (setSDKLoading?: (_: boolean) => void) => {
     data?.createPaymentOrder.__typename === "MutationCreatePaymentOrderSuccess"
   ) {
     const options: RazorpayOptions = {
-      key: env.RAZORPAY_KEY,
-      name: "Incridea 2024",
+      key: env.NEXT_PUBLIC_RAZORPAY_KEY,
+      name: `Incridea ${CONSTANT.YEAR}`,
       currency: "INR",
       amount: data.createPaymentOrder.data.amount,
       order_id: data.createPaymentOrder.data.orderId,
-      description: "Incridea 2024 Registration",
-      image: "/logo.png",
+      description: `Incridea ${CONSTANT.YEAR} Registration`,
+      image: "/logo.webp",
       handler: async function () {
         await client.refetchQueries({
           include: ["MeQuery"],
@@ -51,7 +53,7 @@ export const makePayment = async (setSDKLoading?: (_: boolean) => void) => {
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
   } else {
-    alert("Something went wrong");
+    toast.error("Something went wrong");
     console.log(data);
   }
 
@@ -79,13 +81,13 @@ export const makeTeamPayment = async (
     data?.eventPaymentOrder.__typename === "MutationEventPaymentOrderSuccess"
   ) {
     const options = {
-      key: env.RAZORPAY_KEY,
-      name: "Incridea 2024",
+      key: env.NEXT_PUBLIC_RAZORPAY_KEY,
+      name: `Incridea ${CONSTANT.YEAR}`,
       currency: "INR",
       amount: data.eventPaymentOrder.data.amount,
       order_id: data.eventPaymentOrder.data.orderId,
       description: `Register for ${data.eventPaymentOrder.data.Team.event.name}`,
-      image: "/logo.png",
+      image: "/logo.webp",
       handler: async function () {
         await client.refetchQueries({
           include: ["MyTeam"],

@@ -47,8 +47,8 @@ const AccommodationForm: FunctionComponent = () => {
     genderQuery === ""
       ? genders
       : genders.filter((gender) => {
-          return gender.toLowerCase().includes(genderQuery.toLowerCase());
-        });
+        return gender.toLowerCase().includes(genderQuery.toLowerCase());
+      });
 
   const [accommodationInfo, setAccommodationInfo] = useState({
     hotelId: 1,
@@ -75,7 +75,7 @@ const AccommodationForm: FunctionComponent = () => {
           setShowModal={setShowModal}
         />
       )}
-      <div className="mb-4 mt-10 h-max min-w-[350px] max-w-[350px] rounded-md bg-[#561e98] px-6 py-8 text-accent-200 transition-all ease-suck-in md:min-w-[450px] md:max-w-[450px]">
+      <div className="mb-4 mt-10 h-max min-w-[350px] max-w-[350px] rounded-md bg-primary-800 px-6 py-8 text-accent-200 transition-all ease-suck-in md:min-w-[450px] md:max-w-[450px]">
         {accommodationLoading ? (
           <div className="flex w-full flex-col md:flex-row">
             <Spinner className="text-[#dd5c6e]" intent={"white"} />
@@ -96,7 +96,7 @@ const AccommodationForm: FunctionComponent = () => {
             </Link>
           </div>
         ) : accommodationData?.accommodationRequestsByUser.__typename ===
-            "QueryAccommodationRequestsByUserSuccess" &&
+          "QueryAccommodationRequestsByUserSuccess" &&
           accommodationData.accommodationRequestsByUser.data[0]?.status ? (
           <div className="flex flex-col md:flex-row">
             <div className="flex justify-center">
@@ -169,10 +169,9 @@ const AccommodationForm: FunctionComponent = () => {
                       filteredGenders?.map((gender) => (
                         <Combobox.Option
                           className={({ active }) =>
-                            `relative cursor-pointer select-none px-4 py-2 text-xs md:text-base ${
-                              active
-                                ? "bg-[#dd5c6e] text-white"
-                                : "text-gray-900"
+                            `relative cursor-pointer select-none px-4 py-2 text-xs md:text-base ${active
+                              ? "bg-[#dd5c6e] text-white"
+                              : "text-gray-900"
                             }`
                           }
                           key={gender}
@@ -190,7 +189,7 @@ const AccommodationForm: FunctionComponent = () => {
             <div>
               <label className="mb-2 block text-sm text-white">Upload ID</label>
               <UploadButton
-                endpoint="idUploader"
+                endpoint="accommodation"
                 onUploadBegin={() => {
                   setUploading(true);
                 }}
