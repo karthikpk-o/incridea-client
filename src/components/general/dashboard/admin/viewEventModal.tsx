@@ -59,7 +59,7 @@ const VieweventModal: FC<{
       },
       {
         name: "Fees",
-        text: event?.fees,
+        text: event?.id==="50" ? 60 : event?.id ==="52" ? 500: event?.id==="53" ? 250 : event?.id==="54" ? 200 : event?.id==="55" ? 150 : event?.id==="56" ? 300 : event?.fees,
         Icon: IoCashOutline,
       },
       {
