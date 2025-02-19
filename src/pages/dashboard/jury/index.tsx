@@ -88,7 +88,7 @@ const Jury = () => {
             : CONSTANT.DATE.INCRIDEA.DAY3,
       ).getDate();
       tempFilteredEvents = tempFilteredEvents?.filter((event) =>
-        event.rounds.some((round) => round.date?.getDate() === filteredDay),
+        event.rounds.some((round) => round.date && new Date(round.date).getDate() === filteredDay),
       );
     }
     if (currentCategoryFilter !== AllCategory.ALL) {
@@ -127,16 +127,18 @@ const Jury = () => {
             currentDayFilter === "DAY 3"
           ) {
             if (
+              winner.event.rounds[
+                winner.event.rounds.length - 1
+              ]!.date && new Date(winner.event.rounds[
+                winner.event.rounds.length - 1
+              ]!.date!).getDate() ===
               new Date(
                 currentDayFilter === "DAY 1"
                   ? CONSTANT.DATE.INCRIDEA.DAY1
                   : currentDayFilter === "DAY 2"
                     ? CONSTANT.DATE.INCRIDEA.DAY2
                     : CONSTANT.DATE.INCRIDEA.DAY3,
-              ).getDate() ===
-              winner.event.rounds[
-                winner.event.rounds.length - 1
-              ]!.date?.getDate()
+              ).getDate()
             ) {
               if (winner.event.branch.name === "CORE") {
                 winner.team.members.map((member) => {
@@ -174,16 +176,18 @@ const Jury = () => {
             currentDayFilter === "DAY 3"
           ) {
             if (
+              winner.event.rounds[
+                winner.event.rounds.length - 1
+              ]!.date && (winner.event.rounds[
+                winner.event.rounds.length - 1
+              ]!.date!).getDate() ===
               new Date(
                 currentDayFilter === "DAY 1"
                   ? CONSTANT.DATE.INCRIDEA.DAY1
                   : currentDayFilter === "DAY 2"
                     ? CONSTANT.DATE.INCRIDEA.DAY2
                     : CONSTANT.DATE.INCRIDEA.DAY3,
-              ).getDate() ===
-              winner.event.rounds[
-                winner.event.rounds.length - 1
-              ]!.date?.getDate()
+              ).getDate()
             ) {
               if (winner.event.branch.name !== "CORE") {
                 winner.team.members.map((member) => {
@@ -222,9 +226,8 @@ const Jury = () => {
     const a = document.createElement("a");
     a.style.display = "none";
     a.href = url;
-    a.download = `${currentDayFilter} ${
-      currentBranchFilter === "ALL" ? "Branch" : "Core"
-    } Winners.csv`;
+    a.download = `${currentDayFilter} ${currentBranchFilter === "ALL" ? "Branch" : "Core"
+      } Winners.csv`;
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
@@ -238,11 +241,13 @@ const Jury = () => {
         <Spinner />
       </div>
     );
+
   if (!user) {
     void router.push("/login");
     return <div>Redirecting...</div>;
   }
-  if (user.role !== Role.Jury) {
+
+  if (user.role !== Role.Jury && user.role !== Role.Admin) {
     void router.push("/profile");
     return <div>Redirecting...</div>;
   }
@@ -288,11 +293,10 @@ const Jury = () => {
                     <Menu.Item key={filter}>
                       {() => (
                         <button
-                          className={`${
-                            currentBranchFilter === filter
-                              ? "bg-black/50"
-                              : "bg-black/20"
-                          } m-1.5 mb-0 w-32 rounded-sm px-3 py-2 text-sm text-white`}
+                          className={`${currentBranchFilter === filter
+                            ? "bg-black/50"
+                            : "bg-black/20"
+                            } m-1.5 mb-0 w-32 rounded-sm px-3 py-2 text-sm text-white`}
                           onClick={() => setCurrentBranchFilter(filter)}
                         >
                           {filter}
@@ -317,11 +321,10 @@ const Jury = () => {
                     <Menu.Item key={filter}>
                       {() => (
                         <button
-                          className={`${
-                            currentDayFilter === filter
-                              ? "bg-black/50"
-                              : "bg-black/20"
-                          } m-1.5 mb-0 w-36 rounded-sm px-3 py-2 text-sm text-white`}
+                          className={`${currentDayFilter === filter
+                            ? "bg-black/50"
+                            : "bg-black/20"
+                            } m-1.5 mb-0 w-36 rounded-sm px-3 py-2 text-sm text-white`}
                           onClick={() => setCurrentDayFilter(filter)}
                         >
                           {filter}
@@ -345,12 +348,11 @@ const Jury = () => {
               e.map((filter) => (
                 <span
                   key={filter}
-                  className={`${
-                    (filter as EventCategory | AllCategory) ===
+                  className={`${(filter as EventCategory | AllCategory) ===
                     currentCategoryFilter
-                      ? "border-b-4 bg-black/10"
-                      : "hover:bg-black/10"
-                  } grow cursor-pointer rounded-sm border-black/30 px-3 py-1 text-center text-white`}
+                    ? "border-b-4 bg-black/10"
+                    : "hover:bg-black/10"
+                    } grow cursor-pointer rounded-sm border-black/30 px-3 py-1 text-center text-white`}
                   onClick={() =>
                     setCurrentCategoryFilter(
                       filter as EventCategory | AllCategory,
@@ -380,11 +382,10 @@ const Jury = () => {
                   <Menu.Item key={filter}>
                     {() => (
                       <button
-                        className={`${
-                          currentBranchFilter === filter
-                            ? "bg-black/50"
-                            : "bg-black/20"
-                        } m-1.5 mb-0 w-36 rounded-sm px-3 py-2 text-sm text-white`}
+                        className={`${currentBranchFilter === filter
+                          ? "bg-black/50"
+                          : "bg-black/20"
+                          } m-1.5 mb-0 w-36 rounded-sm px-3 py-2 text-sm text-white`}
                         onClick={() => setCurrentBranchFilter(filter)}
                       >
                         {filter}
@@ -413,12 +414,11 @@ const Jury = () => {
                       <Menu.Item key={filter}>
                         {() => (
                           <button
-                            className={`${
-                              currentCategoryFilter ===
+                            className={`${currentCategoryFilter ===
                               (filter as EventCategory | AllCategory)
-                                ? "bg-black/50"
-                                : "bg-black/20"
-                            } m-1.5 mb-0 w-36 rounded-sm px-3 py-2 text-sm text-white`}
+                              ? "bg-black/50"
+                              : "bg-black/20"
+                              } m-1.5 mb-0 w-36 rounded-sm px-3 py-2 text-sm text-white`}
                             onClick={() =>
                               setCurrentCategoryFilter(
                                 filter as EventCategory | AllCategory,
@@ -448,11 +448,10 @@ const Jury = () => {
                   <Menu.Item key={filter}>
                     {() => (
                       <button
-                        className={`${
-                          currentDayFilter === filter
-                            ? "bg-black/50"
-                            : "bg-black/20"
-                        } m-1.5 mb-0 w-36 rounded-sm px-3 py-2 text-sm text-white`}
+                        className={`${currentDayFilter === filter
+                          ? "bg-black/50"
+                          : "bg-black/20"
+                          } m-1.5 mb-0 w-36 rounded-sm px-3 py-2 text-sm text-white`}
                         onClick={() => setCurrentDayFilter(filter)}
                       >
                         {filter.replace("_", " ")}
@@ -499,8 +498,9 @@ const EventCard = ({
   const totalRounds = event.rounds.length;
   const getRoundStatus = () => {
     if (getCompletedRounds() === totalRounds) return "COMPLETED";
+    const tempDate = event.rounds.find((r) => r.roundNo === 1)?.date
     if (
-      (event.rounds.find((r) => r.roundNo === 1)?.date?.getTime() ?? 0) >
+      (tempDate ? new Date(tempDate).getTime() : 0) >
       new Date().getTime()
     )
       return "YET_TO_START";

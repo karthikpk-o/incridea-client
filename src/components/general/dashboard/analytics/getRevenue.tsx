@@ -27,7 +27,7 @@ const RevenueCard = () => {
         <div className="p-6">
           <div className="flex items-start justify-center">
             <IndianRupee className="size-12 text-gray-300" />
-            <p className="text-6xl font-bold text-white">{revenue}</p>
+            <p className="text-6xl font-bold text-white">{revenue / 100}</p>
           </div>
         </div>
       </div>
