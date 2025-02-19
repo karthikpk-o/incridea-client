@@ -101,28 +101,28 @@ function Intermediate({
         <Environment>
           <Lightformer
             intensity={2}
-            color="white"
+            color="gold"
             position={[0, -1, 5]}
             rotation={[0, 0, Math.PI / 3]}
             scale={[100, 0.1, 1]}
           />
           <Lightformer
             intensity={3}
-            color="white"
+            color="gold"
             position={[-1, -1, 1]}
             rotation={[0, 0, Math.PI / 3]}
             scale={[100, 0.1, 1]}
           />
           <Lightformer
             intensity={3}
-            color="white"
+            color="gold"
             position={[1, 1, 1]}
             rotation={[0, 0, Math.PI / 3]}
             scale={[100, 0.1, 1]}
           />
           <Lightformer
             intensity={10}
-            color="white"
+            color="gold"
             position={[-10, 0, 14]}
             rotation={[0, Math.PI / 2, Math.PI / 3]}
             scale={[100, 10, 1]}
@@ -395,7 +395,7 @@ function Band({
                         flexGrow={1}
                       >
                         <Text
-                          fontSize={28}
+                          fontSize={26}
                           fontWeight="bold"
                           transformScaleY={1.4}
                           color="white"
@@ -451,7 +451,7 @@ function Band({
                       />
 
                       <Text
-                        fontSize={16}
+                        fontSize={28}
                         fontWeight="bold"
                         transformScaleY={1.4}
                         color="white"
