@@ -1,5 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { stat } from "fs";
+import { type QueryResult, useMutation, useQuery } from "@apollo/client";
 import React, { useEffect } from "react";
 import { type FC, useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
@@ -8,22 +7,21 @@ import Button from "~/components/button";
 import Modal from "~/components/modal";
 import createToast from "~/components/toast";
 import {
+  AccommodationBookingStatus,
+  type AccommodationRequestsQuery,
+  type AccommodationRequestsQueryVariables,
   GetAllHotelsDocument,
   UpdateAccommodationStatusDocument,
 } from "~/generated/generated";
 
-enum AccommodationStatus {
-  pending = "PENDING",
-  complete = "CONFIRMED",
-  cancelled = "CANCELLED",
-}
+
 const AddAccommodateDetails: FC<{
-  accId: string;
-}> = ({ accId }) => {
+  accommodation: Extract<NonNullable<QueryResult<AccommodationRequestsQuery, AccommodationRequestsQueryVariables>["data"]>["accommodationRequests"], { __typename: "QueryAccommodationRequestsSuccess" }>["data"][number];
+}> = ({ accommodation }) => {
   const [showModal, setShowModal] = useState(false);
-  const [hotelDetails, setHotelDetails] = useState("");
-  const [roomNo, setRoomNo] = useState("");
-  const [status, setStatus] = useState<string>(AccommodationStatus.pending);
+  const [hotelDetails, setHotelDetails] = useState(accommodation.hotel.id);
+  const [roomNo, setRoomNo] = useState(accommodation.room);
+  const [status, setStatus] = useState<AccommodationBookingStatus>(accommodation.status);
 
   const { data: allHotels } = useQuery(GetAllHotelsDocument);
 
@@ -38,14 +36,16 @@ const AddAccommodateDetails: FC<{
     }
   }, [allHotels]);
 
-  const [updateStatus] = useMutation(UpdateAccommodationStatusDocument);
+  const [updateStatus] = useMutation(UpdateAccommodationStatusDocument, {
+    refetchQueries: ["AccommodationRequests"]
+  });
+
   const handleUpdate = async () => {
-    console.log(hotelDetails, roomNo, accId, status);
     const promise = updateStatus({
       variables: {
         hotelId: hotelDetails,
-        room: roomNo,
-        bookingId: accId,
+        room: roomNo ?? "",
+        bookingId: accommodation.id,
         status,
       },
     }).then(async (res) => {
@@ -110,7 +110,7 @@ const AddAccommodateDetails: FC<{
               onChange={(e) => {
                 setRoomNo(e.target.value);
               }}
-              value={roomNo}
+              value={roomNo ?? ""}
               required
             />
           </div>
@@ -121,13 +121,13 @@ const AddAccommodateDetails: FC<{
             </label>
             <select
               onChange={(e) => {
-                setStatus(e.target.value);
+                setStatus(e.target.value as AccommodationBookingStatus);
               }}
               value={status}
               id="status"
               className="block w-11/12 rounded-lg border border-gray-600 bg-gray-600 p-2.5 text-sm text-white placeholder-gray-400 ring-gray-500 focus:outline-none focus:ring-2"
             >
-              {Object.values(AccommodationStatus).map((item, index) => (
+              {Object.values(AccommodationBookingStatus).map((item, index) => (
                 <option key={index} value={item}>
                   {item}
                 </option>
@@ -140,7 +140,7 @@ const AddAccommodateDetails: FC<{
               onClick={handleUpdate}
             >
               <MdModeEditOutline />
-              submit
+              Submit
             </Button>
           </div>
         </div>

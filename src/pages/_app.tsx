@@ -1,5 +1,4 @@
 import { ApolloProvider, type NormalizedCacheObject } from "@apollo/client";
-import { Analytics } from "@vercel/analytics/react";
 import { AnimatePresence } from "framer-motion";
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
@@ -175,7 +174,6 @@ export default function App({
           </BackGroundGradient>
         </LoaderProvider>
       </ApolloProvider>
-      <Analytics />
     </>
   );
 }
