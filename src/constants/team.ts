@@ -197,22 +197,6 @@ const TEAM_MEMBERS: {
     image: ASSETS.TEAM.SOURAV_BANGERA,
     quote: "i wish to be touched by Nandan"
   },
-  "Prakash Waddar": {
-    role: "Frontend",
-    instagram: "https://www.instagram.com/____prakash____28",
-    github: "https://github.com/prakashwaddar628",
-    linkedin: "https://www.linkedin.com/in/prakash-l-waddar-422760203",
-    image: ASSETS.TEAM.PRAKASH_WADDAR,
-    quote: "Break loops, not your spirit. Go beyond your limits",
-  },
-  Mustafa: {
-    role: "Frontend",
-    instagram: "https://www.instagram.com/mustafa._._.raza/",
-    github: "https://github.com/Mustafa-DEV0",
-    linkedin: "https://www.linkedin.com/in/mustafa-raza-b98163350",
-    image: ASSETS.TEAM.MUSTAFA,
-    quote: "I write clean code… until the deadline says otherwise.",
-  },
 };
 
 export { TEAM_MEMBERS };
