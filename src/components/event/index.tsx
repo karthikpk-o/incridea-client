@@ -49,19 +49,13 @@ const Event = ({
               minute: "numeric",
               hour12: true,
             })
-          : event?.id === "50" || event?.id === "51"  ? "Open on all 3 Days":"TBD",
+          : event?.id === "50" || event?.id === "51"
+            ? "Open on all 3 Days"
+            : "TBD",
         Icon: Calendar,
       },
-      {
-        name: "Type & Team Size",
-        text: eventTypeWithTeamSize,
-        Icon: Users,
-      },
-      {
-        name: "Venue",
-        text: event.venue,
-        Icon: MapPin,
-      },
+      { name: "Type & Team Size", text: eventTypeWithTeamSize, Icon: Users },
+      { name: "Venue", text: event.venue, Icon: MapPin },
     ];
   };
   const buttonRef = useRef<HTMLDivElement>(null);
@@ -74,7 +68,7 @@ const Event = ({
     tl.fromTo(
       shine,
       { x: "-100%" },
-      { x: "100%", duration: 0.5, ease: "power1.inOut" },
+      { x: "100%", duration: 0.5, ease: "power1.inOut" }
     );
 
     const button = buttonRef.current;
@@ -150,16 +144,6 @@ const Event = ({
           points="13.1 242.61 13.07 242.61 12.78 242.29 13.06 242.57 13.1 242.61"
         />
 
-        <foreignObject x="0" y="86" width="17" height="60">
-          <div className="flex h-full w-full items-center justify-center">
-            <span className="origin-center -rotate-90 transform whitespace-nowrap rounded-xl px-8 text-[8px] font-semibold uppercase italic text-white shadow-2xl">
-              {event.category?.toLowerCase() === "non_technical"
-                ? "Non Tech"
-                : event.category?.toLocaleLowerCase()}
-            </span>
-          </div>
-        </foreignObject>
-
         <image
           href={CONSTANT.ASSETS.PUBLIC.LOGO_WHITE}
           x="21"
@@ -233,6 +217,17 @@ const Event = ({
           </div>
         </foreignObject>
       </svg>
+      <div className="absolute left-3 top-[45.5%] flex w-[5%] items-center justify-center">
+        <span
+          className="whitespace-nowrap rounded-xl px-8 text-base font-semibold uppercase italic text-white shadow-2xl"
+          style={{ transform: "rotate(-90deg)", transformOrigin: "center" }}
+        >
+          {event.category?.toLowerCase() === "non_technical"
+            ? "Non Tech"
+            : event.category?.toLowerCase()}
+        </span>
+      </div>
+
       <div
         className="h-10 register-button w-[86%] aspect-square bg-gradient-to-tr bg-opacity-50 from-primary-950 via-primary-900/90 to-primary-950 flex justify-center items-center absolute -mt-[62px] md:-mt-[65px]"
         style={{
