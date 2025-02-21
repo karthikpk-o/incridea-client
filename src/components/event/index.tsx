@@ -95,14 +95,18 @@ const Event = ({
     <div
       event-scroll
       onClick={() => router.push(generateEventUrl(event.name, event.id))}
-      className={`mb relative mx-auto flex w-full max-w-[80%] cursor-pointer flex-col items-center rounded-2xl transition-transform duration-300 hover:scale-[1.02] sm:mx-0 sm:max-w-sm md:max-w-md`}
+      className={`relative my-5 flex w-full h-auto items-center max-w-[90%] sm:max-w-sm md:max-w-md cursor-pointer flex-col rounded-2xl transition-transform duration-300 hover:scale-[1.02] mx-auto sm:mx-0`}
       style={{ willChange: "transform" }}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 145.68 254"
-        className="h-full w-full rounded-2xl object-cover"
-        style={{ transform: "scale(0.95)", WebkitTransform: "scale(0.95)" }}
+        viewBox="0 0 145.68 256"
+        className="w-full rounded-2xl block"
+        style={{
+          height: "100%",
+          transform: "scale(0.95)",
+          WebkitTransform: "scale(0.95)",
+        }}
         preserveAspectRatio="xMidYMid meet"
       >
         <defs>
@@ -230,7 +234,7 @@ const Event = ({
         </foreignObject>
       </svg>
       <div
-        className="register-button absolute -mt-[42.5%] flex aspect-square h-[6%] w-[86%] items-center justify-center bg-opacity-50 bg-gradient-to-tr from-primary-950 via-primary-900/90 to-primary-950"
+        className="h-10 register-button w-[86%] aspect-square bg-gradient-to-tr bg-opacity-50 from-primary-950 via-primary-900/90 to-primary-950 flex justify-center items-center absolute -mt-[62px] md:-mt-[65px]"
         style={{
           clipPath:
             "polygon(0% 55%, 5% 0%, 95% 0%, 100% 55%, 95% 100%, 5% 100%)",
