@@ -45,7 +45,7 @@ const Page = () => {
     void router.push("/login");
     return <div>Redirecting...</div>;
   }
-  if (user.role !== Role.Jury) {
+  if (user.role !== Role.Jury && user.role !== Role.Admin) {
     void router.push("/profile");
     return <div>Redirecting...</div>;
   }
@@ -70,7 +70,7 @@ const RoundTabs = ({
   const getRoundStatus = (round: typeof rounds[number]) => {
     if (round.completed) return "COMPLETED";
     const roundTime = rounds.find((r) => r.roundNo === round.roundNo)?.date;
-    if (roundTime && roundTime.getTime() > new Date().getTime())
+    if (roundTime && new Date(roundTime).getTime() > new Date().getTime())
       return "YET_TO_START";
     return "ONGOING";
   };

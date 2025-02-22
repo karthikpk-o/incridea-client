@@ -49,7 +49,7 @@ const Event = ({
               minute: "numeric",
               hour12: true,
             })
-          : "TBD",
+          : event?.id === "50" || event?.id === "51"  ? "Open on all 3 Days":"TBD",
         Icon: Calendar,
       },
       {

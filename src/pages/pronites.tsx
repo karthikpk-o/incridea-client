@@ -40,16 +40,16 @@ import { EventHandlers } from "@react-three/fiber/dist/declarations/src/core/eve
 import { CONSTANT } from "~/constants";
 
 const videos = [
-  "https://res.cloudinary.com/dliarni5j/video/upload/v1739119567/shaan_z13zrz.mov",
+  "https://res.cloudinary.com/dlr9tbqlk/video/upload/v1739986328/shaan_o0nrcg.mp4",
 
-  "https://res.cloudinary.com/dliarni5j/video/upload/v1739079132/Coffee_pdoave.mp4",
+  "https://res.cloudinary.com/dlr9tbqlk/video/upload/v1739986369/masalacoffee_hcllsc.mp4",
 ];
 const songs = [
-  "https://res.cloudinary.com/dliarni5j/video/upload/v1739121952/Chaar_Kadam_vsre4a.mp3",
-  "https://res.cloudinary.com/dliarni5j/video/upload/v1739121950/Musu_Musu_uqvaqg.mp3",
-  "https://res.cloudinary.com/dliarni5j/video/upload/v1739121945/Deevangi_lfwynw.mp3",
-  "https://res.cloudinary.com/dliarni5j/video/upload/v1739127684/kantaa_wofgg1.mp3",
-  "https://res.cloudinary.com/dliarni5j/video/upload/v1739127684/Adiyelo_hr9sno.mp3",
+  "https://res.cloudinary.com/dlr9tbqlk/video/upload/v1739986245/Chaar_Kadam_c0n5f0.mp3",
+  "https://res.cloudinary.com/dlr9tbqlk/video/upload/v1739986244/Musu_Musu_t05ryd.mp3",
+  "https://res.cloudinary.com/dlr9tbqlk/video/upload/v1739986238/Deevangi_m65uzt.mp3",
+  "https://res.cloudinary.com/dlr9tbqlk/video/upload/v1739986242/kantaa_ectjx0.mp3",
+  "https://res.cloudinary.com/dlr9tbqlk/video/upload/v1739986243/Adiyelo_fwyp9h.mp3",
 ];
 
 const songname = [
@@ -561,7 +561,7 @@ function Rig({ _camPosisiton }: { _camPosisiton: number[] }) {
         animationState.current.elapsed += delta;
         const t = Math.min(
           animationState.current.elapsed / keyframe.duration,
-          1,
+          1
         );
         camera.position.lerpVectors(startPos, keyframe.pos, t);
         camera.lookAt(keyframe.lookAt);
@@ -587,7 +587,7 @@ function Rig({ _camPosisiton }: { _camPosisiton: number[] }) {
         const targetPos = new THREE.Vector3(
           _camPosisiton[0]! + offsetX,
           _camPosisiton[1]! + offsetY,
-          _camPosisiton[2],
+          _camPosisiton[2]
         );
         camera.position.lerp(targetPos, 0.05);
         camera.lookAt(look);
@@ -599,7 +599,7 @@ function Rig({ _camPosisiton }: { _camPosisiton: number[] }) {
       camera.rotation.set(
         -(mouse.y * factor) - Math.PI / 32,
         -(mouse.x * factor),
-        0,
+        0
       );
     }
   });

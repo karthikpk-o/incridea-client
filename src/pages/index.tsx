@@ -40,34 +40,35 @@ export const HomeFooter = () => {
   return (
     <footer
       className={cn(
-        "absolute bottom-0 flex w-full flex-col gap-2 text-green-900 font-semibold text-[1rem] md:gap-4 h-14 ",
+        "absolute bottom-0 flex w-full flex-col gap-2 text-white font-semibold text-[1rem] md:gap-4 h-14",
+        "before:absolute before:inset-0 before:bg-gradient-to-t before:from-black/80 before:via-black/60 before:to-transparent before:-z-10",
+        "backdrop-blur-sm"
       )}
     >
       {show && (
         <ul
-          className="mb-5 mx-auto  flex flex-1 text-xs flex-row flex-wrap items-center justify-center gap-2 whitespace-nowrap md:gap-5"
+          className="mb-5 mx-auto flex flex-1 text-xs flex-row flex-wrap items-center justify-center gap-2 whitespace-nowrap md:gap-5"
           style={{
-            textShadow:
-              "0 0 3px rgba(255, 215, 0, 0.1), 0 0 6px rgba(255, 215, 0, 0.2), 0 0 12px rgba(255, 215, 0, 0.9)",
+            textShadow: "0 0 2px rgba(255, 255, 255, 0.1), 0 0 3px rgba(255, 255, 255, 0.1)",
           }}
         >
-          <li className="transition-colors duration-300 hover:text-green-900">
+          <li className="transition-colors duration-300 hover:text-gray-300">
             <Link href="/privacy">Privacy Policy</Link>
           </li>
           |
-          <li className="transition-colors duration-300 hover:text-green-900">
+          <li className="transition-colors duration-300 hover:text-gray-300">
             <Link href="/rules">Terms & Conditions</Link>
           </li>
           |
-          <li className="transition-colors duration-300 hover:text-green-900">
+          <li className="transition-colors duration-300 hover:text-gray-300">
             <Link href="/guidelines">Guidelines</Link>
           </li>
           |
-          <li className="transition-colors duration-300 hover:text-green-900">
+          <li className="transition-colors duration-300 hover:text-gray-300">
             <Link href="/refund">Refund Policy</Link>
           </li>
           |
-          <li className="transition-colors duration-300 hover:text-green-900">
+          <li className="transition-colors duration-300 hover:text-gray-300">
             <Link href="/contact">Contact Us</Link>
           </li>
         </ul>
@@ -76,12 +77,11 @@ export const HomeFooter = () => {
         <p
           className="text-center mx-auto text-sm"
           style={{
-            textShadow:
-              "0 0 3px rgba(255, 215, 0, 0.4), 0 0 6px rgba(255, 215, 0, 0.2), 0 0 12px rgba(255, 215, 0, 0.4)",
+            textShadow: "0 0 2px rgba(255, 255, 255, 0.1), 0 0 3px rgba(255, 255, 255, 0.1)",
           }}
         >
           <Link
-            className="flex items-center justify-center tracking-normal text-sm transition-all hover:tracking-widest hover:text-green-900"
+            className="flex items-center justify-center tracking-normal text-sm transition-all hover:tracking-widest hover:text-gray-300"
             href="/team"
           >
             Made with &nbsp;<span className="text-red-600 text-sm">❤</span>

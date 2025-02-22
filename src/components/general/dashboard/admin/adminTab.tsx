@@ -14,6 +14,8 @@ import RoundsDone from "./roundsDone";
 import SearchUsersModal from "./searchUsersModal";
 import ViewEvent from "./viewEventModal";
 import RegistrationToggle from "~/components/general/dashboard/admin/registrationToggle";
+import Button from "~/components/button";
+import Link from "next/link";
 
 const AdminTab: FC<{
   AdminId: string;
@@ -36,6 +38,11 @@ const AdminTab: FC<{
         {/* Admin Header */}
         <div className="mt-6 flex flex-col gap-4 md:flex-row items-center justify-between text-center md:m-3">
           <RegistrationToggle />
+          <Link href="/dashboard/analytics">
+            <Button intent={"info"}>
+              Analytics
+            </Button>
+          </Link>
           <div className="flex gap-4">
             <div className="mx-3 flex items-center justify-center">
               <SearchUsersModal />

@@ -129,7 +129,8 @@ const Page = ({ data }: Props) => {
       tempFilteredEvents = tempFilteredEvents.filter(
         (event) =>
           event.category.replace("_", "").toLowerCase() ===
-          currentCategoryFilter.toLocaleLowerCase(),
+          currentCategoryFilter.replace("_", "").toLocaleLowerCase(),
+        
       );
 
     setFilteredEvents(tempFilteredEvents);

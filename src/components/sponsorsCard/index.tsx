@@ -1,16 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-import Image from "next/image";
 import { ExternalLink } from "lucide-react";
-import { type Sponsor } from "~/constants/sponsors";
 import { CONSTANT } from "~/constants";
+import { type GetSponsorsQuery, type GetSponsorsQueryVariables } from "~/generated/generated";
+import { type QueryResult } from "@apollo/client";
 
 const SponsorGearCarousel = ({
   sponsors,
   isSoundEnabled,
   setIsSoundEnabled,
 }: {
-  sponsors: Sponsor[];
+  sponsors: Extract<
+    NonNullable<
+      QueryResult<GetSponsorsQuery, GetSponsorsQueryVariables>["data"]>["getSponsors"], {
+        __typename: "QueryGetSponsorsSuccess";
+      }>["data"];
   isSoundEnabled: boolean;
   setIsSoundEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -179,7 +183,7 @@ const SponsorGearCarousel = ({
                 )}
                 <div className="relative size-32 md:size-40">
                   <img
-                    src={`/2025/sponsors/${sponsors[currentIndex]?.logo}`}
+                    src={`/2025/sponsors/${sponsors[currentIndex]?.imageUrl}`}
                     alt={sponsors[currentIndex]?.name ?? "Sponsor Logo"}
                     className="object-contain"
                   />
@@ -191,15 +195,15 @@ const SponsorGearCarousel = ({
                         {sponsors[currentIndex].name}
                       </h3>
                       <p className="text-emerald-100/90 text-xs md:text-sm p-1 text-center md:text-center ">
-                        {sponsors[currentIndex].desc}
+                        {sponsors[currentIndex].description}
                       </p>
                     </>
                   )}
                 </div>
 
-                {sponsors[currentIndex]?.websiteURL && (
+                {sponsors[currentIndex]?.websiteUrl && (
                   <a
-                    href={sponsors[currentIndex].websiteURL}
+                    href={sponsors[currentIndex].websiteUrl}
                     target="_blank"
                     rel="noreferrer"
                     className="text-sm md:text-[1rem] bottom-0 translate-y-1/2 group flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 bg-amber-500 text-[#054432] hover:bg-amber-400 transition-all hover:scale-105 rounded-tl-2xl rounded-br-2xl rounded-tr-sm rounded-bl-sm"
