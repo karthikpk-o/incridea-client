@@ -22,42 +22,8 @@ const Profile: NextPage = () => {
   const { error, user: user, loading } = useAuth();
   const containerRef = useRef(null);
   const router = useRouter();
-  const [bombXp, setBombXp] = useState<boolean>(false);
   const [showQr, setShowQr] = useState<boolean>(false);
   const [showAvatarModal, setShowAvatarModal] = useState<boolean>(false);
-  const [addXp] = useMutation(AddXpDocument, {
-    variables: {
-      levelId: "2",
-    },
-    refetchQueries: [GetUserXpDocument],
-    awaitRefetchQueries: true,
-  });
-
-  useEffect(() => {
-    if (router.isReady) {
-      setBombXp(localStorage.getItem("easterBombClicked") === "true");
-    }
-  }, [router.isReady]);
-
-  useEffect(() => {
-    if (bombXp) {
-      void addXp().then((res) => {
-        if (res.data?.addXP.__typename === "MutationAddXPSuccess") {
-          toast.success(
-            `Congratulations!! Added ${res.data?.addXP.data.level.point} Easter Bomb XP`,
-            {
-              position: "bottom-center",
-              style: {
-                backgroundColor: "#7628D0",
-                color: "white",
-              },
-            },
-          );
-          localStorage.removeItem("easterBombClicked");
-        }
-      });
-    }
-  }, [addXp, bombXp]);
 
   if (loading) return <Loader />;
 
