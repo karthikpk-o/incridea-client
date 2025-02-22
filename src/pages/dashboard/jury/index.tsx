@@ -26,26 +26,14 @@ enum AllCategory {
 
 const Jury = () => {
   const { user, loading } = useAuth();
-  // function fetchWinners(eventId: string) {
-  //   const { data: winners, loading: winnersLoading } = useQuery(
-  //     WinnersByEventDocument,
-  //     {
-  //       variables: {
-  //         eventId: eventId!,
-  //       },
-  //       skip: !eventId,
-  //     }
-  //   );
-  //   return winners;
-  // }
+
   const { data: allWinners } = useQuery(GetAllWinnersDocument);
-  console.log(allWinners);
+
   const router = useRouter();
   const { data: Events, loading: EventLoading } = useQuery(
     PublishedEventsDocument,
   );
 
-  // --------------------------------------------------
   const branchFilters = [
     "ALL",
     "CORE",
@@ -58,9 +46,9 @@ const Jury = () => {
     "MECH",
     "CIVIL",
     "BTE",
-  ];
+  ] as const;
 
-  const dayFilters = ["ALL", "DAY 1", "DAY 2", "DAY 3"];
+  const dayFilters = ["ALL", "DAY 1", "DAY 2", "DAY 3"] as const;
 
   const [currentBranchFilter, setCurrentBranchFilter] =
     useState<(typeof branchFilters)[number]>("ALL");
@@ -75,11 +63,11 @@ const Jury = () => {
 
   useEffect(() => {
     let tempFilteredEvents = Events?.publishedEvents;
-    if (currentBranchFilter !== "ALL")
+    if (currentBranchFilter !== branchFilters[0])
       tempFilteredEvents = tempFilteredEvents?.filter(
         (event) => event.branch.name === currentBranchFilter,
       );
-    if (currentDayFilter !== "All") {
+    if (currentDayFilter !== dayFilters[0]) {
       const filteredDay = new Date(
         currentDayFilter === "DAY 1"
           ? CONSTANT.DATE.INCRIDEA.DAY1
@@ -97,7 +85,7 @@ const Jury = () => {
       );
     }
     setFilteredEvents(tempFilteredEvents);
-  }, [currentBranchFilter, currentDayFilter, currentCategoryFilter, Events]);
+  }, [currentBranchFilter, currentDayFilter, currentCategoryFilter, Events, branchFilters, dayFilters]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
