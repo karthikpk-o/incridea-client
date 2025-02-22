@@ -342,7 +342,7 @@ const Page = ({ data }: Props) => {
               data-scroll-speed="0.7"
               className={
                 filteredEvents.length > 0
-                  ? `mx-auto mb-20 grid h-full w-full max-w-7xl grid-cols-1 justify-center gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`
+                  ? `mx-auto mt-6 mb-20 grid h-full w-full max-w-7xl grid-cols-1 justify-center items-center gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`
                   : "flex h-full w-full items-center justify-center"
               }
             >
