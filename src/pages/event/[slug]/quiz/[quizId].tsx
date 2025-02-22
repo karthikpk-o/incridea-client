@@ -46,8 +46,19 @@ const AttemptQuizPage = ({ quizId, error }: Props) => {
     if (
       questionsData?.getAllquestions.__typename ===
       "QueryGetAllquestionsSuccess"
-    )
-      setQuestions(questionsData.getAllquestions.data);
+    ) {
+      const questions = questionsData.getAllquestions.data;
+      const mappedqs = questions.map((question) => ({
+        id: question.id,
+        question: question.question,
+        image: question.image,
+        options: question.options,
+        isCode: question.isCode,
+        description: question.description,
+      }));
+      const sortedQuestions = mappedqs.sort(() => Math.random() - 0.5);
+      setQuestions(sortedQuestions);
+    }
   }, [questionsData]);
 
   if (error) {

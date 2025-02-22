@@ -28,6 +28,7 @@ import {
   DeleteCriteriaDocument,
   DeleteJudgeDocument,
   DeleteRoundDocument,
+  EndQuizDocument,
   type EventByOrganizerQuery,
   NotifyParticipantsDocument,
   UpdateQuizStatusDocument,
@@ -44,7 +45,13 @@ const RoundsSidebar: FC<{
   eventId: string;
   isPublished: boolean;
 }> = ({ rounds, eventId, isPublished }) => {
-  const [baseUrl, setBaseUrl] = useState("");
+  const [endQuizMutation, { loading: endQuizLoading }] = useMutation(
+    EndQuizDocument,
+    {
+      refetchQueries: ["EventByOrganizer"],
+      awaitRefetchQueries: true,
+    },
+  );
   const [deleteRound, { loading: loading2 }] = useMutation(
     DeleteRoundDocument,
     {
@@ -152,6 +159,28 @@ const RoundsSidebar: FC<{
     }
   };
 
+  useEffect(() => {
+    rounds.map((round) => {
+      if (round.quiz?.endTime && new Date(round.quiz.endTime) < new Date()) {
+        if (!round.quiz.completed) {
+          endQuizMutation({
+            variables: {
+              quizId: round.quiz.id,
+            },
+          })
+            .then((res) => {
+              if (res.data?.endQuiz.__typename === "MutationEndQuizSuccess") {
+                console.log("Quiz Ended");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      }
+    });
+  }, [rounds]);
+
   const handlePublishQuiz = async (quizId: string, allowAttempts: boolean) => {
     const promise = updateQuizStatus({
       variables: {
@@ -188,10 +217,6 @@ const RoundsSidebar: FC<{
       );
     }
   };
-
-  useEffect(() => {
-    setBaseUrl(`${window.location.protocol}//${window.location.host}`);
-  }, []);
 
   return (
     <div className="flex flex-col gap-5 px-2 pb-2">
@@ -383,7 +408,7 @@ const RoundsSidebar: FC<{
                                   </DialogHeader>
                                   <div className="flex flex-col items-center justify-center space-y-4">
                                     <QRCodeSVG
-                                      value={`${baseUrl}/event/${round.quiz.name}-${selectedRound}/quiz/${round.quiz.id}`}
+                                      value={`${env.NEXT_PUBLIC_THIS_APP_URL}/event/${round.quiz.name}-${selectedRound}/quiz/${round.quiz.id}`}
                                       size={200}
                                     />
                                     <div className="flex">
@@ -392,7 +417,7 @@ const RoundsSidebar: FC<{
                                         className="rounded-md bg-black"
                                         onClick={() =>
                                           handleCopyURL(
-                                            `${baseUrl}/event/${round.quiz?.name}-${selectedRound}/quiz/${round.quiz?.id}`,
+                                            `${env.NEXT_PUBLIC_THIS_APP_URL}/event/${round.quiz?.name}-${selectedRound}/quiz/${round.quiz?.id}`,
                                           )
                                         }
                                       >
