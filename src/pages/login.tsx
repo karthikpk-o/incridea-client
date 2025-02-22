@@ -25,7 +25,7 @@ const Page = () => {
       // Set in signup mutation success
       localStorage.getItem("user-has-signed-up")
       ? AuthFormType.SIGN_IN
-      : AuthFormType.SIGN_UP,
+      : AuthFormType.SIGN_IN,
   );
 
   const changeCard = useCallback(
