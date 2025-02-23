@@ -1,7 +1,6 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { GetRevenueDocument } from "~/generated/generated";
-import { IndianRupee } from "lucide-react";
 import Spinner from "~/components/spinner";
 
 const RevenueCard = () => {
@@ -16,8 +15,16 @@ const RevenueCard = () => {
     return <p>Error: {revenueResult.message}</p>;
   }
 
+  const convertToINR = (amount: number) => {
+    const amountInRupees = amount / 100;
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+    }).format(amountInRupees);
+  };
+
   if (revenueResult?.__typename === "QueryGetRevenueSuccess") {
-    const revenue = revenueResult.data;
+    const revenue = convertToINR(revenueResult.data);
 
     return (
       <div className="flex-1 rounded-xl bg-white/10 backdrop-blur-lg shadow-lg overflow-hidden">
@@ -26,8 +33,7 @@ const RevenueCard = () => {
         </div>
         <div className="p-6">
           <div className="flex items-start justify-center">
-            <IndianRupee className="size-12 text-gray-300" />
-            <p className="text-6xl font-bold text-white">{revenue / 100}</p>
+            <p className="text-6xl font-bold text-white">{revenue}</p>
           </div>
         </div>
       </div>
