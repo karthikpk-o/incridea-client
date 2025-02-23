@@ -12,6 +12,7 @@ query EventByOrganizer($organizerId: ID!) {
         startTime
         endTime
         password
+        overridePassword
         points
         qualifyNext
         allowAttempts
