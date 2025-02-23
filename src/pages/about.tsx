@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { AddXpDocument, GetUserXpDocument } from "~/generated/generated";
 import Banner from "~/components/aboutUs/banner";
 import { CONSTANT } from "~/constants";
+import Team from "~/components/aboutUs/team";
 import { AuthStatus, useAuth } from "~/hooks/useAuth";
 
 const images = [
@@ -65,11 +66,11 @@ const About = () => {
   };
 
   return (
-    <div className="max-w-screen-2xl mx-auto p-4 md:p-32 pb-10 flex flex-col gap-y-2 md:gap-16">
+    <div className="max-w-screen-2xl mx-auto p-4 md:p-32 pb-10 flex flex-col gap-y-2 md:gap-16 items-center md:items-stretch">
       <div className="flex min-h-screen flex-col gap-y-2 md:gap-16">
         <Banner video={"https://vimeo.com/1055845788?share=copy"} credits="" />
 
-        <span className="text-base text-secondary-100 md:text-lg xl:text-xl">
+        <span className="text-base text-white md:text-lg xl:text-xl">
           <div className="flex flex-col items-center justify-between gap-8 lg:flex-row">
             <Image
               src={CONSTANT.ASSETS.PUBLIC.NITTE_LOGO}
@@ -113,7 +114,7 @@ const About = () => {
 
       <Banner video={"https://vimeo.com/1055896700?share=copy"} credits="" />
 
-      <span className="text-base text-secondary-100 md:text-lg xl:text-xl">
+      <span className="text-base text-white md:text-lg xl:text-xl">
         <div className="relative flex flex-col items-center justify-between gap-16 lg:flex-row">
           {/* Gallery Section - Contained width, proper spacing */}
           <div className="relative w-full lg:w-1/3 md:pt-24 pt-40 pb-28 my-4">
@@ -241,6 +242,7 @@ const About = () => {
           </div>
         </div>
       </span>
+      <Team />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { TEAM_MEMBERS } from "~/constants/team";
 import { ASSETS } from "~/constants/assets";
+import { CORE_MEMBERS } from "./coreteam";
 
 const CONSTANT = {
   BASE_URL: "https://incridea.in" as const,
@@ -41,6 +42,7 @@ const CONSTANT = {
   },
   ASSETS: ASSETS,
   TEAM_MEMBERS: TEAM_MEMBERS,
+  CORE_MEMBERS: CORE_MEMBERS,
 };
 
 export { CONSTANT };
