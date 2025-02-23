@@ -106,13 +106,13 @@ function Intermediate({
             rotation={[0, 0, Math.PI / 3]}
             scale={[100, 0.1, 1]}
           />
-          <Lightformer
+          {/* <Lightformer
             intensity={3}
             color="gold"
             position={[-1, -1, 1]}
             rotation={[0, 0, Math.PI / 3]}
             scale={[100, 0.1, 1]}
-          />
+          /> */}
           <Lightformer
             intensity={3}
             color="gold"
@@ -120,13 +120,13 @@ function Intermediate({
             rotation={[0, 0, Math.PI / 3]}
             scale={[100, 0.1, 1]}
           />
-          <Lightformer
+          {/* <Lightformer
             intensity={10}
             color="gold"
             position={[-10, 0, 14]}
             rotation={[0, Math.PI / 2, Math.PI / 3]}
             scale={[100, 10, 1]}
-          />
+          /> */}
         </Environment>
       </Physics>
     </>
