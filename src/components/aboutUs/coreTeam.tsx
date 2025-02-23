@@ -1,7 +1,11 @@
-import TeamCard from "~/components/aboutUs/teamCard";
-import { CONSTANT } from "~/constants";
+import CoreTeamCard from "~/components/aboutUs/coreTeamCard";
+import { type GetCoreTeamMembersQuery } from "~/generated/generated";
 
-const Team = () => {
+const CoreTeam = ({ coreTeamMembers }: {
+  coreTeamMembers: Extract<GetCoreTeamMembersQuery["getCoreTeamMembers"], {
+    __typename: "QueryGetCoreTeamMembersSuccess";
+  }>["data"]
+}) => {
   return (
     <div className="flex flex-col justify-center items-center gap-y-8 bg-transparent pb-10 pt-12">
       <div className="px-4">
@@ -15,15 +19,10 @@ const Team = () => {
         </p>
       </div>
       <div className="mx-auto flex max-w-[80rem] flex-wrap justify-center gap-10 px-2">
-        {Object.entries(CONSTANT.CORE_MEMBERS).map(([name, details], idx) => (
-          <TeamCard
+        {coreTeamMembers.map((coreTeamMember, idx) => (
+          <CoreTeamCard
             key={idx}
-            name={name}
-            image={details.image}
-            committee={details.committee}
-            designation={details.designation}
-            phone={`tel:${details.phone}`}
-            email={`mailto:${details.email}`}
+            coreTeamMember={coreTeamMember}
           />
         ))}
       </div>
@@ -31,4 +30,4 @@ const Team = () => {
   );
 };
 
-export default Team;
+export default CoreTeam;
