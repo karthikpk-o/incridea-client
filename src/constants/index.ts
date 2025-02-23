@@ -1,6 +1,4 @@
-import { TEAM_MEMBERS } from "~/constants/team";
 import { ASSETS } from "~/constants/assets";
-import { CORE_MEMBERS } from "./coreteam";
 
 const CONSTANT = {
   BASE_URL: "https://incridea.in" as const,
@@ -22,12 +20,13 @@ const CONSTANT = {
     },
   },
   DATE: {
+    // FIXME: 0-index dates vs 1-index dates
     ROUND: {
-      DEAFULT_START: new Date(2025, 2, 27, 9, 30),
+      DEAFULT_START: new Date(2025, 1, 27, 9, 30),
     },
     ACCOMODATION: {
-      CHECK_IN_TIME: new Date(2025, 2, 27, 9, 30),
-      CHECK_OUT_TIME: new Date(2025, 3, 1, 22, 30),
+      CHECK_IN_TIME: new Date(2025, 1, 27, 9, 30),
+      CHECK_OUT_TIME: new Date(2025, 2, 1, 22, 30),
     },
     INCRIDEA: {
       DAY1: new Date("2025-02-27T09:00:00"),
@@ -42,8 +41,6 @@ const CONSTANT = {
     ACCOMMODATION_TEAM: [96, 768, 1652]
   },
   ASSETS: ASSETS,
-  TEAM_MEMBERS: TEAM_MEMBERS,
-  CORE_MEMBERS: CORE_MEMBERS,
 };
 
 export { CONSTANT };

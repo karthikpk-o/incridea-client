@@ -1,24 +1,17 @@
-import { useMutation } from "@apollo/client";
 import "locomotive-scroll/dist/locomotive-scroll.css";
-import { useEffect } from "react";
-import toast from "react-hot-toast";
-import { AddXpDocument, GetUserXpDocument, Role } from "~/generated/generated";
+import { Role } from "~/generated/generated";
 import Loader from "~/components/loader";
 import { useAuth } from "~/hooks/useAuth";
 import ProfileCard from "~/components/profile/ProfileCard";
 import UserEvents from "~/components/profile/UserEvents";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { type NextPage } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import LeaderBoard from "~/components/profile/LeaderBoard";
 import { Button } from "~/components/button/button";
 import { UserPen } from "lucide-react";
 import AvatarModal from "~/components/profile/avatarModal";
-import { CONSTANT } from "~/constants";
 
-const Profile: NextPage = () => {
+const Page = () => {
   const { error, user: user, loading } = useAuth();
   const containerRef = useRef(null);
   const router = useRouter();
@@ -27,28 +20,10 @@ const Profile: NextPage = () => {
 
   if (loading) return <Loader />;
 
-  if (!user)
-    return (
-      <div className="flex h-screen flex-col items-center justify-center space-y-3 text-center">
-        {/* Todo: Any graphic to fill space */}
-        <div className="z-10 mt-8 flex h-96 items-center justify-center">
-          <Image
-            src={CONSTANT.ASSETS.PUBLIC.GAMER}
-            alt="404"
-            width={400}
-            height={400}
-          />
-        </div>
-        <h1 className="-translate-y-10 text-lg text-white lg:text-xl">
-          Hey there! You need to login to view your profile page.
-        </h1>
-        <Link href="/login" className="-translate-y-5">
-          <Button className="md:text-lg text-base py-3 rounded-full">
-            Login / Register
-          </Button>
-        </Link>
-      </div>
-    );
+  if (!user) {
+    void router.push("/login");
+    return null;
+  }
 
   if (error)
     return (
@@ -61,6 +36,11 @@ const Profile: NextPage = () => {
 
   if (user.role === Role.User) {
     void router.push("/register");
+    return null;
+  }
+
+  if (user.role === Role.Judge) {
+    void router.push("/dashboard");
     return null;
   }
 
@@ -86,19 +66,17 @@ const Profile: NextPage = () => {
           </div>
           <LeaderBoard
             isShowQr={showQr}
-            setQr={() => {
-              setShowQr(!showQr);
-            }}
+            setQr={() => setShowQr(!showQr)}
           />
         </div>
 
         {/* md:h-full h-[85vh] */}
-        <div className="w-full  col-span-3">
-          <UserEvents userId={user?.id} />
+        <div className="w-full col-span-3">
+          <UserEvents userId={user.id} />
         </div>
       </div>
     </main>
   );
 };
 
-export default Profile;
+export default Page;
