@@ -1,6 +1,5 @@
 /* eslint-disable */
 import * as THREE from "three";
-import { QueryResult } from "@apollo/client";
 import {
   Environment,
   Lightformer,
