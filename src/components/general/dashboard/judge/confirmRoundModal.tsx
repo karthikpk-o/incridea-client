@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
+import { ConversionHtmlNode } from "@react-three/uikit";
 import { useState } from "react";
 
 import Badge from "~/components/badge";
@@ -6,10 +7,12 @@ import Button from "~/components/button";
 import Modal from "~/components/modal";
 import Spinner from "~/components/spinner";
 import createToast from "~/components/toast";
+import { CONSTANT } from "~/constants";
 import {
   CompleteRoundDocument,
   GetTotalScoresDocument,
   type JudgeGetTeamsByRoundQuery,
+  SplitTeamDocument,
   type WinnersByEventQuery,
   WinnerType,
 } from "~/generated/generated";
@@ -38,6 +41,10 @@ const ConfirmRoundModal = ({
     setShowModal(false);
   }
 
+  const [splitTeam, {loading: splitLoading}] = useMutation(
+    SplitTeamDocument,
+  );
+
   const [completeRound, { loading: completeLoading }] = useMutation(
     CompleteRoundDocument,
     {
@@ -46,7 +53,19 @@ const ConfirmRoundModal = ({
     },
   );
 
+  
+
   const handleComplete = async () => {
+
+    if(eventId === CONSTANT.ROADIES_EVENT_ID.toString()) {
+      console.log(eventId, roundNo);
+      await splitTeam({
+        variables: {
+          eventId: CONSTANT.ROADIES_EVENT_ID.toString(),
+          roundNo: roundNo.toString(),
+        }
+      }) 
+    }
     const promise = completeRound({
       variables: {
         roundNo,

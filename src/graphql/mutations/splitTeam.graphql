@@ -1,0 +1,16 @@
+mutation SplitTeam($eventId: ID!, $roundNo: ID!) {
+  splitTeam(eventId: $eventId, roundNo: $roundNo) {
+    ... on Error {
+      __typename
+      message
+    }
+    ... on MutationSplitTeamSuccess {
+      __typename
+      data {
+        name
+        roundNo
+        leaderId
+      }
+    }
+  }
+}
