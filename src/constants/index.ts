@@ -37,7 +37,7 @@ const CONSTANT = {
     PRONITE_USER: 669 as const,
     // TODO(Omkar): Update following, reflects in the leaderboard
     TECH_TEAM: [1, 2, 5, 7, 9, 17, 18, 28, 36, 37, 39, 120, 125, 126, 127, 131, 498, 897, 1095],
-    ACCOMMODATION_TEAM: [96]
+    ACCOMMODATION_TEAM: [96, 768, 1652]
   },
   ASSETS: ASSETS,
   TEAM_MEMBERS: TEAM_MEMBERS,
