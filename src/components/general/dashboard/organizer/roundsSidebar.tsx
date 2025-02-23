@@ -41,11 +41,12 @@ import EndQuizModal from "./endQuizModal";
 import RoundAddModal from "./roundsAddModal";
 
 const RoundsSidebar: FC<{
-  rounds: EventByOrganizerQuery["eventByOrganizer"][0]["rounds"];
+  rounds: Extract<EventByOrganizerQuery["eventByOrganizer"],
+    { __typename: "QueryEventByOrganizerSuccess" }>["data"][number]["rounds"];
   eventId: string;
   isPublished: boolean;
 }> = ({ rounds, eventId, isPublished }) => {
-  const [endQuizMutation, { loading: endQuizLoading }] = useMutation(
+  const [endQuizMutation] = useMutation(
     EndQuizDocument,
     {
       refetchQueries: ["EventByOrganizer"],
@@ -229,11 +230,10 @@ const RoundsSidebar: FC<{
                   onClick={() => {
                     setSelectedRound(round.roundNo);
                   }}
-                  className={`w-full whitespace-nowrap rounded-lg px-3 py-2 ${
-                    selected
-                      ? "bg-blue-900/40 text-white"
-                      : "bg-gray-600/40 text-gray-300"
-                  }`}
+                  className={`w-full whitespace-nowrap rounded-lg px-3 py-2 ${selected
+                    ? "bg-blue-900/40 text-white"
+                    : "bg-gray-600/40 text-gray-300"
+                    }`}
                 >
                   Round {round.roundNo}
                 </button>

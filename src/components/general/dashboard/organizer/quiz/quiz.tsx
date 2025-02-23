@@ -66,8 +66,12 @@ function loadfromLocalStore<T>(key: string): T | null {
 }
 
 const Quiz: React.FC<{
-  event: EventByOrganizerQuery["eventByOrganizer"][0];
-  round: EventByOrganizerQuery["eventByOrganizer"][0]["rounds"];
+  event: Extract<EventByOrganizerQuery["eventByOrganizer"], {
+    __typename: "QueryEventByOrganizerSuccess"
+  }>["data"][number];
+  round: Extract<EventByOrganizerQuery["eventByOrganizer"], {
+    __typename: "QueryEventByOrganizerSuccess"
+  }>["data"][number]["rounds"];
 }> = ({ event, round }) => {
   const scrollToBottom = (divId: string) => {
     const targetdiv = document.getElementById(divId);
@@ -370,20 +374,20 @@ const Quiz: React.FC<{
         q.id === id
           ? q.mode === "view"
             ? {
-                ...q,
-                options: q.options.map((opt, i) =>
-                  i === optionIndex ? value : opt,
-                ),
-                answer: q.ansIndex === optionIndex ? value : q.answer,
-                mode: "edit" as const,
-              }
+              ...q,
+              options: q.options.map((opt, i) =>
+                i === optionIndex ? value : opt,
+              ),
+              answer: q.ansIndex === optionIndex ? value : q.answer,
+              mode: "edit" as const,
+            }
             : {
-                ...q,
-                options: q.options.map((opt, i) =>
-                  i === optionIndex ? value : opt,
-                ),
-                answer: q.ansIndex === optionIndex ? value : q.answer,
-              }
+              ...q,
+              options: q.options.map((opt, i) =>
+                i === optionIndex ? value : opt,
+              ),
+              answer: q.ansIndex === optionIndex ? value : q.answer,
+            }
           : q,
       ),
     );
@@ -395,12 +399,12 @@ const Quiz: React.FC<{
         localQuestions?.map((q) =>
           q.id === id
             ? {
-                ...q,
-                options: q.options.map((opt, i) =>
-                  i === optionIndex ? value : opt,
-                ),
-                answer: q.ansIndex === optionIndex ? value : q.answer,
-              }
+              ...q,
+              options: q.options.map((opt, i) =>
+                i === optionIndex ? value : opt,
+              ),
+              answer: q.ansIndex === optionIndex ? value : q.answer,
+            }
             : q,
         ) ?? [],
       );
@@ -436,11 +440,11 @@ const Quiz: React.FC<{
         q.id === id
           ? q.mode === "view"
             ? {
-                ...q,
-                ansIndex: optIndex,
-                answer: q.options[optIndex] ?? "",
-                mode: "edit" as const,
-              }
+              ...q,
+              ansIndex: optIndex,
+              answer: q.options[optIndex] ?? "",
+              mode: "edit" as const,
+            }
             : { ...q, ansIndex: optIndex, answer: q.options[optIndex] ?? "" }
           : q,
       ),
@@ -453,10 +457,10 @@ const Quiz: React.FC<{
         localQuestions?.map((q) =>
           q.id === id
             ? {
-                ...q,
-                ansIndex: optIndex,
-                answer: q.options[optIndex] ?? "",
-              }
+              ...q,
+              ansIndex: optIndex,
+              answer: q.options[optIndex] ?? "",
+            }
             : q,
         ) ?? [],
       );
@@ -584,18 +588,18 @@ const Quiz: React.FC<{
         quizId: quizId,
         questions: localQuestions
           ? localQuestions.map((question) => ({
-              id: question.id,
-              question: question.questionText,
-              isCode: question.isCode,
-              options: question.options.map((opt, index) => ({
-                value: opt,
-                isAnswer: index === question.ansIndex,
-              })),
-              createdAt: question.createdAt,
-              description: question.description,
-              image: question.imageUrl,
-              mode: question.mode,
-            }))
+            id: question.id,
+            question: question.questionText,
+            isCode: question.isCode,
+            options: question.options.map((opt, index) => ({
+              value: opt,
+              isAnswer: index === question.ansIndex,
+            })),
+            createdAt: question.createdAt,
+            description: question.description,
+            image: question.imageUrl,
+            mode: question.mode,
+          }))
           : [],
       },
     }).then((res) => {
