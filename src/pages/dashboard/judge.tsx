@@ -1,4 +1,4 @@
-import { useQuery, useSubscription } from "@apollo/client";
+import { useQuery, } from "@apollo/client";
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -35,9 +35,10 @@ const Judge: NextPage = () => {
       ? data.roundByJudge.data.eventId
       : null;
 
-  const { data: TeamsData, loading: TeamsLoading } = useSubscription(
+  const { data: TeamsData, loading: TeamsLoading } = useQuery(
     JudgeGetTeamsByRoundDocument,
     {
+      pollInterval: 1000,
       variables: {
         roundId: roundNo!,
         eventId: Number(eventId!),
@@ -60,7 +61,7 @@ const Judge: NextPage = () => {
         !(
           data?.roundByJudge.__typename === "QueryRoundByJudgeSuccess" &&
           data?.roundByJudge.data.roundNo ===
-            data.roundByJudge.data.event.rounds.length
+          data.roundByJudge.data.event.rounds.length
         ),
     },
   );
@@ -84,7 +85,7 @@ const Judge: NextPage = () => {
     return <div>Redirecting...</div>;
   }
 
-  if (user.role !== Role.Judge) {
+  if (user.role !== Role.Judge && user.role !== Role.Admin) {
     void router.push("/profile");
     return <div>Redirecting...</div>;
   }
@@ -123,23 +124,23 @@ const Judge: NextPage = () => {
               <>
                 {data?.roundByJudge.__typename ===
                   "QueryRoundByJudgeSuccess" && (
-                  <TeamList
-                    data={TeamsData}
-                    loading={TeamsLoading}
-                    selectionMode={selectionMode}
-                    setSelectionMode={setSelectionMode}
-                    selectedTeam={selectedTeam}
-                    setSelectedTeam={setSelectedTeam}
-                    roundNo={data.roundByJudge.data.roundNo}
-                    eventType={data.roundByJudge.data.event.eventType}
-                    eventId={data.roundByJudge.data.eventId}
-                    finalRound={
-                      data.roundByJudge.data.roundNo ===
-                      data.roundByJudge.data.event.rounds.length
-                    }
-                    winners={winners}
-                  />
-                )}
+                    <TeamList
+                      data={TeamsData}
+                      loading={TeamsLoading}
+                      selectionMode={selectionMode}
+                      setSelectionMode={setSelectionMode}
+                      selectedTeam={selectedTeam}
+                      setSelectedTeam={setSelectedTeam}
+                      roundNo={data.roundByJudge.data.roundNo}
+                      eventType={data.roundByJudge.data.event.eventType}
+                      eventId={data.roundByJudge.data.eventId}
+                      finalRound={
+                        data.roundByJudge.data.roundNo ===
+                        data.roundByJudge.data.event.rounds.length
+                      }
+                      winners={winners}
+                    />
+                  )}
               </>
             )}
           </div>
@@ -171,13 +172,13 @@ const Judge: NextPage = () => {
                   <>
                     {data?.roundByJudge.__typename ===
                       "QueryRoundByJudgeSuccess" && (
-                      <Criterias
-                        selectedTeam={selectedTeam}
-                        eventId={data?.roundByJudge.data.eventId}
-                        roundNo={data?.roundByJudge.data.roundNo}
-                        criterias={data.roundByJudge.data.criteria}
-                      />
-                    )}
+                        <Criterias
+                          selectedTeam={selectedTeam}
+                          eventId={data?.roundByJudge.data.eventId}
+                          roundNo={data?.roundByJudge.data.roundNo}
+                          criterias={data.roundByJudge.data.criteria}
+                        />
+                      )}
                   </>
                 ) : (
                   <div className="flex h-full items-center justify-center">

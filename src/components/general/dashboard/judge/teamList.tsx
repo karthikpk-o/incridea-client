@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useSubscription } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import React, { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -11,7 +11,7 @@ import {
   CreateWinnerDocument,
   GetRoundStatusDocument,
   GetTotalScoresDocument,
-  type JudgeGetTeamsByRoundSubscription,
+  type JudgeGetTeamsByRoundQuery,
   PromoteToNextRoundDocument,
   WinnerType,
   type WinnersByEventQuery,
@@ -33,7 +33,7 @@ const TeamList = ({
   finalRound,
   winners,
 }: {
-  data: JudgeGetTeamsByRoundSubscription | undefined;
+  data: JudgeGetTeamsByRoundQuery | undefined;
   loading: boolean;
   roundNo: number;
   eventId: string;
@@ -74,7 +74,8 @@ const TeamList = ({
     },
   );
 
-  const { data: roundStatus } = useSubscription(GetRoundStatusDocument, {
+  const { data: roundStatus } = useQuery(GetRoundStatusDocument, {
+    pollInterval: 1000,
     variables: {
       roundNo: roundNo,
       eventId: eventId,
@@ -95,7 +96,7 @@ const TeamList = ({
   useEffect(() => {
     if (
       roundStatus?.getRoundStatus.__typename ===
-      "SubscriptionGetRoundStatusSuccess"
+      "QueryGetRoundStatusSuccess"
     ) {
       if (roundStatus.getRoundStatus.data.selectStatus) setSelectionMode(true);
     }
@@ -124,24 +125,24 @@ const TeamList = ({
 
   const getTotalScore = (
     team: Extract<
-      JudgeGetTeamsByRoundSubscription["judgeGetTeamsByRound"],
+      JudgeGetTeamsByRoundQuery["judgeGetTeamsByRound"],
       {
-        __typename: "SubscriptionJudgeGetTeamsByRoundSuccess";
+        __typename: "QueryJudgeGetTeamsByRoundSuccess";
       }
     >["data"][0],
   ) => {
     const score =
       scores?.getTotalScores.__typename === "QueryGetTotalScoresSuccess"
         ? scores?.getTotalScores.data.find(
-            (score) => score.teamId === Number(team.id),
-          )?.[sorter]
+          (score) => score.teamId === Number(team.id),
+        )?.[sorter]
         : null;
     return score;
   };
 
   const filteredTeams = [
     ...(data?.judgeGetTeamsByRound.__typename ===
-    "SubscriptionJudgeGetTeamsByRoundSuccess"
+      "QueryJudgeGetTeamsByRoundSuccess"
       ? data.judgeGetTeamsByRound.data
       : []),
   ].filter((team) => {
@@ -258,9 +259,8 @@ const TeamList = ({
             <div className={`basis-4/12 text-white/80`}>Name</div>
             <div className={`basis-4/12 text-white/80`}>ID</div>
             <div
-              className={`${
-                selectionMode ? "basis-1/12" : "basis-4/12"
-              } text-white/80`}
+              className={`${selectionMode ? "basis-1/12" : "basis-4/12"
+                } text-white/80`}
             >
               Score
             </div>
@@ -300,29 +300,26 @@ const TeamList = ({
               onClick={() => {
                 setSelectedTeam(team?.id);
               }}
-              className={`flex cursor-pointer items-center rounded-lg bg-white/10 p-2 px-5 ${
-                selectedTeam === team?.id
-                  ? "bg-white/50"
-                  : "transition-colors duration-300 hover:bg-white/20"
-              }`}
+              className={`flex cursor-pointer items-center rounded-lg bg-white/10 p-2 px-5 ${selectedTeam === team?.id
+                ? "bg-white/50"
+                : "transition-colors duration-300 hover:bg-white/20"
+                }`}
             >
               <div className="flex w-full flex-row gap-5">
                 <div
-                  className={`basis-4/12 ${
-                    selectedTeam === team?.id
-                      ? "text-black/80"
-                      : "text-white/80"
-                  }`}
+                  className={`basis-4/12 ${selectedTeam === team?.id
+                    ? "text-black/80"
+                    : "text-white/80"
+                    }`}
                 >
                   {team?.name}
                 </div>
 
                 <div
-                  className={`basis-4/12 ${
-                    selectedTeam === team?.id
-                      ? "text-black/60"
-                      : "text-white/60"
-                  }`}
+                  className={`basis-4/12 ${selectedTeam === team?.id
+                    ? "text-black/60"
+                    : "text-white/60"
+                    }`}
                 >
                   {teamOrParticipant === "Team"
                     ? idToTeamId(team.id)
@@ -330,11 +327,10 @@ const TeamList = ({
                 </div>
 
                 <div
-                  className={`${selectionMode ? "basis-1/12" : "basis-4/12"} ${
-                    selectedTeam === team?.id
-                      ? "text-black/60"
-                      : "text-white/60"
-                  }`}
+                  className={`${selectionMode ? "basis-1/12" : "basis-4/12"} ${selectedTeam === team?.id
+                    ? "text-black/60"
+                    : "text-white/60"
+                    }`}
                 >
                   {scoresLoading && <Spinner />}
                   {scores?.getTotalScores.__typename ===
@@ -346,11 +342,10 @@ const TeamList = ({
 
                 {selectionMode && (
                   <div
-                    className={`basis-1/12 ${
-                      selectedTeam === team?.id
-                        ? "text-black/60"
-                        : "text-white/60"
-                    }`}
+                    className={`basis-1/12 ${selectedTeam === team?.id
+                      ? "text-black/60"
+                      : "text-white/60"
+                      }`}
                   >
                     {scoresLoading && <Spinner />}
                     {scores?.getTotalScores.__typename ===
@@ -362,9 +357,8 @@ const TeamList = ({
                 )}
 
                 <div
-                  className={`basis-2/12 ${
-                    !selectionMode ? "flex items-end justify-end" : ""
-                  }`}
+                  className={`basis-2/12 ${!selectionMode ? "flex items-end justify-end" : ""
+                    }`}
                 >
                   {selectionMode && !finalRound && (
                     <input
