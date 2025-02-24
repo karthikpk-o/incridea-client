@@ -142,9 +142,6 @@ const RoundsSidebar: FC<{
       if (message.data.includes("already sent")) {
         throw new Error("Notifications were already sent for this round");
       }
-      if (message.data.includes("Failed")) {
-        throw new Error(message.data);
-      }
       return message;
     });
 
