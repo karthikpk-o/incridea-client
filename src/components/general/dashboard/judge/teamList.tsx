@@ -21,6 +21,7 @@ import { idToPid, idToTeamId } from "~/utils/id";
 import ViewTeamModal from "./viewTeamModal";
 
 const TeamList = ({
+  shouldPoll,
   data,
   loading,
   roundNo,
@@ -33,6 +34,7 @@ const TeamList = ({
   finalRound,
   winners,
 }: {
+  shouldPoll: boolean,
   data: JudgeGetTeamsByRoundQuery | undefined;
   loading: boolean;
   roundNo: number;
@@ -50,18 +52,22 @@ const TeamList = ({
   const [sortField, setSortField] = React.useState<
     "Total Score" | "Your Score"
   >("Total Score");
+
   const [winnerType, setWinnerType] = React.useState<WinnerType>(
     WinnerType.Winner,
   );
 
   const [promote, { loading: promoteLoading }] = useMutation(
     PromoteToNextRoundDocument,
+    {
+      refetchQueries: [...(shouldPoll ? [] : ["JudgeGetTeamsByRound"])],
+    }
   );
 
   const [changeStatus, { loading: changeLoading }] = useMutation(
     ChangeSelectStatusDocument,
     {
-      refetchQueries: ["GetTotalScores"],
+      refetchQueries: ["GetTotalScores", ...(shouldPoll ? [] : ["GetRoundStatus"])],
       awaitRefetchQueries: true,
     },
   );
@@ -75,7 +81,7 @@ const TeamList = ({
   );
 
   const { data: roundStatus } = useQuery(GetRoundStatusDocument, {
-    pollInterval: 1000,
+    ...(shouldPoll ? { pollInterval: 1000 } : {}),
     variables: {
       roundNo: roundNo,
       eventId: eventId,
