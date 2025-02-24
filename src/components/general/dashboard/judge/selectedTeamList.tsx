@@ -16,6 +16,7 @@ import { idToPid, idToTeamId } from "~/utils/id";
 import ConfirmRoundModal from "./confirmRoundModal";
 
 const SelectedTeamList = ({
+  shouldPoll,
   teams,
   roundNo,
   finalRound,
@@ -24,6 +25,7 @@ const SelectedTeamList = ({
   eventId,
   eventType,
 }: {
+  shouldPoll: boolean,
   teams: JudgeGetTeamsByRoundQuery;
   roundNo: number;
   finalRound: boolean;
@@ -34,6 +36,9 @@ const SelectedTeamList = ({
 }) => {
   const [promote, { loading: promoteLoading }] = useMutation(
     PromoteToNextRoundDocument,
+    {
+      refetchQueries: [...(shouldPoll ? [] : ["JudgeGetTeamsByRound"])],
+    }
   );
 
   const [deleteWinner, { loading: deleteLoading }] = useMutation(
@@ -223,6 +228,7 @@ const SelectedTeamList = ({
             </div>
           ))}
         <ConfirmRoundModal
+          shouldPoll={shouldPoll}
           winners={winners}
           roundNo={roundNo}
           winnersLoading={winnersLoading}
