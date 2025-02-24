@@ -1,1 +1,1 @@
-export const ALLOWED_USER_IDS = [9, 11];
+export const JURY_AUTHORIZED_IDS = [9, 11];

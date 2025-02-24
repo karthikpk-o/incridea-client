@@ -8,6 +8,7 @@ import { BiLoaderAlt, BiTrash } from "react-icons/bi";
 import { BsQrCodeScan } from "react-icons/bs";
 import { IoCopy } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
+import { differenceInHours } from "date-fns";
 
 import {
   Dialog,
@@ -22,6 +23,7 @@ import {
 } from "~/components/ui/hover-card";
 
 import Button from "~/components/button";
+import Modal from "~/components/modal";
 import createToast from "~/components/toast";
 import { env } from "~/env";
 import {
@@ -41,18 +43,17 @@ import EndQuizModal from "./endQuizModal";
 import RoundAddModal from "./roundsAddModal";
 
 const RoundsSidebar: FC<{
-  rounds: Extract<EventByOrganizerQuery["eventByOrganizer"],
-    { __typename: "QueryEventByOrganizerSuccess" }>["data"][number]["rounds"];
+  rounds: Extract<
+    EventByOrganizerQuery["eventByOrganizer"],
+    { __typename: "QueryEventByOrganizerSuccess" }
+  >["data"][number]["rounds"];
   eventId: string;
   isPublished: boolean;
 }> = ({ rounds, eventId, isPublished }) => {
-  const [endQuizMutation] = useMutation(
-    EndQuizDocument,
-    {
-      refetchQueries: ["EventByOrganizer"],
-      awaitRefetchQueries: true,
-    },
-  );
+  const [endQuizMutation] = useMutation(EndQuizDocument, {
+    refetchQueries: ["EventByOrganizer"],
+    awaitRefetchQueries: true,
+  });
   const [deleteRound, { loading: loading2 }] = useMutation(
     DeleteRoundDocument,
     {
@@ -61,7 +62,7 @@ const RoundsSidebar: FC<{
         eventId: eventId,
       },
       awaitRefetchQueries: true,
-    },
+    }
   );
 
   const [deleteJudge, { loading: deleteJudgeLoading }] = useMutation(
@@ -69,7 +70,7 @@ const RoundsSidebar: FC<{
     {
       refetchQueries: ["EventByOrganizer"],
       awaitRefetchQueries: true,
-    },
+    }
   );
 
   const [deleteCriteria, { loading: deleteCriteriaLoading }] = useMutation(
@@ -77,7 +78,7 @@ const RoundsSidebar: FC<{
     {
       refetchQueries: ["EventByOrganizer"],
       awaitRefetchQueries: true,
-    },
+    }
   );
 
   const [notifyParticipants, { loading: notifyLoading }] = useMutation(
@@ -85,15 +86,17 @@ const RoundsSidebar: FC<{
     {
       refetchQueries: ["EventByOrganizer"],
       awaitRefetchQueries: true,
-    },
+    }
   );
+
+  const [showNotifyModal, setShowNotifyModal] = useState(false);
 
   const [updateQuizStatus, { loading: updateQuizStatusLoading }] = useMutation(
     UpdateQuizStatusDocument,
     {
       refetchQueries: ["EventByOrganizer"],
       awaitRefetchQueries: true,
-    },
+    }
   );
 
   const [selectedRound, setSelectedRound] = useState(1);
@@ -127,34 +130,22 @@ const RoundsSidebar: FC<{
   };
 
   const handleNotify = async () => {
-    const roundNo = rounds[selectedIndex]?.roundNo ?? 0;
+    const roundDate = new Date(rounds[selectedIndex]?.date ?? "");
+    const currentTime = new Date();
+    const hoursDifference = differenceInHours(roundDate, currentTime);
 
-    const promise = notifyParticipants({
-      variables: {
-        eventId,
-        roundNo,
-      },
-    }).then((response) => {
-      const message = response.data?.notifyParticipants;
-      if (!message || message.__typename === "Error") {
-        throw new Error("Failed to send notifications");
-      }
-      if (message.data.includes("already sent")) {
-        throw new Error("Notifications were already sent for this round");
-      }
-      return message;
-    });
-
-    try {
-      await createToast(promise, "Sending notifications...");
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error(String(err));
+    if (hoursDifference > 2) {
       await createToast(
-        Promise.reject(error),
-        "Sending notifications...",
-        error.message,
+        Promise.reject(
+          new Error("Cannot notify more than 2 hours before the round")
+        ),
+        "Notification error"
       );
+      return;
     }
+
+    // Show confirmation modal if within 2 hours
+    setShowNotifyModal(true);
   };
 
   useEffect(() => {
@@ -192,7 +183,7 @@ const RoundsSidebar: FC<{
           "MutationUpdateQuizStatusSuccess"
         )
           throw new Error(
-            res.data?.updateQuizStatus.message ?? "Error publishing quiz",
+            res.data?.updateQuizStatus.message ?? "Error publishing quiz"
           );
       })
       .catch(async (err) => {
@@ -211,7 +202,7 @@ const RoundsSidebar: FC<{
       console.log(error);
       await createToast(
         Promise.reject(new Error("Failed to copy URL to clipboard")),
-        "Failed to copy URL to clipboard",
+        "Failed to copy URL to clipboard"
       );
     }
   };
@@ -227,10 +218,11 @@ const RoundsSidebar: FC<{
                   onClick={() => {
                     setSelectedRound(round.roundNo);
                   }}
-                  className={`w-full whitespace-nowrap rounded-lg px-3 py-2 ${selected
-                    ? "bg-blue-900/40 text-white"
-                    : "bg-gray-600/40 text-gray-300"
-                    }`}
+                  className={`w-full whitespace-nowrap rounded-lg px-3 py-2 ${
+                    selected
+                      ? "bg-blue-900/40 text-white"
+                      : "bg-gray-600/40 text-gray-300"
+                  }`}
                 >
                   Round {round.roundNo}
                 </button>
@@ -414,7 +406,7 @@ const RoundsSidebar: FC<{
                                         className="rounded-md bg-black"
                                         onClick={() =>
                                           handleCopyURL(
-                                            `${env.NEXT_PUBLIC_THIS_APP_URL}/event/${round.quiz?.name}-${selectedRound}/quiz/${round.quiz?.id}`,
+                                            `${env.NEXT_PUBLIC_THIS_APP_URL}/event/${round.quiz?.name}-${selectedRound}/quiz/${round.quiz?.id}`
                                           )
                                         }
                                       >
@@ -439,7 +431,7 @@ const RoundsSidebar: FC<{
                                   onClick={() =>
                                     handlePublishQuiz(
                                       round.quiz?.id ?? "",
-                                      !round.quiz?.allowAttempts,
+                                      !round.quiz?.allowAttempts
                                     )
                                   }
                                   disabled={updateQuizStatusLoading}
@@ -467,7 +459,7 @@ const RoundsSidebar: FC<{
                                       Start Time:{" "}
                                     </span>
                                     {new Date(
-                                      round.quiz.startTime,
+                                      round.quiz.startTime
                                     ).toLocaleTimeString()}
                                   </p>
                                   <p>
@@ -475,7 +467,7 @@ const RoundsSidebar: FC<{
                                       End Time:{" "}
                                     </span>
                                     {new Date(
-                                      round.quiz.endTime,
+                                      round.quiz.endTime
                                     ).toLocaleTimeString()}
                                   </p>
                                   <p>
@@ -532,7 +524,7 @@ const RoundsSidebar: FC<{
                           eventId={eventId}
                           roundNo={selectedRound}
                           roundDate={new Date(
-                            round.date ?? new Date(),
+                            round.date ?? new Date()
                           ).toISOString()}
                           quizDetails={
                             round.quiz && {
@@ -559,7 +551,13 @@ const RoundsSidebar: FC<{
       <Button
         variant="outline"
         onClick={handleNotify}
-        disabled={notifyLoading}
+        disabled={
+          notifyLoading ||
+          differenceInHours(
+            new Date(rounds[selectedIndex]?.date ?? ""),
+            new Date()
+          ) > 2
+        }
         className="m-2 flex items-center justify-center"
       >
         {notifyLoading ? (
@@ -568,6 +566,68 @@ const RoundsSidebar: FC<{
           "Notify Participants"
         )}
       </Button>
+      {showNotifyModal && (
+        <Modal
+          onClose={() => setShowNotifyModal(false)}
+          title="Send Notification"
+          size="small"
+          showModal={showNotifyModal}
+        >
+          <div className="mt-3 pl-6 pr-6">
+            Do you really want to send notifications to all participants?
+            <div className="mb-6 mt-6 flex justify-center gap-4">
+              <Button
+                className=" transform rounded-md bg-emerald-600 text-amber-100 shadow-lg transition-all duration-300 hover:scale-105 hover:bg-emerald-500"
+                intent={"dark"}
+                size={"medium"}
+                onClick={() => setShowNotifyModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="transform rounded-md bg-emerald-600 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-emerald-500"
+                intent={"success"}
+                size={"medium"}
+                onClick={async () => {
+                  const roundNo = rounds[selectedIndex]?.roundNo ?? 0;
+                  const promise = notifyParticipants({
+                    variables: {
+                      eventId,
+                      roundNo,
+                    },
+                  }).then((response) => {
+                    const message = response.data?.notifyParticipants;
+                    if (!message || message.__typename === "Error") {
+                      throw new Error("Failed to send notifications");
+                    }
+                    if (message.data.includes("already sent")) {
+                      throw new Error(
+                        "Notifications were already sent for this round"
+                      );
+                    }
+                    return message;
+                  });
+
+                  try {
+                    await createToast(promise, "Sending notifications...");
+                    setShowNotifyModal(false);
+                  } catch (err) {
+                    const error =
+                      err instanceof Error ? err : new Error(String(err));
+                    await createToast(
+                      Promise.reject(error),
+                      "Sending notifications...",
+                      error.message
+                    );
+                  }
+                }}
+              >
+                Send
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
