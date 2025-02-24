@@ -22,6 +22,9 @@ const ProniteRules = ({
       <div className="space-y-4 text-sm text-gray-300 max-h-[70vh] overflow-y-auto pr-4">
         <p>⚠️ Entry Rules:</p>
         <ul className="list-disc list-inside space-y-2 ml-4">
+          <li className='font-bold text-red-400'>
+            Entry is strictly limited to students from engineering colleges and Nitte sister institutes. Any unauthorized or fraudulent entry will be denied without refund.
+          </li>
           <li>
             Valid PID scan required at pronite booth for admission
           </li>
@@ -42,13 +45,12 @@ const ProniteRules = ({
             </ul>
           </li>
           <li className="text-red-400">
-            Entry while intoxicated is strictly prohibited - may
-            result in expulsion and registration cancellation
+            Entry while intoxicated is strictly prohibited - may result in expulsion and registration cancellation
           </li>
           <li>
             Disruptive behavior will result in immediate removal
           </li>
-          <li>Security and Team Incridea present for assistance</li>
+          <li>Security and Incridea Team are present for assistance</li>
           <li>All instructions from officials must be followed</li>
         </ul>
       </div>

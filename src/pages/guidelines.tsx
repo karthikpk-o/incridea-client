@@ -34,6 +34,9 @@ const Page = () => {
               institutions - ₹ {CONSTANT.REG_AMOUNT_IN_INR.EXTERNAL}
             </li>
             <li>
+              Only students from engineering institutions and Nitte sister institutes are eligible to register. Registrations from non-engineering colleges or fraudulent entries will be disqualified without refund.
+            </li>
+            <li>
               Event registrations can be done either through website or on-spot,
               which may vary according to the event, please check the Incridea
               website for further information regarding the same.
