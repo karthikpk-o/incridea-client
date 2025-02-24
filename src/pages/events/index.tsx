@@ -325,7 +325,7 @@ const Page = ({ data }: Props) => {
                     </button>
                   </a>
                   <a
-                    href="https://drive.google.com/file/d/12tmcXENfyG9fndAJSSH5z1QCIZb40zjf/view?usp=sharing"
+                    href="https://drive.google.com/drive/folders/1jp9xTicps-O0I8E-h9pyCJ2aYZ2Y3ngC?usp=sharing"
                     target="_blank"
                     download
                   >
