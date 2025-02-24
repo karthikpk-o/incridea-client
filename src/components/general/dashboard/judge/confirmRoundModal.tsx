@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
+import { ConversionHtmlNode } from "@react-three/uikit";
 import { useState } from "react";
 
 import Badge from "~/components/badge";
@@ -6,7 +7,9 @@ import Button from "~/components/button";
 import Modal from "~/components/modal";
 import Spinner from "~/components/spinner";
 import createToast from "~/components/toast";
+import { CONSTANT } from "~/constants";
 import {
+  CompleteRoadiesRoundDocument,
   CompleteRoundDocument,
   GetTotalScoresDocument,
   type JudgeGetTeamsByRoundQuery,
@@ -40,6 +43,14 @@ const ConfirmRoundModal = ({
     setShowModal(false);
   }
 
+  const [completeRoadiesRound, {loading: completeRoadiesLoading}] = useMutation(
+    CompleteRoadiesRoundDocument,
+    {
+      refetchQueries: ["RoundByJudge"],
+      awaitRefetchQueries: true,
+    }
+  );
+
   const [completeRound, { loading: completeLoading }] = useMutation(
     CompleteRoundDocument,
     {
@@ -47,6 +58,22 @@ const ConfirmRoundModal = ({
       awaitRefetchQueries: true,
     },
   );
+
+  const handleCompleteRoadiesRound = async () =>{
+    const promise = completeRoadiesRound({
+      variables: {
+        eventId,
+        roundNo: roundNo.toString()
+      }
+    }).then((data)=> {
+      if(
+        data.data?.completeRoadiesRound.__typename === "MutationCompleteRoadiesRoundSuccess"
+      ){
+        setShowModal(false);
+      }
+    })
+    await createToast(promise, "Promoting Teams...");
+  }
 
   const handleComplete = async () => {
     const promise = completeRound({
@@ -212,25 +239,42 @@ const ConfirmRoundModal = ({
               </div>
             )}
 
-          {!finalRound &&
-            selectedTeams.judgeGetTeamsByRound.__typename ===
-            "QueryJudgeGetTeamsByRoundSuccess" &&
-            selectedTeams.judgeGetTeamsByRound.data.filter(
-              (team) => team.roundNo > roundNo,
-            ).length !== 0 && (
-              <Button
-                onClick={handleComplete}
-                disabled={completeLoading}
-                intent={"success"}
-                noScaleOnHover
-              >
-                {completeLoading ? (
-                  <Spinner intent={"white"} />
-                ) : (
-                  `Confirm ${solo ? "Participants" : "Teams"}`
-                )}
-              </Button>
-            )}
+            {!finalRound &&
+              selectedTeams.judgeGetTeamsByRound.__typename ===
+                "QueryJudgeGetTeamsByRoundSuccess" &&
+              selectedTeams.judgeGetTeamsByRound.data.filter(
+                (team) => team.roundNo > roundNo,
+              ).length !== 0 && (
+                <>
+                  {eventId === CONSTANT.ROADIES_EVENT_ID.toString() && roundNo === 1 ? (
+                    <Button
+                      onClick={handleCompleteRoadiesRound}
+                      intent={"success"}
+                      noScaleOnHover
+                    >
+                      {completeLoading ? (
+                        <Spinner intent={"white"} />
+                      ) : (
+                        "Promote to Roadies R2"
+                      )}
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={handleComplete}
+                      disabled={completeLoading}
+                      intent={"success"}
+                      noScaleOnHover
+                    >
+                      {completeLoading ? (
+                        <Spinner intent={"white"} />
+                      ) : (
+                        `Confirm ${solo ? "Participants" : "Teams"}`
+                      )}
+                    </Button>
+                  )}
+                </>
+              )}
+
 
           {/* Final round - Confirming winners */}
           {finalRound && winnersLoading && <Spinner />}

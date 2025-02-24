@@ -3,6 +3,7 @@ import { ASSETS } from "~/constants/assets";
 const CONSTANT = {
   BASE_URL: "https://incridea.in" as const,
   NMAMIT_COLLEGE_ID: 1,
+  ROADIES_EVENT_ID: 27 as const,
   PID_FORMAT: "INC25-" as const,
   TID_FORMAT: "T25-" as const,
   YEAR: 2025 as const,

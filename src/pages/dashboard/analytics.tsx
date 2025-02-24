@@ -16,19 +16,22 @@ import Link from "next/link";
 const Analytics: NextPage = () => {
   const router = useRouter();
   const { user, loading } = useAuth();
+
   if (loading)
     return (
       <div className="flex h-screen w-screen justify-center">
         <Spinner />
       </div>
     );
+
   if (!user) {
     void router.push("/login");
     return <div>Redirecting...</div>;
   }
+
   if (user.role !== Role.Admin && user.role !== Role.Jury) {
     void router.push("/profile");
-    return <div>Redirecting...</div>
+    return <div>Redirecting...</div>;
   }
 
   return (
@@ -37,11 +40,15 @@ const Analytics: NextPage = () => {
         <Link href="/dashboard" className="self-end">
           <Button intent={"danger"}>Go Back</Button>
         </Link>
-        <div className="grid w-full md:grid-cols-3 gap-4 mb-4">
-          <RevenueCard />
-          <RegistrationCard />
-          <ProniteRegistrationCard />
-        </div>
+        {user.role === Role.Admin && (
+          <>
+            <div className="grid w-full md:grid-cols-3 gap-4 mb-4">
+              <RevenueCard />
+              <RegistrationCard />
+              <ProniteRegistrationCard />
+            </div>
+          </>
+        )}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <div className="hidden md:block col-span-2">
             <Leaderboard />
@@ -51,8 +58,9 @@ const Analytics: NextPage = () => {
           </div>
         </div>
       </div>
-    </Dashboard >
+    </Dashboard>
   );
 };
+
 
 export default Analytics;
