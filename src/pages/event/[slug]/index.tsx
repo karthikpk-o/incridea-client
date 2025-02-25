@@ -263,6 +263,7 @@ const Page = ({ event, error }: Props) => {
                       )}
                     </div>
                     <div className={`text-sm`}>
+                        {event.name.toLowerCase() !== "lazzerena" ?(
                       <div className={`grid grid-cols-1 gap-2 mt-2`}>
                         {event.rounds.map((round) => (
                           <div
@@ -312,7 +313,12 @@ const Page = ({ event, error }: Props) => {
                             </div>
                           </div>
                         ))}
-                      </div>
+                      </div>):(
+                        <div className="p-2.5 px-3 font-semibold italic  border border-[#D79128] bg-[#D79128] mt-2
+                           flex w-full justify-center rounded-full  bg-opacity-30 backdrop-blur-xl backdrop-filter">
+                          Open on all 3 days
+                          </div>
+                      )}
                     </div>
                   </div>
                   <div className={`order-1 mt-3 flex w-full justify-center`}>

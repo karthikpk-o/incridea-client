@@ -62,7 +62,7 @@ function EventRegistration({
         href={`/login?redirectUrl=${encodeURIComponent(`/event/${slug}`)}`}
         className="w-fit lg:w-full"
         >
-        <button className="mt-1 flex w-fit shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-tr from-secondary-800 to-secondary-600 px-5 py-1 capitalize text-white brightness-100 transition-all duration-300 hover:scale-[1.02] hover:brightness-125">
+        <button className="mt-1 flex w-full shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-tr from-secondary-800 to-secondary-600 px-5 py-2 capitalize text-white brightness-100 transition-all duration-300 hover:scale-[1.02] hover:brightness-125">
           <CiLogin />
           Login to Register
         </button>
