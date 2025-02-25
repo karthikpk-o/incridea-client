@@ -38,6 +38,7 @@ const config = {
         },
       },
     ],
+    // "@typescript-eslint/no-unnecessary-condition": "error",
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
